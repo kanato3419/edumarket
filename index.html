@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduMarket</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduMarket</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <header>
+        <h1>EduMarket</h1>
+        <p>先生が作った教材を、必要な人へ。</p>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>教材を探す</h2>
+            <a href="materials.html" class="main-button">
+    教材一覧を見る
+</a>
+            
+        </section>
+
+        <section>
+            <h2>教材を出品する</h2>
+            <p>あなたが作った教材を販売できます。</p>
+           <a href="sell.html" class="main-button">
+    教材を出品する
+</a>
+        </section>
+
+     <section>
+
+    <h2>おすすめ教材</h2>
+
+    <div id="materials-list">
+
+        <p>教材を読み込んでいます...</p>
+
+    </div>
+
+</section>
+
+    </main>
+<script src="supabase.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>教材を編集 - EduMarket</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <header>
+
+        <h1>EduMarket</h1>
+
+        <p>
+            先生が作った教材を、必要な人へ。
+        </p>
+
+    </header>
+
+
+    <main>
+
+        <section class="sell-section">
+
+            <h2>
+                教材を編集
+            </h2>
+
+
+            <form id="edit-material-form">
+
+
+                <!-- タイトル -->
+
+                <label for="title">
+                    教材タイトル
+                </label>
+
+                <input
+                    type="text"
+                    id="title"
+                    required
+                >
+
+
+                <!-- カテゴリー -->
+
+                <label for="category">
+                    カテゴリー
+                </label>
+
+                <select
+                    id="category"
+                    required
+                >
+
+                    <option value="数学">
+                        数学
+                    </option>
+
+                    <option value="英語">
+                        英語
+                    </option>
+
+                    <option value="国語">
+                        国語
+                    </option>
+
+                    <option value="理科">
+                        理科
+                    </option>
+
+                    <option value="社会">
+                        社会
+                    </option>
+
+                </select>
+
+
+                <!-- 対象 -->
+
+                <label for="target">
+                    対象
+                </label>
+
+                <input
+                    type="text"
+                    id="target"
+                    required
+                >
+
+
+                <!-- 説明 -->
+
+                <label for="description">
+                    教材の説明
+                </label>
+
+                <textarea
+                    id="description"
+                    rows="6"
+                    required
+                ></textarea>
+
+
+                <!-- 価格 -->
+
+                <label for="price">
+                    価格
+                </label>
+
+                <input
+                    type="number"
+                    id="price"
+                    min="0"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="main-button"
+                >
+                    変更を保存する
+                </button>
+
+
+            </form>
+
+
+            <br>
+
+
+            <a
+                href="mypage.html"
+                class="detail-button"
+            >
+                マイページに戻る
+            </a>
+
+
+        </section>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>

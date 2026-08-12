@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>教材を探す - EduMarket</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>EduMarket</h1>
+        <p>先生が作った教材を、必要な人へ。</p>
+    </header>
+
+
+    <main>
+
+        <h2>教材を探す</h2>
+
+
+        <!-- カテゴリー -->
+        <div class="category-buttons">
+
+            <button onclick="filterMaterials('all')">
+                すべて
+            </button>
+
+            <button onclick="filterMaterials('数学')">
+                数学
+            </button>
+
+            <button onclick="filterMaterials('英語')">
+                英語
+            </button>
+
+            <button onclick="filterMaterials('国語')">
+                国語
+            </button>
+
+            <button onclick="filterMaterials('理科')">
+                理科
+            </button>
+
+            <button onclick="filterMaterials('社会')">
+                社会
+            </button>
+
+        </div>
+
+
+        <br>
+
+
+        <!-- 教材一覧 -->
+        <section>
+
+            <h2>教材一覧</h2>
+
+            <!-- JavaScriptがここに教材を追加する -->
+            <div id="material-list"></div>
+
+        </section>
+
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="script.js"></script>
+
+</body>
+
+</html>

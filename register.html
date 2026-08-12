@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>会員登録 - EduMarket</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+    <header>
+
+        <h1>EduMarket</h1>
+
+        <p>
+            先生が作った教材を、必要な人へ。
+        </p>
+
+    </header>
+
+
+    <main>
+
+        <section class="auth-section">
+
+            <h2>会員登録</h2>
+
+            <p>
+                EduMarketを利用するためのアカウントを作成します。
+            </p>
+
+
+            <form id="register-form">
+
+
+                <div class="form-group">
+
+                    <label for="register-name">
+                        名前
+                    </label>
+
+                    <input
+                        type="text"
+                        id="register-name"
+                        placeholder="例：山田太郎"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="register-email">
+                        メールアドレス
+                    </label>
+
+                    <input
+                        type="email"
+                        id="register-email"
+                        placeholder="example@email.com"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="register-password">
+                        パスワード
+                    </label>
+
+                    <input
+                        type="password"
+                        id="register-password"
+                        placeholder="パスワードを入力"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="submit-button"
+                >
+                    アカウントを作成する
+                </button>
+
+
+            </form>
+
+
+            <p class="auth-link">
+
+                すでにアカウントをお持ちですか？
+
+                <a href="login.html">
+                    ログイン
+                </a>
+
+            </p>
+
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

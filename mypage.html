@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>マイページ - EduMarket</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+    <header>
+
+        <h1>EduMarket</h1>
+
+        <p>
+            先生が作った教材を、必要な人へ。
+        </p>
+
+    </header>
+
+
+   <main>
+
+    <section class="mypage-section">
+
+        <h2>マイページ</h2>
+
+
+        <!-- ユーザー情報 -->
+        <div id="user-info">
+
+            <p>
+                ユーザー情報を読み込んでいます...
+            </p>
+
+        </div>
+
+
+        <!-- 自分が出品した教材 -->
+        <section id="my-materials">
+
+            <h2>自分が出品した教材</h2>
+
+            <div id="my-material-list">
+
+                <p>
+                    出品した教材を読み込んでいます...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- 購入した教材 -->
+        <section id="purchased-materials">
+
+            <h2>購入した教材</h2>
+
+            <div id="purchased-material-list">
+
+                <p>
+                    購入した教材を読み込んでいます...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- メニュー -->
+        <div class="mypage-menu">
+
+            <a
+                href="materials.html"
+                class="main-button"
+            >
+                教材を探す
+            </a>
+
+
+            <a
+                href="sell.html"
+                class="main-button"
+            >
+                教材を出品する
+            </a>
+<button
+    id="stripe-connect-button"
+    class="main-button"
+>
+    Stripe販売者登録
+</button>
+
+            <button
+                id="logout-button"
+            >
+                ログアウト
+            </button>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
+   
