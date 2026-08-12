@@ -140,7 +140,7 @@ async function checkStripeConnectAccount() {
     console.log("Stripe Connect状態を確認します");
 
     const { data, error } =
-        await supabase.functions.invoke(
+        await supabaseClient.functions.invoke(
             "check-connect-account",
             {
                 body: {}
