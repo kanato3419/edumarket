@@ -134,6 +134,35 @@
 <script src="supabase.js"></script>
 <script src="script.js"></script>
 
+<script>
+async function checkStripeConnectAccount() {
+
+    console.log("Stripe Connect状態を確認します");
+
+    const { data, error } =
+        await supabase.functions.invoke(
+            "check-connect-account",
+            {
+                body: {}
+            }
+        );
+
+    if (error) {
+        console.error(
+            "Stripe Connect確認エラー:",
+            error
+        );
+        return;
+    }
+
+    console.log(
+        "Stripe Connect確認結果:",
+        data
+    );
+}
+
+checkStripeConnectAccount();
+</script>
+
 </body>
 </html>
-   
