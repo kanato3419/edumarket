@@ -2755,27 +2755,7 @@ async function displaySalesManagement() {
 
                     <div class="sales-history-detail">
 
-                        販売価格：
-                        ¥${Number(
-                            sale.price
-                        ).toLocaleString()}
-
-                        <br>
-
-                        EduMarket手数料：
-                        ¥${Number(
-                            sale.platform_fee
-                        ).toLocaleString()}
-
-                        <br>
-
-                        受取額：
-                        ¥${Number(
-                            sale.seller_amount
-                        ).toLocaleString()}
-                        <div class="sales-history-detail">
-
-                        販売価格：
+                       販売価格：
                         ¥${Number(
                             sale.price
                         ).toLocaleString()}
@@ -2795,8 +2775,8 @@ async function displaySalesManagement() {
                         ).toLocaleString()}
                         <br>
 
-販売日時：
-${sale.purchased_at || "日時データなし"}
+                        販売日時：
+                        ${sale.purchased_at || "日時データなし"}
 
                     </div>
 
