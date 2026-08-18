@@ -2773,6 +2773,12 @@ async function displaySalesManagement() {
                         ¥${Number(
                             sale.seller_amount
                         ).toLocaleString()}
+                        <br>
+
+販売日時：
+${new Date(
+    sale.purchased_at
+).toLocaleString("ja-JP")}
 
                     </div>
 
