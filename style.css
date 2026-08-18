@@ -365,3 +365,101 @@ section:last-child p {
     font-size: 13px;
     margin-top: 6px;
 }
+/* ==============================
+   売上管理
+============================== */
+
+#sales-management {
+    margin-top: 40px;
+    padding: 25px;
+    background: #f8fafc;
+    border-radius: 16px;
+}
+
+#sales-management h2 {
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+
+/* 売上概要 */
+
+#sales-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.sales-card {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.sales-card-title {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.sales-card-value {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+
+/* 販売件数 */
+
+.sales-count {
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+
+/* 販売履歴 */
+
+#sales-history {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+}
+
+#sales-history h3 {
+    margin-bottom: 20px;
+}
+
+.sales-history-item {
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.sales-history-item:last-child {
+    border-bottom: none;
+}
+
+.sales-history-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.sales-history-detail {
+    color: #666;
+    font-size: 14px;
+}
+
+
+/* スマホ対応 */
+
+@media (max-width: 700px) {
+
+    #sales-summary {
+        grid-template-columns: 1fr;
+    }
+
+    #sales-management {
+        padding: 18px;
+    }
+
+}
