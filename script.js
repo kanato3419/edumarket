@@ -2538,13 +2538,17 @@ async function displaySalesManagement() {
     const salesHistory =
         document.getElementById("sales-history");
 
+
     // 売上管理がないページでは何もしない
     if (!salesSummary || !salesHistory) {
         return;
     }
 
 
+    // ==============================
     // ログインユーザーを確認
+    // ==============================
+
     const {
         data: {
             user
@@ -2568,7 +2572,10 @@ async function displaySalesManagement() {
     }
 
 
+    // ==============================
     // 読み込み中
+    // ==============================
+
     salesSummary.innerHTML = `
         <p>
             売上情報を読み込んでいます...
@@ -2638,47 +2645,47 @@ async function displaySalesManagement() {
 
     salesSummary.innerHTML = `
 
-        <div class="sales-summary-card">
+        <div class="sales-card">
 
-            <p>
+            <div class="sales-card-title">
                 売上総額
-            </p>
+            </div>
 
-            <h3>
+            <div class="sales-card-value">
                 ¥${Number(
                     data.total_sales || 0
                 ).toLocaleString()}
-            </h3>
+            </div>
+
+        </div>
 
 
-            <p>
+        <div class="sales-card">
+
+            <div class="sales-card-title">
                 EduMarket手数料（13%）
-            </p>
+            </div>
 
-            <h3>
+            <div class="sales-card-value">
                 ¥${Number(
                     data.platform_fee || 0
                 ).toLocaleString()}
-            </h3>
+            </div>
+
+        </div>
 
 
-            <p>
+        <div class="sales-card">
+
+            <div class="sales-card-title">
                 出品者受取額
-            </p>
+            </div>
 
-            <h3>
+            <div class="sales-card-value">
                 ¥${Number(
                     data.seller_amount || 0
                 ).toLocaleString()}
-            </h3>
-
-
-            <p>
-                販売件数：
-                ${Number(
-                    data.sales_count || 0
-                )}件
-            </p>
+            </div>
 
         </div>
 
@@ -2686,7 +2693,26 @@ async function displaySalesManagement() {
 
 
     // ==============================
-    // 販売履歴
+    // 販売件数
+    // ==============================
+
+    const salesCountHTML = `
+
+        <div class="sales-count">
+            販売件数：
+            ${Number(
+                data.sales_count || 0
+            )}件
+        </div>
+
+    `;
+
+    salesSummary.innerHTML +=
+        salesCountHTML;
+
+
+    // ==============================
+    // 販売履歴がない場合
     // ==============================
 
     if (
@@ -2706,6 +2732,10 @@ async function displaySalesManagement() {
     }
 
 
+    // ==============================
+    // 販売履歴
+    // ==============================
+
     let historyHTML = `
         <h3>販売履歴</h3>
     `;
@@ -2716,32 +2746,35 @@ async function displaySalesManagement() {
 
             historyHTML += `
 
-                <div class="material-card">
+                <div class="sales-history-item">
 
-                    <h4>
+                    <div class="sales-history-title">
                         ${sale.title}
-                    </h4>
+                    </div>
 
-                    <p>
+
+                    <div class="sales-history-detail">
+
                         販売価格：
                         ¥${Number(
                             sale.price
                         ).toLocaleString()}
-                    </p>
 
-                    <p>
+                        <br>
+
                         EduMarket手数料：
                         ¥${Number(
                             sale.platform_fee
                         ).toLocaleString()}
-                    </p>
 
-                    <p>
+                        <br>
+
                         受取額：
                         ¥${Number(
                             sale.seller_amount
                         ).toLocaleString()}
-                    </p>
+
+                    </div>
 
                 </div>
 
