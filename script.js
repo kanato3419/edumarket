@@ -2526,3 +2526,239 @@ if (stripeConnectButton) {
         }
     );
 }
+// ==============================
+// 売上管理を表示
+// ==============================
+
+async function displaySalesManagement() {
+
+    const salesSummary =
+        document.getElementById("sales-summary");
+
+    const salesHistory =
+        document.getElementById("sales-history");
+
+    // 売上管理がないページでは何もしない
+    if (!salesSummary || !salesHistory) {
+        return;
+    }
+
+
+    // ログインユーザーを確認
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (userError || !user) {
+
+        salesSummary.innerHTML = `
+            <p>
+                売上管理を見るにはログインしてください。
+            </p>
+        `;
+
+        salesHistory.innerHTML = "";
+
+        return;
+    }
+
+
+    // 読み込み中
+    salesSummary.innerHTML = `
+        <p>
+            売上情報を読み込んでいます...
+        </p>
+    `;
+
+    salesHistory.innerHTML = `
+        <h3>販売履歴</h3>
+        <p>
+            販売履歴を読み込んでいます...
+        </p>
+    `;
+
+
+    // ==============================
+    // Edge Functionを呼び出す
+    // ==============================
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.functions.invoke(
+            "get-sales-data",
+            {
+                body: {}
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            "売上情報取得エラー:",
+            error
+        );
+
+        salesSummary.innerHTML = `
+            <p>
+                売上情報を取得できませんでした。
+            </p>
+        `;
+
+        salesHistory.innerHTML = "";
+
+        return;
+    }
+
+
+    if (!data) {
+
+        salesSummary.innerHTML = `
+            <p>
+                売上情報がありません。
+            </p>
+        `;
+
+        salesHistory.innerHTML = "";
+
+        return;
+    }
+
+
+    // ==============================
+    // 売上概要
+    // ==============================
+
+    salesSummary.innerHTML = `
+
+        <div class="sales-summary-card">
+
+            <p>
+                売上総額
+            </p>
+
+            <h3>
+                ¥${Number(
+                    data.total_sales || 0
+                ).toLocaleString()}
+            </h3>
+
+
+            <p>
+                EduMarket手数料（13%）
+            </p>
+
+            <h3>
+                ¥${Number(
+                    data.platform_fee || 0
+                ).toLocaleString()}
+            </h3>
+
+
+            <p>
+                出品者受取額
+            </p>
+
+            <h3>
+                ¥${Number(
+                    data.seller_amount || 0
+                ).toLocaleString()}
+            </h3>
+
+
+            <p>
+                販売件数：
+                ${Number(
+                    data.sales_count || 0
+                )}件
+            </p>
+
+        </div>
+
+    `;
+
+
+    // ==============================
+    // 販売履歴
+    // ==============================
+
+    if (
+        !data.sales ||
+        data.sales.length === 0
+    ) {
+
+        salesHistory.innerHTML = `
+            <h3>販売履歴</h3>
+
+            <p>
+                まだ教材は売れていません。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    let historyHTML = `
+        <h3>販売履歴</h3>
+    `;
+
+
+    data.sales.forEach(
+        function(sale) {
+
+            historyHTML += `
+
+                <div class="material-card">
+
+                    <h4>
+                        ${sale.title}
+                    </h4>
+
+                    <p>
+                        販売価格：
+                        ¥${Number(
+                            sale.price
+                        ).toLocaleString()}
+                    </p>
+
+                    <p>
+                        EduMarket手数料：
+                        ¥${Number(
+                            sale.platform_fee
+                        ).toLocaleString()}
+                    </p>
+
+                    <p>
+                        受取額：
+                        ¥${Number(
+                            sale.seller_amount
+                        ).toLocaleString()}
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    salesHistory.innerHTML =
+        historyHTML;
+
+}
+
+
+// ==============================
+// 実行
+// ==============================
+
+displaySalesManagement();
