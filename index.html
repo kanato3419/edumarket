@@ -1,381 +1,653 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>EduMarket</title>
+<title>EduMarket</title>
 
-    <link rel="stylesheet" href="style.css">
+<style>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Noto Sans JP",
+    sans-serif;
+
+  background: #f5f7fb;
+  color: #14213d;
+
+  padding-bottom: 82px;
+}
+
+/* =====================
+   ヘッダー
+===================== */
+
+.header {
+  background: #102344;
+  color: white;
+
+  padding: 20px 18px 18px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.subtitle {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #d9e1ef;
+}
+
+/* =====================
+   検索
+===================== */
+
+.search-area {
+  margin-top: 16px;
+
+  display: flex;
+  gap: 8px;
+}
+
+.search-box {
+  flex: 1;
+
+  height: 42px;
+
+  border: none;
+  border-radius: 12px;
+
+  padding: 0 14px;
+
+  font-size: 14px;
+
+  outline: none;
+}
+
+.search-button {
+  width: 58px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: white;
+  color: #102344;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/* =====================
+   カテゴリ
+===================== */
+
+.categories {
+  display: flex;
+
+  gap: 8px;
+
+  padding: 12px 14px;
+
+  overflow-x: auto;
+
+  white-space: nowrap;
+
+  background: white;
+
+  scrollbar-width: none;
+}
+
+.categories::-webkit-scrollbar {
+  display: none;
+}
+
+.category {
+  flex-shrink: 0;
+
+  border: 1px solid #dce2ec;
+
+  background: #fff;
+
+  color: #263653;
+
+  border-radius: 20px;
+
+  padding: 7px 14px;
+
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.category.active {
+  background: #102344;
+  color: white;
+  border-color: #102344;
+}
+
+/* =====================
+   メイン
+===================== */
+
+.main {
+  padding: 18px 14px;
+}
+
+.section-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.more {
+  font-size: 12px;
+  color: #53627b;
+}
+
+/* =====================
+   教材カード
+===================== */
+
+.material-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+.material-card {
+
+  background: white;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 2px 8px rgba(20, 33, 61, 0.07);
+
+  cursor: pointer;
+
+  transition: transform 0.15s;
+}
+
+.material-card:active {
+  transform: scale(0.98);
+}
+
+.material-image {
+
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  background: #e9edf4;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #8a96aa;
+
+  font-size: 34px;
+}
+
+.material-info {
+  padding: 9px;
+}
+
+.material-title {
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  line-height: 1.4;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 2;
+
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+.material-seller {
+
+  margin-top: 4px;
+
+  font-size: 10px;
+
+  color: #8a94a6;
+}
+
+.material-price {
+
+  margin-top: 5px;
+
+  font-size: 15px;
+
+  font-weight: 800;
+
+  color: #102344;
+}
+
+/* =====================
+   出品ボタン
+===================== */
+
+.sell-banner {
+
+  margin-top: 18px;
+
+  padding: 15px;
+
+  border-radius: 14px;
+
+  background: #102344;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.sell-text strong {
+
+  display: block;
+
+  font-size: 14px;
+}
+
+.sell-text span {
+
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 11px;
+
+  color: #cbd5e5;
+}
+
+.sell-button {
+
+  background: white;
+
+  color: #102344;
+
+  border: none;
+
+  border-radius: 9px;
+
+  padding: 9px 12px;
+
+  font-weight: 700;
+
+  font-size: 11px;
+}
+
+/* =====================
+   下部ナビ
+===================== */
+
+.bottom-nav {
+
+  position: fixed;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 70px;
+
+  background: white;
+
+  border-top: 1px solid #e3e7ef;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(5, 1fr);
+
+  z-index: 999;
+
+  padding-bottom:
+    env(safe-area-inset-bottom);
+}
+
+.nav-item {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 3px;
+
+  text-decoration: none;
+
+  color: #7c8799;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.nav-icon {
+
+  font-size: 21px;
+
+  line-height: 1;
+}
+
+.nav-item.active {
+
+  color: #102344;
+}
+
+/* =====================
+   PC
+===================== */
+
+@media (min-width: 700px) {
+
+  body {
+    max-width: 520px;
+    margin: auto;
+  }
+
+  .bottom-nav {
+    max-width: 520px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+}
+
+</style>
 </head>
+
 
 <body>
 
-<!-- ==============================
+
+<!-- =====================
      ヘッダー
-============================== -->
+===================== -->
 
-<header class="home-header">
+<header class="header">
 
-    <div class="header-inner">
+  <div class="logo">
+    EduMarket
+  </div>
 
-        <div class="header-top">
-
-            <div>
-                <h1>EduMarket</h1>
-
-                <p>
-                    先生が作った教材を、<br>
-                    必要な人へ。
-                </p>
-            </div>
-
-        </div>
+  <div class="subtitle">
+    先生が作った教材を、必要な人へ。
+  </div>
 
 
-        <!-- 検索 -->
+  <div class="search-area">
 
-        <form class="search-box"
-              action="materials.html"
-              method="GET">
+    <input
+      class="search-box"
+      type="search"
+      placeholder="教材を検索"
+      id="searchInput"
+    >
 
-            <span class="search-icon">⌕</span>
+    <button
+      class="search-button"
+      onclick="searchMaterials()"
+    >
+      検索
+    </button>
 
-            <input
-                type="search"
-                name="search"
-                placeholder="教材を検索"
-                aria-label="教材を検索">
-
-            <button type="submit">
-                検索
-            </button>
-
-        </form>
-
-    </div>
+  </div>
 
 </header>
 
 
-<!-- ==============================
-     メイン
-============================== -->
-
-<main class="home-main">
-
-
-    <!-- ==========================
-         教科カテゴリ
-    =========================== -->
-
-    <section class="category-section">
-
-        <div class="category-list">
-
-            <a href="materials.html"
-               class="category-item active">
-
-                <span class="category-icon">📚</span>
-                <span>すべて</span>
-
-            </a>
-
-
-            <a href="materials.html?subject=math"
-               class="category-item">
-
-                <span class="category-icon">📐</span>
-                <span>数学</span>
-
-            </a>
-
-
-            <a href="materials.html?subject=english"
-               class="category-item">
-
-                <span class="category-icon">文</span>
-                <span>英語</span>
-
-            </a>
-
-
-            <a href="materials.html?subject=japanese"
-               class="category-item">
-
-                <span class="category-icon">📖</span>
-                <span>国語</span>
-
-            </a>
-
-
-            <a href="materials.html?subject=science"
-               class="category-item">
-
-                <span class="category-icon">⚗</span>
-                <span>理科</span>
-
-            </a>
-
-
-            <a href="materials.html?subject=social"
-               class="category-item">
-
-                <span class="category-icon">🌎</span>
-                <span>社会</span>
-
-            </a>
-
-
-            <a href="materials.html"
-               class="category-item">
-
-                <span class="category-icon">•••</span>
-                <span>その他</span>
-
-            </a>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ==========================
-         おすすめ教材
-    =========================== -->
-
-    <section class="materials-section">
-
-        <div class="section-title-row">
-
-            <h2>
-                おすすめ教材
-            </h2>
-
-            <a href="materials.html"
-               class="see-all">
-
-                すべて見る
-                <span>›</span>
-
-            </a>
-
-        </div>
-
-
-        <!--
-            ここに script.js が
-            実際の教材を表示する
-        -->
-
-        <div id="materials-list"
-             class="materials-grid">
-
-            <div class="loading-card">
-
-                <p>
-                    教材を読み込んでいます...
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <a href="materials.html"
-           class="more-materials-button">
-
-            新着教材をもっと見る
-            <span>⌄</span>
-
-        </a>
-
-    </section>
-
-
-
-    <!-- ==========================
-         出品
-    =========================== -->
-
-    <section class="sell-promotion">
-
-        <div class="sell-promotion-content">
-
-            <div class="sell-icon">
-                📄
-            </div>
-
-            <div>
-
-                <h2>
-                    教材を出品する
-                </h2>
-
-                <p>
-                    あなたが作った教材を<br>
-                    EduMarketで販売できます。
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <a href="sell.html"
-           class="sell-button">
-
-            出品する
-
-        </a>
-
-    </section>
-
-
-
-    <!-- ==========================
-         ログイン・マイページ
-    =========================== -->
-
-    <section class="quick-links">
-
-        <a href="materials.html"
-           class="quick-link">
-
-            <span>🔍</span>
-
-            <div>
-                <strong>教材を探す</strong>
-                <small>すべての教材を見る</small>
-            </div>
-
-        </a>
-
-
-        <a href="mypage.html"
-           class="quick-link">
-
-            <span>👤</span>
-
-            <div>
-                <strong>マイページ</strong>
-                <small>購入・出品・売上を管理</small>
-            </div>
-
-        </a>
-
-    </section>
-
-</main>
-
-
-
-<!-- ==============================
-     下部ナビゲーション
-============================== -->
-
-<nav class="bottom-navigation">
-
-    <a href="index.html"
-       class="bottom-nav-item active">
-
-        <span class="bottom-nav-icon">⌂</span>
-
-        <span>ホーム</span>
-
-    </a>
-
-
-    <a href="materials.html"
-       class="bottom-nav-item">
-
-        <span class="bottom-nav-icon">⌕</span>
-
-        <span>探す</span>
-
-    </a>
-
-
-    <a href="sell.html"
-       class="bottom-nav-item sell-nav">
-
-        <span class="sell-nav-circle">＋</span>
-
-        <span>出品</span>
-
-    </a>
-
-
-    <a href="mypage.html"
-       class="bottom-nav-item">
-
-        <span class="bottom-nav-icon">🛒</span>
-
-        <span>購入</span>
-
-    </a>
-
-
-    <a href="mypage.html"
-       class="bottom-nav-item">
-
-        <span class="bottom-nav-icon">○</span>
-
-        <span>マイページ</span>
-
-    </a>
+<!-- =====================
+     カテゴリ
+===================== -->
+
+<nav class="categories">
+
+  <button class="category active">
+    すべて
+  </button>
+
+  <button class="category">
+    数学
+  </button>
+
+  <button class="category">
+    英語
+  </button>
+
+  <button class="category">
+    国語
+  </button>
+
+  <button class="category">
+    理科
+  </button>
+
+  <button class="category">
+    社会
+  </button>
+
+  <button class="category">
+    その他
+  </button>
 
 </nav>
 
 
+<!-- =====================
+     メイン
+===================== -->
 
-<!-- ==============================
-     フッター
-============================== -->
+<main class="main">
 
-<footer>
 
-    <div class="footer-links">
+  <div class="section-header">
 
-        <a href="terms.html">
-            利用規約
-        </a>
+    <h2 class="section-title">
+      おすすめ教材
+    </h2>
 
-        <span>|</span>
+    <a
+      class="more"
+      href="materials.html"
+    >
+      すべて見る →
+    </a>
 
-        <a href="privacy.html">
-            プライバシーポリシー
-        </a>
+  </div>
 
-        <span>|</span>
 
-        <a href="tokusho.html">
-            特定商取引法に基づく表記
-        </a>
+  <!-- 教材一覧 -->
+
+  <div
+    class="material-grid"
+    id="materialGrid"
+  >
+
+    <!-- ここに既存のJSから教材を表示 -->
+
+  </div>
+
+
+  <!-- =====================
+       出品バナー
+  ===================== -->
+
+  <div class="sell-banner">
+
+    <div class="sell-text">
+
+      <strong>
+        あなたの教材を販売しませんか？
+      </strong>
+
+      <span>
+        作った教材をEduMarketで販売できます。
+      </span>
 
     </div>
 
+    <button
+      class="sell-button"
+      onclick="location.href='sell.html'"
+    >
+      出品する
+    </button>
 
-    <p>
-        © 2026 EduMarket
-    </p>
-
-</footer>
+  </div>
 
 
+</main>
 
-<!-- ==============================
-     JavaScript
-============================== -->
 
-<script src="supabase.js"></script>
+<!-- =====================
+     下部ナビ
+===================== -->
 
-<script src="script.js"></script>
+<nav class="bottom-nav">
+
+  <a
+    href="index.html"
+    class="nav-item active"
+  >
+    <span class="nav-icon">⌂</span>
+    <span>ホーム</span>
+  </a>
+
+
+  <a
+    href="materials.html"
+    class="nav-item"
+  >
+    <span class="nav-icon">⌕</span>
+    <span>探す</span>
+  </a>
+
+
+  <a
+    href="sell.html"
+    class="nav-item"
+  >
+    <span class="nav-icon">＋</span>
+    <span>出品</span>
+  </a>
+
+
+  <a
+    href="purchases.html"
+    class="nav-item"
+  >
+    <span class="nav-icon">🛒</span>
+    <span>購入</span>
+  </a>
+
+
+  <a
+    href="mypage.html"
+    class="nav-item"
+  >
+    <span class="nav-icon">♙</span>
+    <span>マイページ</span>
+  </a>
+
+</nav>
+
+
+<script>
+
+function searchMaterials() {
+
+  const keyword =
+    document
+      .getElementById("searchInput")
+      .value
+      .trim();
+
+  if (!keyword) {
+
+    location.href =
+      "materials.html";
+
+    return;
+
+  }
+
+  location.href =
+    "materials.html?search=" +
+    encodeURIComponent(keyword);
+
+}
+
+
+/* カテゴリ */
+
+document
+  .querySelectorAll(".category")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(".category")
+          .forEach(b =>
+            b.classList.remove("active")
+          );
+
+        button.classList.add("active");
+
+      }
+    );
+
+  });
+
+</script>
 
 
 </body>
