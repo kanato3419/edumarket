@@ -1,79 +1,382 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduMarket</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>EduMarket</title>
 
     <link rel="stylesheet" href="style.css">
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
 
-    <header>
-        <h1>EduMarket</h1>
-        <p>先生が作った教材を、必要な人へ。</p>
-    </header>
+<!-- ==============================
+     ヘッダー
+============================== -->
 
-    <main>
+<header class="home-header">
 
-        <section>
-            <h2>教材を探す</h2>
-            <a href="materials.html" class="main-button">
-    教材一覧を見る
-</a>
-            <a href="login.html" class="main-button">
-    ログイン
-</a>
+    <div class="header-inner">
 
-<a href="mypage.html" class="main-button">
-    マイページ
-</a>
-        </section>
+        <div class="header-top">
 
-        <section>
-            <h2>教材を出品する</h2>
-            <p>あなたが作った教材を販売できます。</p>
-           <a href="sell.html" class="main-button">
-    教材を出品する
-</a>
-        </section>
+            <div>
+                <h1>EduMarket</h1>
 
-     <section>
+                <p>
+                    先生が作った教材を、<br>
+                    必要な人へ。
+                </p>
+            </div>
 
-    <h2>おすすめ教材</h2>
+        </div>
 
-    <div id="materials-list">
 
-        <p>教材を読み込んでいます...</p>
+        <!-- 検索 -->
+
+        <form class="search-box"
+              action="materials.html"
+              method="GET">
+
+            <span class="search-icon">⌕</span>
+
+            <input
+                type="search"
+                name="search"
+                placeholder="教材を検索"
+                aria-label="教材を検索">
+
+            <button type="submit">
+                検索
+            </button>
+
+        </form>
 
     </div>
 
-</section>
+</header>
 
-    </main>
-<script src="supabase.js"></script>
-<script src="script.js"></script>
-    <footer>
 
-    <p>
-        <a href="terms.html">利用規約</a>
-        |
-        <a href="privacy.html">プライバシーポリシー</a>
-        |
-        <a href="tokusho.html">特定商取引法に基づく表記</a>
-    </p>
+<!-- ==============================
+     メイン
+============================== -->
+
+<main class="home-main">
+
+
+    <!-- ==========================
+         教科カテゴリ
+    =========================== -->
+
+    <section class="category-section">
+
+        <div class="category-list">
+
+            <a href="materials.html"
+               class="category-item active">
+
+                <span class="category-icon">📚</span>
+                <span>すべて</span>
+
+            </a>
+
+
+            <a href="materials.html?subject=math"
+               class="category-item">
+
+                <span class="category-icon">📐</span>
+                <span>数学</span>
+
+            </a>
+
+
+            <a href="materials.html?subject=english"
+               class="category-item">
+
+                <span class="category-icon">文</span>
+                <span>英語</span>
+
+            </a>
+
+
+            <a href="materials.html?subject=japanese"
+               class="category-item">
+
+                <span class="category-icon">📖</span>
+                <span>国語</span>
+
+            </a>
+
+
+            <a href="materials.html?subject=science"
+               class="category-item">
+
+                <span class="category-icon">⚗</span>
+                <span>理科</span>
+
+            </a>
+
+
+            <a href="materials.html?subject=social"
+               class="category-item">
+
+                <span class="category-icon">🌎</span>
+                <span>社会</span>
+
+            </a>
+
+
+            <a href="materials.html"
+               class="category-item">
+
+                <span class="category-icon">•••</span>
+                <span>その他</span>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==========================
+         おすすめ教材
+    =========================== -->
+
+    <section class="materials-section">
+
+        <div class="section-title-row">
+
+            <h2>
+                おすすめ教材
+            </h2>
+
+            <a href="materials.html"
+               class="see-all">
+
+                すべて見る
+                <span>›</span>
+
+            </a>
+
+        </div>
+
+
+        <!--
+            ここに script.js が
+            実際の教材を表示する
+        -->
+
+        <div id="materials-list"
+             class="materials-grid">
+
+            <div class="loading-card">
+
+                <p>
+                    教材を読み込んでいます...
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <a href="materials.html"
+           class="more-materials-button">
+
+            新着教材をもっと見る
+            <span>⌄</span>
+
+        </a>
+
+    </section>
+
+
+
+    <!-- ==========================
+         出品
+    =========================== -->
+
+    <section class="sell-promotion">
+
+        <div class="sell-promotion-content">
+
+            <div class="sell-icon">
+                📄
+            </div>
+
+            <div>
+
+                <h2>
+                    教材を出品する
+                </h2>
+
+                <p>
+                    あなたが作った教材を<br>
+                    EduMarketで販売できます。
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <a href="sell.html"
+           class="sell-button">
+
+            出品する
+
+        </a>
+
+    </section>
+
+
+
+    <!-- ==========================
+         ログイン・マイページ
+    =========================== -->
+
+    <section class="quick-links">
+
+        <a href="materials.html"
+           class="quick-link">
+
+            <span>🔍</span>
+
+            <div>
+                <strong>教材を探す</strong>
+                <small>すべての教材を見る</small>
+            </div>
+
+        </a>
+
+
+        <a href="mypage.html"
+           class="quick-link">
+
+            <span>👤</span>
+
+            <div>
+                <strong>マイページ</strong>
+                <small>購入・出品・売上を管理</small>
+            </div>
+
+        </a>
+
+    </section>
+
+</main>
+
+
+
+<!-- ==============================
+     下部ナビゲーション
+============================== -->
+
+<nav class="bottom-navigation">
+
+    <a href="index.html"
+       class="bottom-nav-item active">
+
+        <span class="bottom-nav-icon">⌂</span>
+
+        <span>ホーム</span>
+
+    </a>
+
+
+    <a href="materials.html"
+       class="bottom-nav-item">
+
+        <span class="bottom-nav-icon">⌕</span>
+
+        <span>探す</span>
+
+    </a>
+
+
+    <a href="sell.html"
+       class="bottom-nav-item sell-nav">
+
+        <span class="sell-nav-circle">＋</span>
+
+        <span>出品</span>
+
+    </a>
+
+
+    <a href="mypage.html"
+       class="bottom-nav-item">
+
+        <span class="bottom-nav-icon">🛒</span>
+
+        <span>購入</span>
+
+    </a>
+
+
+    <a href="mypage.html"
+       class="bottom-nav-item">
+
+        <span class="bottom-nav-icon">○</span>
+
+        <span>マイページ</span>
+
+    </a>
+
+</nav>
+
+
+
+<!-- ==============================
+     フッター
+============================== -->
+
+<footer>
+
+    <div class="footer-links">
+
+        <a href="terms.html">
+            利用規約
+        </a>
+
+        <span>|</span>
+
+        <a href="privacy.html">
+            プライバシーポリシー
+        </a>
+
+        <span>|</span>
+
+        <a href="tokusho.html">
+            特定商取引法に基づく表記
+        </a>
+
+    </div>
+
 
     <p>
         © 2026 EduMarket
     </p>
 
 </footer>
+
+
+
+<!-- ==============================
+     JavaScript
+============================== -->
+
+<script src="supabase.js"></script>
+
+<script src="script.js"></script>
+
+
 </body>
 </html>
