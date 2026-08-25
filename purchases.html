@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>購入履歴 - EduMarket</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Noto Sans JP",
+    sans-serif;
+
+  background: #f5f7fb;
+  color: #14213d;
+
+  padding-bottom: 82px;
+}
+
+/* ヘッダー */
+
+.header {
+  background: #102344;
+  color: white;
+  padding: 24px 18px;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.subtitle {
+  margin-top: 5px;
+  font-size: 13px;
+  color: #d9e1ef;
+}
+
+/* メイン */
+
+.main {
+  padding: 22px 14px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+/* 購入履歴 */
+
+.purchase-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.purchase-card {
+  background: white;
+  border-radius: 14px;
+  padding: 15px;
+
+  box-shadow:
+    0 2px 8px rgba(20, 33, 61, 0.07);
+}
+
+.purchase-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.purchase-price {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #102344;
+}
+
+.purchase-date {
+  margin-top: 5px;
+  font-size: 11px;
+  color: #8a94a6;
+}
+
+.empty {
+  background: white;
+  border-radius: 14px;
+  padding: 35px 20px;
+  text-align: center;
+  color: #7c8799;
+}
+
+/* 下部ナビ */
+
+.bottom-nav {
+  position: fixed;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 70px;
+
+  background: white;
+
+  border-top: 1px solid #e3e7ef;
+
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+
+  z-index: 999;
+
+  padding-bottom:
+    env(safe-area-inset-bottom);
+}
+
+.nav-item {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 3px;
+
+  text-decoration: none;
+
+  color: #7c8799;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.nav-icon {
+  font-size: 21px;
+  line-height: 1;
+}
+
+.nav-item.active {
+  color: #102344;
+}
+
+/* PC */
+
+@media (min-width: 700px) {
+
+  body {
+    max-width: 520px;
+    margin: auto;
+  }
+
+  .bottom-nav {
+    max-width: 520px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="logo">
+    EduMarket
+  </div>
+
+  <div class="subtitle">
+    購入した教材を確認できます。
+  </div>
+
+</header>
+
+
+<main class="main">
+
+  <h1 class="title">
+    購入履歴
+  </h1>
+
+  <div
+    class="purchase-list"
+    id="purchaseList"
+  >
+
+    <div class="empty">
+      購入した教材はまだありません。
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- 下部ナビ -->
+
+<nav class="bottom-nav">
+
+  <a
+    href="index.html"
+    class="nav-item"
+  >
+    <span class="nav-icon">⌂</span>
+    <span>ホーム</span>
+  </a>
+
+  <a
+    href="materials.html"
+    class="nav-item"
+  >
+    <span class="nav-icon">⌕</span>
+    <span>探す</span>
+  </a>
+
+  <a
+    href="sell.html"
+    class="nav-item"
+  >
+    <span class="nav-icon">＋</span>
+    <span>出品</span>
+  </a>
+
+  <a
+    href="purchases.html"
+    class="nav-item active"
+  >
+    <span class="nav-icon">🛒</span>
+    <span>購入</span>
+  </a>
+
+  <a
+    href="mypage.html"
+    class="nav-item"
+  >
+    <span class="nav-icon">♙</span>
+    <span>マイページ</span>
+  </a>
+
+</nav>
+
+</body>
+</html>
