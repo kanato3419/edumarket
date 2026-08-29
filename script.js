@@ -1344,16 +1344,44 @@ async function displayMyMaterials() {
         card.className =
             "material-card";
 
+card.innerHTML = `
 
-        card.innerHTML = `
+    <div class="material-image">
 
-            <p>
-                ${material.category}
-            </p>
+        ${
+            material.image_url
+                ? `<img
+                    src="${material.image_url}"
+                    alt="${material.title}"
+                >`
+                : "📚"
+        }
 
-            <h3>
-                ${material.title}
-            </h3>
+    </div>
+
+    <p>${material.category}</p>
+
+    <h3>${material.title}</h3>
+
+    <p>${material.description}</p>
+
+    <p>
+        対象：${material.target}
+    </p>
+
+    <p>
+        ¥${Number(material.price).toLocaleString()}
+    </p>
+
+    <a
+        href="material.html?id=${material.id}"
+        class="detail-button"
+    >
+        詳細を見る
+    </a>
+
+`;
+       
 
             <p>
                 ¥${Number(
