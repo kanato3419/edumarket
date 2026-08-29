@@ -3436,3 +3436,12 @@ async function displaySalesManagement() {
 
 displaySalesManagement();
 displayPurchasedMaterials();
+// ==============================
+// 教材一覧ページを開いた時
+// ==============================
+
+if (document.getElementById("material-list")) {
+
+    displayMaterials("all");
+
+}
