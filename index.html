@@ -674,7 +674,142 @@ document
   });
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script src="supabase.js"></script>
+
+<script>
+
+async function displayRecommendedMaterials() {
+
+  const materialGrid =
+    document.getElementById("materialGrid");
+
+
+  if (!materialGrid) {
+    return;
+  }
+
+
+  console.log(
+    "おすすめ教材を取得開始"
+  );
+
+
+  const {
+    data: materials,
+    error
+  } =
+    await supabaseClient
+      .from("materials")
+      .select("*")
+      .limit(6);
+
+
+  console.log(
+    "取得した教材:",
+    materials
+  );
+
+
+  console.log(
+    "取得エラー:",
+    error
+  );
+
+
+  if (error) {
+
+    materialGrid.innerHTML = `
+      <p>
+        教材を読み込めませんでした。
+      </p>
+    `;
+
+    return;
+  }
+
+
+  if (
+    !materials ||
+    materials.length === 0
+  ) {
+
+    materialGrid.innerHTML = `
+      <p>
+        まだ教材がありません。
+      </p>
+    `;
+
+    return;
+  }
+
+
+  materialGrid.innerHTML = "";
+
+
+  materials.forEach(
+    function(material) {
+
+      const card =
+        document.createElement("div");
+
+
+      card.className =
+        "material-card";
+
+
+      card.onclick =
+        function() {
+
+          location.href =
+            "material.html?id=" +
+            material.id;
+
+        };
+
+
+      card.innerHTML = `
+
+        <div class="material-image">
+          📚
+        </div>
+
+
+        <div class="material-info">
+
+          <div class="material-title">
+            ${material.title || "教材"}
+          </div>
+
+
+          <div class="material-seller">
+            ${material.category || ""}
+          </div>
+
+
+          <div class="material-price">
+            ¥${Number(
+              material.price || 0
+            ).toLocaleString()}
+          </div>
+
+        </div>
+
+      `;
+
+
+      materialGrid.appendChild(card);
+
+    }
+  );
+
+}
+
+
+displayRecommendedMaterials();
+
+</script>
 
 </body>
 </html>
