@@ -1361,10 +1361,89 @@ async function displayPurchasedMaterials() {
         </p>
     `;
 
+// ==============================
+// 購入した教材を表示（Supabase版）
+// ==============================
+
+async function displayPurchasedMaterials() {
+
+    const purchasedArea =
+        document.getElementById(
+            "purchased-material-list"
+        );
+
+    if (!purchasedArea) {
+        return;
+    }
+
+
+    // ==============================
+    // ログイン中のユーザーを取得
+    // ==============================
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (userError) {
+
+        console.error(
+            "ユーザー取得エラー:",
+            userError
+        );
+
+        purchasedArea.innerHTML = `
+            <p>
+                ユーザー情報を取得できませんでした。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // ログインしていない
+    // ==============================
+
+    if (!user) {
+
+        purchasedArea.innerHTML = `
+            <p>
+                ログインすると購入履歴を確認できます。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // 読み込み中
+    // ==============================
+
+    purchasedArea.innerHTML = `
+        <p>
+            購入履歴を読み込んでいます...
+        </p>
+    `;
+
 
     // ==============================
     // 購入履歴を取得
     // ==============================
+
+    console.log(
+        "① 購入履歴取得を開始"
+    );
+
 
     const {
         data: purchases,
@@ -1389,7 +1468,22 @@ async function displayPurchasedMaterials() {
             );
 
 
+    console.log(
+        "② 購入履歴取得結果:",
+        purchases
+    );
+
+
+    console.log(
+        "③ 購入履歴取得エラー:",
+        purchaseError
+    );
+
+
+    // ==============================
     // エラー
+    // ==============================
+
     if (purchaseError) {
 
         console.error(
@@ -1407,7 +1501,10 @@ async function displayPurchasedMaterials() {
     }
 
 
+    // ==============================
     // 購入履歴がない
+    // ==============================
+
     if (
         !purchases ||
         purchases.length === 0
@@ -1423,7 +1520,10 @@ async function displayPurchasedMaterials() {
     }
 
 
+    // ==============================
     // 一覧を空にする
+    // ==============================
+
     purchasedArea.innerHTML = "";
 
 
@@ -1447,53 +1547,86 @@ async function displayPurchasedMaterials() {
             const material =
                 purchase.materials;
 
-card.innerHTML = `
 
-    <div class="purchase-card-category">
-        ${material?.category || "その他"}
-    </div>
+            card.innerHTML = `
 
-    <h3 class="purchase-card-title">
-        ${material?.title || "教材"}
-    </h3>
+                <div class="purchase-card-category">
 
-    <p class="purchase-card-description">
-        ${material?.description || "教材の説明はありません。"}
-    </p>
+                    ${
+                        material?.category ||
+                        "その他"
+                    }
 
-    <div class="purchase-card-footer">
+                </div>
 
-        <div class="purchase-card-price">
-            <span>購入価格</span>
-            <strong>
-                ¥${Number(
-                    purchase.price
-                ).toLocaleString()}
-            </strong>
-        </div>
 
-    </div>
+                <h3 class="purchase-card-title">
 
-    <div class="purchase-card-buttons">
+                    ${
+                        material?.title ||
+                        "教材"
+                    }
 
-        <a
-            href="material.html?id=${purchase.material_id}"
-            class="purchase-detail-button"
-        >
-            教材を見る
-        </a>
+                </h3>
 
-        <button
-            class="purchase-pdf-button"
-            onclick="openPurchasedPDF('${purchase.material_id}')"
-        >
-            PDFを見る
-        </button>
 
-    </div>
+                <p class="purchase-card-description">
 
-`;
-          
+                    ${
+                        material?.description ||
+                        "教材の説明はありません。"
+                    }
+
+                </p>
+
+
+                <div class="purchase-card-footer">
+
+                    <div class="purchase-card-price">
+
+                        <span>
+                            購入価格
+                        </span>
+
+                        <strong>
+
+                            ¥${Number(
+                                purchase.price
+                            ).toLocaleString()}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="purchase-card-buttons">
+
+
+                    <a
+                        href="material.html?id=${purchase.material_id}"
+                        class="purchase-detail-button"
+                    >
+
+                        教材を見る
+
+                    </a>
+
+
+                    <button
+                        class="purchase-pdf-button"
+                        onclick="openPurchasedPDF('${purchase.material_id}')"
+                    >
+
+                        PDFを見る
+
+                    </button>
+
+
+                </div>
+
+            `;
 
 
             purchasedArea.appendChild(
@@ -1506,8 +1639,12 @@ card.innerHTML = `
 }
 
 
+// ==============================
 // 実行
+// ==============================
+
 displayPurchasedMaterials();
+  
 // =====================================
 // Supabaseから教材を取得
 // =====================================
