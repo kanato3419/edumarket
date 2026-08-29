@@ -2806,3 +2806,6 @@ async function displaySalesManagement() {
 // ==============================
 
 displaySalesManagement();
+displayPurchasedMaterials();
+
+
