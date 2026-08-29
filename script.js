@@ -1447,48 +1447,53 @@ async function displayPurchasedMaterials() {
             const material =
                 purchase.materials;
 
+card.innerHTML = `
 
-            card.innerHTML = `
+    <div class="purchase-card-category">
+        ${material?.category || "その他"}
+    </div>
 
-                <p>
-                    ${material?.category || ""}
-                </p>
+    <h3 class="purchase-card-title">
+        ${material?.title || "教材"}
+    </h3>
 
+    <p class="purchase-card-description">
+        ${material?.description || "教材の説明はありません。"}
+    </p>
 
-                <h3>
-                    ${material?.title || "教材"}
-                </h3>
+    <div class="purchase-card-footer">
 
+        <div class="purchase-card-price">
+            <span>購入価格</span>
+            <strong>
+                ¥${Number(
+                    purchase.price
+                ).toLocaleString()}
+            </strong>
+        </div>
 
-                <p>
-                    ${material?.description || ""}
-                </p>
+    </div>
 
+    <div class="purchase-card-buttons">
 
-                <p>
-                    購入価格：
-                    ¥${Number(
-                        purchase.price
-                    ).toLocaleString()}
-                </p>
+        <a
+            href="material.html?id=${purchase.material_id}"
+            class="purchase-detail-button"
+        >
+            教材を見る
+        </a>
 
+        <button
+            class="purchase-pdf-button"
+            onclick="openPurchasedPDF('${purchase.material_id}')"
+        >
+            PDFを見る
+        </button>
 
-                <a
-                    href="material.html?id=${purchase.material_id}"
-                    class="detail-button"
-                >
-                    教材を見る
-                </a>
+    </div>
 
-
-                <button
-                    class="detail-button"
-                    onclick="openPurchasedPDF('${purchase.material_id}')"
-                >
-                    PDFを見る
-                </button>
-
-            `;
+`;
+          
 
 
             purchasedArea.appendChild(
