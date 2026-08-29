@@ -18,21 +18,24 @@
 
 
 <body>
-<nav class="site-nav">
 
-    <a href="index.html">
-        EduMarket
-    </a>
+    <nav class="site-nav">
 
-    <a href="materials.html">
-        教材を探す
-    </a>
+        <a href="index.html">
+            EduMarket
+        </a>
 
-    <a href="mypage.html">
-        マイページ
-    </a>
+        <a href="materials.html">
+            教材を探す
+        </a>
 
-</nav>
+        <a href="mypage.html">
+            マイページ
+        </a>
+
+    </nav>
+
+
     <header>
 
         <h1>EduMarket</h1>
@@ -44,175 +47,246 @@
     </header>
 
 
-   <main>
+    <main>
 
-    <section class="mypage-section">
+        <section class="mypage-section">
 
-        <h2>マイページ</h2>
-
-
-        <!-- ユーザー情報 -->
-        <div id="user-info">
-
-            <p>
-                ユーザー情報を読み込んでいます...
-            </p>
-
-        </div>
+            <h2>マイページ</h2>
 
 
-        <!-- 自分が出品した教材 -->
-        <section id="my-materials">
+            <!-- ユーザー情報 -->
 
-            <h2>自分が出品した教材</h2>
-
-            <div id="my-material-list">
+            <div id="user-info">
 
                 <p>
-                    出品した教材を読み込んでいます...
+                    ユーザー情報を読み込んでいます...
                 </p>
+
+            </div>
+
+
+            <!-- 自分が出品した教材 -->
+
+            <section id="my-materials">
+
+                <h2>
+                    自分が出品した教材
+                </h2>
+
+                <div id="my-material-list">
+
+                    <p>
+                        出品した教材を読み込んでいます...
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- 購入した教材 -->
+
+            <section id="purchased-materials">
+
+                <h2>
+                    購入した教材
+                </h2>
+
+                <div id="purchased-material-list">
+
+                    <p>
+                        購入した教材を読み込んでいます...
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- 売上管理 -->
+
+            <section id="sales-management">
+
+                <h2>
+                    売上管理
+                </h2>
+
+                <div id="sales-summary">
+
+                    <p>
+                        売上情報を読み込んでいます...
+                    </p>
+
+                </div>
+
+
+                <div id="sales-history">
+
+                    <h3>
+                        販売履歴
+                    </h3>
+
+                    <p>
+                        販売履歴を読み込んでいます...
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- メニュー -->
+
+            <div class="mypage-menu">
+
+                <a
+                    href="materials.html"
+                    class="main-button"
+                >
+                    教材を探す
+                </a>
+
+
+                <a
+                    href="sell.html"
+                    class="main-button"
+                >
+                    教材を出品する
+                </a>
+
+
+                <button
+                    id="stripe-connect-button"
+                    class="main-button"
+                >
+                    Stripe販売者登録
+                </button>
+
+
+                <button id="logout-button">
+
+                    ログアウト
+
+                </button>
 
             </div>
 
         </section>
 
-
-        <!-- 購入した教材 -->
-        <section id="purchased-materials">
-
-            <h2>購入した教材</h2>
-
-            <div id="purchased-material-list">
-
-                <p>
-                    購入した教材を読み込んでいます...
-                </p>
-
-            </div>
-
-        </section>
-<!-- 売上管理 -->
-<section id="sales-management">
-
-    <h2>売上管理</h2>
-
-    <div id="sales-summary">
-
-        <p>
-            売上情報を読み込んでいます...
-        </p>
-
-    </div>
-
-    <div id="sales-history">
-
-        <h3>販売履歴</h3>
-
-        <p>
-            販売履歴を読み込んでいます...
-        </p>
-
-    </div>
-
-</section>
-
-        <!-- メニュー -->
-        <div class="mypage-menu">
-
-            <a
-                href="materials.html"
-                class="main-button"
-            >
-                教材を探す
-            </a>
+    </main>
 
 
-            <a
-                href="sell.html"
-                class="main-button"
-            >
-                教材を出品する
-            </a>
-<button
-    id="stripe-connect-button"
-    class="main-button"
->
-    Stripe販売者登録
-</button>
+    <!-- 下部ナビ -->
 
-            <button
-                id="logout-button"
-            >
-                ログアウト
-            </button>
+    <nav class="bottom-nav">
 
-        </div>
+        <a
+            href="index.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">⌂</span>
+            <span>ホーム</span>
+        </a>
 
 
-    </section>
+        <a
+            href="materials.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">⌕</span>
+            <span>探す</span>
+        </a>
 
-</main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-<script src="script.js"></script>
-console.log("★★★★★ mypageチェックコードが読み込まれた ★★★★★");
-<script>
-async function checkStripeConnectAccount() {
+        <a
+            href="sell.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">＋</span>
+            <span>出品</span>
+        </a>
 
-    console.log("Stripe Connect状態を確認します");
 
-    const { data, error } =
-        await supabaseClient.functions.invoke(
-            "check-connect-account",
-            {
-                body: {}
+        <a
+            href="purchases.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">🛒</span>
+            <span>購入</span>
+        </a>
+
+
+        <a
+            href="mypage.html"
+            class="nav-item active"
+        >
+            <span class="nav-icon">♙</span>
+            <span>マイページ</span>
+        </a>
+
+    </nav>
+
+
+    <!-- JavaScript -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="script.js"></script>
+
+
+    <script>
+
+        console.log(
+            "★★★★★ mypageチェックコードが読み込まれた ★★★★★"
+        );
+
+
+        async function checkStripeConnectAccount() {
+
+            console.log(
+                "Stripe Connect状態を確認します"
+            );
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.functions.invoke(
+                    "check-connect-account",
+                    {
+                        body: {}
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Stripe Connect確認エラー:",
+                    error
+                );
+
+                return;
+
             }
-        );
 
-    if (error) {
-        console.error(
-            "Stripe Connect確認エラー:",
-            error
-        );
-        return;
-    }
 
-    console.log(
-        "Stripe Connect確認結果:",
-        data
-    );
-}
+            console.log(
+                "Stripe Connect確認結果:",
+                data
+            );
 
-checkStripeConnectAccount();
-</script>
-<nav class="bottom-nav">
+        }
 
-  <a href="index.html" class="nav-item">
-    <span class="nav-icon">⌂</span>
-    <span>ホーム</span>
-  </a>
 
-  <a href="materials.html" class="nav-item">
-    <span class="nav-icon">⌕</span>
-    <span>探す</span>
-  </a>
+        checkStripeConnectAccount();
 
-  <a href="sell.html" class="nav-item active">
-    <span class="nav-icon">＋</span>
-    <span>出品</span>
-  </a>
+    </script>
 
-  <a href="purchases.html" class="nav-item">
-    <span class="nav-icon">🛒</span>
-    <span>購入</span>
-  </a>
 
-  <a href="mypage.html" class="nav-item">
-    <span class="nav-icon">♙</span>
-    <span>マイページ</span>
-  </a>
-
-</nav>
 </body>
+
 </html>
