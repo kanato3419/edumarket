@@ -255,6 +255,10 @@ if (sellForm) {
 
             const imageFile =
                 imageInput?.files[0] || null;
+            console.log(
+    "選択された画像:",
+    imageFile
+);
 
 
             // ==============================
