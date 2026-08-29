@@ -657,3 +657,33 @@ button:hover {
     }
 
 }
+/* ==============================
+   教材イメージ画像
+============================== */
+
+.material-thumbnail {
+
+    width: 100%;
+
+    height: 180px;
+
+    object-fit: cover;
+
+    display: block;
+
+}
+
+
+.material-thumbnail.no-image {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eef1f5;
+
+    font-size: 48px;
+
+}
