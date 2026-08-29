@@ -153,11 +153,13 @@ function filterMaterials(category) {
 
 
 // ==============================
-// 教材出品（Supabase + PDF Storage版）
+// 教材出品
+// Supabase + PDF + イメージ画像
 // ==============================
 
 const sellForm =
     document.getElementById("sell-form");
+
 
 if (sellForm) {
 
@@ -187,7 +189,7 @@ if (sellForm) {
             const target =
                 document.getElementById(
                     "target"
-                ).value;
+                ).value.trim();
 
 
             const description =
@@ -203,7 +205,7 @@ if (sellForm) {
 
 
             // ==============================
-            // PDFファイルを取得
+            // PDFを取得
             // ==============================
 
             const fileInput =
@@ -223,10 +225,10 @@ if (sellForm) {
                 );
 
                 return;
+
             }
 
 
-            // PDFか確認
             if (
                 file.type !==
                 "application/pdf"
@@ -237,11 +239,26 @@ if (sellForm) {
                 );
 
                 return;
+
             }
 
 
             // ==============================
-            // ログインユーザーを取得
+            // イメージ画像を取得
+            // ==============================
+
+            const imageInput =
+                document.getElementById(
+                    "material-image"
+                );
+
+
+            const imageFile =
+                imageInput?.files[0] || null;
+
+
+            // ==============================
+            // ログインユーザー取得
             // ==============================
 
             const {
@@ -250,26 +267,12 @@ if (sellForm) {
                 },
                 error: userError
             } =
-                await supabaseClient.auth.getUser();
+                await supabaseClient
+                    .auth
+                    .getUser();
 
 
-            if (userError) {
-
-                console.error(
-                    "ユーザー取得エラー:",
-                    userError
-                );
-
-                alert(
-                    "ユーザー情報を取得できませんでした。"
-                );
-
-                return;
-            }
-
-
-            // ログインしていない場合
-            if (!user) {
+            if (userError || !user) {
 
                 alert(
                     "教材を出品するにはログインしてください。"
@@ -279,44 +282,38 @@ if (sellForm) {
                     "login.html";
 
                 return;
+
             }
 
 
             // ==============================
-            // ファイルの保存場所を作る
+            // PDF保存パス
             // ==============================
 
-            const safeFileName =
-    "material_" +
-    Date.now() +
-    ".pdf";
-
-const filePath =
-    user.id +
-    "/" +
-    safeFileName;
-            
+            const pdfFileName =
+                "material_" +
+                Date.now() +
+                ".pdf";
 
 
-            console.log(
-                "PDF保存先:",
-                filePath
-            );
+            const pdfPath =
+                user.id +
+                "/" +
+                pdfFileName;
 
 
             // ==============================
-            // PDFをStorageへアップロード
+            // PDFアップロード
             // ==============================
 
             const {
-                data: uploadData,
-                error: uploadError
+                error: pdfUploadError
             } =
                 await supabaseClient
                     .storage
                     .from("materials")
                     .upload(
-                        filePath,
+                        pdfPath,
                         file,
                         {
                             contentType:
@@ -327,27 +324,144 @@ const filePath =
                     );
 
 
-            // PDFアップロードエラー
-            if (uploadError) {
+            if (pdfUploadError) {
 
                 console.error(
                     "PDFアップロードエラー:",
-                    uploadError
+                    pdfUploadError
                 );
 
                 alert(
                     "PDFのアップロードに失敗しました。\n\n" +
-                    uploadError.message
+                    pdfUploadError.message
                 );
 
                 return;
+
             }
 
 
-            console.log(
-                "PDFアップロード成功:",
-                uploadData
-            );
+            // ==============================
+            // 画像アップロード
+            // ==============================
+
+            let imageUrl = null;
+            let imagePath = null;
+
+
+            if (imageFile) {
+
+                // 画像ファイルか確認
+
+                if (
+                    !imageFile.type.startsWith(
+                        "image/"
+                    )
+                ) {
+
+                    alert(
+                        "画像ファイルを選択してください。"
+                    );
+
+                    return;
+
+                }
+
+
+                // 拡張子取得
+
+                const extension =
+                    imageFile.name
+                        .split(".")
+                        .pop();
+
+
+                // 保存名
+
+                const imageFileName =
+                    "image_" +
+                    Date.now() +
+                    "." +
+                    extension;
+
+
+                imagePath =
+                    user.id +
+                    "/" +
+                    imageFileName;
+
+
+                // Storageへアップロード
+
+                const {
+                    error: imageUploadError
+                } =
+                    await supabaseClient
+                        .storage
+                        .from("material-images")
+                        .upload(
+                            imagePath,
+                            imageFile,
+                            {
+                                contentType:
+                                    imageFile.type,
+
+                                upsert: false
+                            }
+                        );
+
+
+                if (imageUploadError) {
+
+                    console.error(
+                        "画像アップロードエラー:",
+                        imageUploadError
+                    );
+
+
+                    // PDFを削除
+
+                    await supabaseClient
+                        .storage
+                        .from("materials")
+                        .remove([
+                            pdfPath
+                        ]);
+
+
+                    alert(
+                        "画像のアップロードに失敗しました。\n\n" +
+                        imageUploadError.message
+                    );
+
+                    return;
+
+                }
+
+
+                // 公開URL取得
+
+                const {
+                    data: imageUrlData
+                } =
+                    supabaseClient
+                        .storage
+                        .from("material-images")
+                        .getPublicUrl(
+                            imagePath
+                        );
+
+
+                imageUrl =
+                    imageUrlData.publicUrl;
+
+
+                console.log(
+                    "画像URL:",
+                    imageUrl
+                );
+
+            }
 
 
             // ==============================
@@ -368,7 +482,9 @@ const filePath =
 
                 file_name: file.name,
 
-                file_path: filePath,
+                file_path: pdfPath,
+
+                image_url: imageUrl,
 
                 seller_id: user.id
 
@@ -381,12 +497,17 @@ const filePath =
             } =
                 await supabaseClient
                     .from("materials")
-                    .insert(newMaterial)
+                    .insert(
+                        newMaterial
+                    )
                     .select()
                     .single();
 
 
-            // データベース登録エラー
+            // ==============================
+            // DB登録エラー
+            // ==============================
+
             if (error) {
 
                 console.error(
@@ -395,14 +516,28 @@ const filePath =
                 );
 
 
-                // DB登録に失敗した場合、
-                // 先ほどアップロードしたPDFを削除
+                // PDF削除
+
                 await supabaseClient
                     .storage
                     .from("materials")
                     .remove([
-                        filePath
+                        pdfPath
                     ]);
+
+
+                // 画像も削除
+
+                if (imagePath) {
+
+                    await supabaseClient
+                        .storage
+                        .from("material-images")
+                        .remove([
+                            imagePath
+                        ]);
+
+                }
 
 
                 alert(
@@ -411,6 +546,7 @@ const filePath =
                 );
 
                 return;
+
             }
 
 
@@ -436,9 +572,6 @@ const filePath =
     );
 
 }
-
-
-
   // ==============================
 // 教材詳細を表示
 // ==============================
