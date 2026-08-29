@@ -495,3 +495,167 @@ section:last-child p {
     }
 
 }
+/* =========================
+   購入教材カード
+========================= */
+
+#purchased-material-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.material-card {
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 18px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(20, 33, 61, 0.08);
+
+    border: 1px solid #edf0f5;
+}
+
+
+/* カテゴリ */
+
+.purchase-card-category {
+
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    background: #eef3fb;
+
+    color: #34527d;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* タイトル */
+
+.purchase-card-title {
+
+    margin-top: 12px;
+
+    font-size: 19px;
+
+    font-weight: 800;
+
+    color: #14213d;
+}
+
+
+/* 説明 */
+
+.purchase-card-description {
+
+    margin-top: 8px;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    color: #69758a;
+}
+
+
+/* 価格 */
+
+.purchase-card-footer {
+
+    margin-top: 15px;
+
+    padding-top: 14px;
+
+    border-top:
+        1px solid #edf0f5;
+}
+
+.purchase-card-price {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    color: #7c8799;
+
+    font-size: 12px;
+}
+
+.purchase-card-price strong {
+
+    font-size: 20px;
+
+    color: #102344;
+}
+
+
+/* ボタン */
+
+.purchase-card-buttons {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+
+.purchase-detail-button {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    height: 45px;
+
+    border-radius: 11px;
+
+    background: #102344;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.purchase-pdf-button {
+
+    height: 45px;
+
+    border-radius: 11px;
+
+    border:
+        1px solid #dce3ee;
+
+    background: white;
+
+    color: #102344;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
