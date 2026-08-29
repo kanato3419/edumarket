@@ -40,13 +40,16 @@ const defaultMaterials = [
 
 async function getMaterials() {
 
-    const { data, error } =
-        await supabaseClient
-            .from("materials")
-            .select("*")
-            .order("created_at", {
-                ascending: false
-            });
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("materials")
+        .select("*")
+        .order("created_at", {
+            ascending: false
+        });
+
 
     if (error) {
 
@@ -59,41 +62,48 @@ async function getMaterials() {
 
     }
 
+
     return data || [];
 
 }
+
 
 // ==============================
 // 教材一覧を表示
 // ==============================
 
-async function displayMaterials(category = "all") {
+async function displayMaterials(
+    category = "all"
+) {
 
     const materialList =
-        document.getElementById("material-list");
+        document.getElementById(
+            "material-list"
+        );
 
 
+    // 教材一覧ページ以外では実行しない
     if (!materialList) {
         return;
     }
 
 
     // 読み込み中
-
     materialList.innerHTML = `
         <p>教材を読み込んでいます...</p>
     `;
 
 
-    // Supabaseから教材を取得
-
+    // Supabaseから教材取得
     const materials =
         await getMaterials();
 
 
+    // 一度画面を空にする
     materialList.innerHTML = "";
 
 
+    // 教材がない場合
     if (
         !materials ||
         materials.length === 0
@@ -104,29 +114,36 @@ async function displayMaterials(category = "all") {
         `;
 
         return;
+
     }
 
 
-    // ==============================
-    // 教材カード作成
-    // ==============================
+    let displayCount = 0;
 
+
+    // 教材を1つずつ表示
     materials.forEach(
         function(material) {
 
 
-            // カテゴリーで絞り込み
-
+            // カテゴリー絞り込み
             if (
                 category !== "all" &&
                 material.category !== category
             ) {
+
                 return;
+
             }
 
 
+            displayCount++;
+
+
             const card =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             card.className =
@@ -134,39 +151,29 @@ async function displayMaterials(category = "all") {
 
 
             // ==============================
-            // 画像
+            // 教材画像
             // ==============================
 
-            let imageHTML;
-
-
-            if (material.image_url) {
-
-                imageHTML = `
-
-                    <img
-                        src="${material.image_url}"
-                        alt="${material.title}"
-                        class="material-thumbnail"
-                    >
-
-                `;
-
-            } else {
-
-                imageHTML = `
-
-                    <div class="material-thumbnail no-image">
-                        📚
-                    </div>
-
-                `;
-
-            }
+            const imageHTML =
+                material.image_url
+                    ? `
+                        <div class="material-image">
+                            <img
+                                src="${material.image_url}"
+                                alt="${material.title}"
+                                class="material-thumbnail"
+                            >
+                        </div>
+                    `
+                    : `
+                        <div class="material-image no-image">
+                            📚
+                        </div>
+                    `;
 
 
             // ==============================
-            // カード内容
+            // 教材カード
             // ==============================
 
             card.innerHTML = `
@@ -179,21 +186,21 @@ async function displayMaterials(category = "all") {
 
                     <p class="material-category">
 
-                        ${material.category}
+                        ${material.category || ""}
 
                     </p>
 
 
                     <h3>
 
-                        ${material.title}
+                        ${material.title || ""}
 
                     </h3>
 
 
                     <p class="material-description">
 
-                        ${material.description}
+                        ${material.description || ""}
 
                     </p>
 
@@ -201,7 +208,7 @@ async function displayMaterials(category = "all") {
                     <p>
 
                         対象：
-                        ${material.target}
+                        ${material.target || ""}
 
                     </p>
 
@@ -209,7 +216,7 @@ async function displayMaterials(category = "all") {
                     <p class="material-price">
 
                         ¥${Number(
-                            material.price
+                            material.price || 0
                         ).toLocaleString()}
 
                     </p>
@@ -219,9 +226,7 @@ async function displayMaterials(category = "all") {
                         href="material.html?id=${material.id}"
                         class="detail-button"
                     >
-
                         詳細を見る
-
                     </a>
 
 
@@ -237,8 +242,19 @@ async function displayMaterials(category = "all") {
         }
     );
 
-}
 
+    // 絞り込み結果がない場合
+    if (displayCount === 0) {
+
+        materialList.innerHTML = `
+            <p>
+                このカテゴリーの教材はまだありません。
+            </p>
+        `;
+
+    }
+
+}
 
 // ==============================
 // カテゴリー検索
@@ -274,33 +290,31 @@ if (sellForm) {
             // ==============================
 
             const title =
-                document.getElementById(
-                    "title"
-                ).value.trim();
+                document.getElementById("title")
+                    .value
+                    .trim();
 
 
             const category =
-                document.getElementById(
-                    "category"
-                ).value;
+                document.getElementById("category")
+                    .value;
 
 
             const target =
-                document.getElementById(
-                    "target"
-                ).value.trim();
+                document.getElementById("target")
+                    .value
+                    .trim();
 
 
             const description =
-                document.getElementById(
-                    "description"
-                ).value.trim();
+                document.getElementById("description")
+                    .value
+                    .trim();
 
 
             const price =
-                document.getElementById(
-                    "price"
-                ).value;
+                document.getElementById("price")
+                    .value;
 
 
             // ==============================
@@ -353,11 +367,9 @@ if (sellForm) {
 
 
             const imageFile =
-                imageInput?.files[0] || null;
-            console.log(
-    "選択された画像:",
-    imageFile
-);
+                imageInput
+                    ? imageInput.files[0]
+                    : null;
 
 
             // ==============================
@@ -389,13 +401,31 @@ if (sellForm) {
             }
 
 
+            // ボタン取得
+            const submitButton =
+                sellForm.querySelector(
+                    ".submit-button"
+                );
+
+
+            // 二重送信防止
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                "教材を登録しています...";
+
+
             // ==============================
             // PDF保存パス
             // ==============================
 
+            const timestamp =
+                Date.now();
+
+
             const pdfFileName =
                 "material_" +
-                Date.now() +
+                timestamp +
                 ".pdf";
 
 
@@ -434,10 +464,17 @@ if (sellForm) {
                     pdfUploadError
                 );
 
+
                 alert(
                     "PDFのアップロードに失敗しました。\n\n" +
                     pdfUploadError.message
                 );
+
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "教材を登録する";
 
                 return;
 
@@ -454,7 +491,7 @@ if (sellForm) {
 
             if (imageFile) {
 
-                // 画像ファイルか確認
+                // 画像か確認
 
                 if (
                     !imageFile.type.startsWith(
@@ -466,6 +503,22 @@ if (sellForm) {
                         "画像ファイルを選択してください。"
                     );
 
+
+                    // すでに保存したPDFを削除
+
+                    await supabaseClient
+                        .storage
+                        .from("materials")
+                        .remove([
+                            pdfPath
+                        ]);
+
+
+                    submitButton.disabled = false;
+
+                    submitButton.textContent =
+                        "教材を登録する";
+
                     return;
 
                 }
@@ -476,14 +529,15 @@ if (sellForm) {
                 const extension =
                     imageFile.name
                         .split(".")
-                        .pop();
+                        .pop()
+                        .toLowerCase();
 
 
-                // 保存名
+                // 画像保存名
 
                 const imageFileName =
                     "image_" +
-                    Date.now() +
+                    timestamp +
                     "." +
                     extension;
 
@@ -494,7 +548,7 @@ if (sellForm) {
                     imageFileName;
 
 
-                // Storageへアップロード
+                // Storageへ画像アップロード
 
                 const {
                     error: imageUploadError
@@ -537,12 +591,20 @@ if (sellForm) {
                         imageUploadError.message
                     );
 
+
+                    submitButton.disabled = false;
+
+                    submitButton.textContent =
+                        "教材を登録する";
+
                     return;
 
                 }
 
 
-                // 公開URL取得
+                // ==============================
+                // 画像の公開URLを取得
+                // ==============================
 
                 const {
                     data: imageUrlData
@@ -600,9 +662,7 @@ if (sellForm) {
             } =
                 await supabaseClient
                     .from("materials")
-                    .insert(
-                        newMaterial
-                    )
+                    .insert(newMaterial)
                     .select()
                     .single();
 
@@ -629,7 +689,7 @@ if (sellForm) {
                     ]);
 
 
-                // 画像も削除
+                // 画像削除
 
                 if (imagePath) {
 
@@ -647,6 +707,12 @@ if (sellForm) {
                     "教材情報の登録に失敗しました。\n\n" +
                     error.message
                 );
+
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "教材を登録する";
 
                 return;
 
@@ -675,7 +741,8 @@ if (sellForm) {
     );
 
 }
-  // ==============================
+
+ // ==============================
 // 教材詳細を表示
 // ==============================
 
@@ -688,86 +755,86 @@ async function displayMaterialDetail() {
         return;
     }
 
+
+    // ==============================
     // URLから教材IDを取得
+    // ==============================
+
     const params =
-        new URLSearchParams(window.location.search);
+        new URLSearchParams(
+            window.location.search
+        );
 
     const id =
         params.get("id");
+
 
     if (!id) {
 
         detailArea.innerHTML = `
             <h2>教材が見つかりません</h2>
-            <p>教材IDが指定されていません。</p>
+
+            <p>
+                教材IDが指定されていません。
+            </p>
         `;
 
         return;
     }
 
 
-    // まず初期教材・自分が保存した教材を確認
-    const defaultList =
-        typeof defaultMaterials !== "undefined"
-            ? defaultMaterials
-            : [];
+    // ==============================
+    // Supabaseから教材を取得
+    // ==============================
 
-    const savedMaterials =
-        JSON.parse(
-            localStorage.getItem("materials")
-        ) || [];
-
-
-    let material =
-        [...defaultList, ...savedMaterials]
-            .find(function(item) {
-
-                return item.id === id;
-
-            });
+    const {
+        data: material,
+        error
+    } =
+        await supabaseClient
+            .from("materials")
+            .select("*")
+            .eq("id", id)
+            .single();
 
 
-    // 見つからなければSupabaseから取得
-    if (!material) {
+    // ==============================
+    // エラー
+    // ==============================
 
-        const {
-            data,
+    if (error) {
+
+        console.error(
+            "教材取得エラー:",
             error
-        } =
-            await supabaseClient
-                .from("materials")
-                .select("*")
-                .eq("id", id)
-                .single();
+        );
 
 
-        if (error) {
+        detailArea.innerHTML = `
+            <h2>
+                教材を読み込めませんでした
+            </h2>
 
-            console.error(
-                "教材取得エラー:",
-                error
-            );
+            <p>
+                教材情報の取得中にエラーが発生しました。
+            </p>
+        `;
 
-            detailArea.innerHTML = `
-                <h2>教材を読み込めませんでした</h2>
-                <p>
-                    教材情報の取得中にエラーが発生しました。
-                </p>
-            `;
-
-            return;
-        }
-
-
-        material = data;
+        return;
     }
 
 
-    // 教材が存在しない場合
+    // ==============================
+    // 教材がない
+    // ==============================
+
     if (!material) {
 
         detailArea.innerHTML = `
-            <h2>教材が見つかりません</h2>
+            <h2>
+                教材が見つかりません
+            </h2>
+
             <p>
                 指定された教材は存在しません。
             </p>
@@ -778,34 +845,83 @@ async function displayMaterialDetail() {
 
 
     // ==============================
+    // 画像
+    // ==============================
+
+    let imageHTML;
+
+
+    if (material.image_url) {
+
+        imageHTML = `
+
+            <div class="material-detail-image">
+
+                <img
+                    src="${material.image_url}"
+                    alt="${material.title}"
+                >
+
+            </div>
+
+        `;
+
+    } else {
+
+        imageHTML = `
+
+            <div
+                class="
+                    material-detail-image
+                    no-image
+                "
+            >
+                📚
+            </div>
+
+        `;
+
+    }
+
+
+    // ==============================
     // 教材詳細を表示
     // ==============================
 
     detailArea.innerHTML = `
 
+
+        ${imageHTML}
+
+
         <p class="material-category">
+
             ${material.category || ""}
+
             /
+
             ${material.target || ""}
+
         </p>
 
 
         <h2>
+
             ${material.title || ""}
+
         </h2>
-
-
-        <p class="rating">
-            ★★★★★ 4.8
-        </p>
 
 
         <div class="detail-box">
 
-            <h3>この教材について</h3>
+            <h3>
+                この教材について
+            </h3>
 
             <p>
+
                 ${material.description || ""}
+
             </p>
 
         </div>
@@ -813,83 +929,121 @@ async function displayMaterialDetail() {
 
         <div class="detail-box">
 
-            <h3>教材情報</h3>
+            <h3>
+                教材情報
+            </h3>
+
 
             <p>
+
                 対象：
+
                 ${material.target || ""}
+
             </p>
+
 
             <p>
+
                 カテゴリー：
+
                 ${material.category || ""}
+
             </p>
 
 
             ${
+
                 material.file_name
-                ? `
-                    <p>
-                        ファイル：
-                        ${material.file_name}
-                    </p>
-                `
-                : ""
+
+                    ? `
+
+                        <p>
+
+                            ファイル：
+
+                            ${material.file_name}
+
+                        </p>
+
+                    `
+
+                    : ""
+
             }
 
-
-            ${
-                material.fileName
-                ? `
-                    <p>
-                        ファイル：
-                        ${material.fileName}
-                    </p>
-                `
-                : ""
-            }
 
         </div>
 
 
         <div class="purchase-box">
 
-            <p>価格</p>
+
+            <p>
+                価格
+            </p>
 
 
             <h2>
+
                 ¥${Number(
                     material.price || 0
                 ).toLocaleString()}
+
             </h2>
 
 
             <button
                 class="purchase-button"
-                onclick="purchaseMaterial('${material.id}')"
+                onclick="
+                    purchaseMaterial(
+                        '${material.id}'
+                    )
+                "
             >
+
                 購入する
+
             </button>
+
 
         </div>
 
+
     `;
+
 }
 
+
 // ==============================
-// ページ読み込み時の処理
+// ページ読み込み時
 // ==============================
 
-// 教材一覧ページの場合
-if (document.getElementById("material-list")) {
+
+// 教材一覧ページ
+
+if (
+    document.getElementById(
+        "material-list"
+    )
+) {
+
     displayMaterials();
+
 }
 
-// 教材詳細ページの場合
-if (document.getElementById("material-detail")) {
+
+// 教材詳細ページ
+
+if (
+    document.getElementById(
+        "material-detail"
+    )
+) {
+
     displayMaterialDetail();
-}
 
+}
 // ==============================
 // 会員登録（Supabase版）
 // ==============================
@@ -1222,13 +1376,14 @@ if (logoutButton) {
 displayMyPage();
 // ==============================
 // 自分が出品した教材を表示
-// Supabase版
 // ==============================
 
 async function displayMyMaterials() {
 
     const myMaterialsArea =
-        document.getElementById("my-materials");
+        document.getElementById(
+            "my-materials"
+        );
 
 
     if (!myMaterialsArea) {
@@ -1236,16 +1391,23 @@ async function displayMyMaterials() {
     }
 
 
-    // 現在ログインしているユーザーを取得
+    // ==============================
+    // ログインユーザーを取得
+    // ==============================
+
     const {
         data: {
             user
         },
         error: userError
-    } = await supabaseClient.auth.getUser();
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
 
 
     // ユーザー取得エラー
+
     if (userError) {
 
         console.error(
@@ -1253,41 +1415,81 @@ async function displayMyMaterials() {
             userError
         );
 
-        return;
-    }
-
-
-    // ログインしていない場合
-    if (!user) {
 
         myMaterialsArea.innerHTML = `
 
-            <h3>あなたが出品した教材</h3>
+            <h3>
+                あなたが出品した教材
+            </h3>
 
             <p>
-                教材を出品するにはログインしてください。
+                ユーザー情報を取得できませんでした。
             </p>
 
         `;
 
         return;
+
     }
 
 
-    // Supabaseから自分の教材だけ取得
+    // ==============================
+    // ログインしていない場合
+    // ==============================
+
+    if (!user) {
+
+        myMaterialsArea.innerHTML = `
+
+            <h3>
+                あなたが出品した教材
+            </h3>
+
+            <p>
+                教材を出品するにはログインしてください。
+            </p>
+
+            <a
+                href="login.html"
+                class="detail-button"
+            >
+                ログインする
+            </a>
+
+        `;
+
+        return;
+
+    }
+
+
+    // ==============================
+    // 自分が出品した教材を取得
+    // ==============================
+
     const {
         data: myMaterials,
         error
-    } = await supabaseClient
-        .from("materials")
-        .select("*")
-        .eq("seller_id", user.id)
-        .order("created_at", {
-            ascending: false
-        });
+    } =
+        await supabaseClient
+            .from("materials")
+            .select("*")
+            .eq(
+                "seller_id",
+                user.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
 
 
-    // 教材取得エラー
+    // ==============================
+    // 取得エラー
+    // ==============================
+
     if (error) {
 
         console.error(
@@ -1295,9 +1497,12 @@ async function displayMyMaterials() {
             error
         );
 
+
         myMaterialsArea.innerHTML = `
 
-            <h3>あなたが出品した教材</h3>
+            <h3>
+                あなたが出品した教材
+            </h3>
 
             <p>
                 教材を読み込めませんでした。
@@ -1306,10 +1511,14 @@ async function displayMyMaterials() {
         `;
 
         return;
+
     }
 
 
+    // ==============================
     // 教材がない場合
+    // ==============================
+
     if (
         !myMaterials ||
         myMaterials.length === 0
@@ -1317,7 +1526,9 @@ async function displayMyMaterials() {
 
         myMaterialsArea.innerHTML = `
 
-            <h3>あなたが出品した教材</h3>
+            <h3>
+                あなたが出品した教材
+            </h3>
 
             <p>
                 まだ教材を出品していません。
@@ -1326,90 +1537,168 @@ async function displayMyMaterials() {
         `;
 
         return;
+
     }
 
 
+    // ==============================
     // 見出し
+    // ==============================
+
     myMaterialsArea.innerHTML = `
 
-        <h3>あなたが出品した教材</h3>
+        <h3>
+            あなたが出品した教材
+        </h3>
 
     `;
 
 
-    // 教材を1つずつ表示
-    myMaterials.forEach(function(material) {
+    // ==============================
+    // 教材カードを表示
+    // ==============================
 
-        const card =
-            document.createElement("div");
+    myMaterials.forEach(
+        function(material) {
 
 
-        card.className =
-            "material-card";
+            const card =
+                document.createElement("div");
 
-card.innerHTML = `
 
-    <div class="material-image">
+            card.className =
+                "material-card";
 
-        ${
-            material.image_url
-                ? `<img
-                    src="${material.image_url}"
-                    alt="${material.title}"
-                >`
-                : "📚"
+
+            // ==============================
+            // 画像
+            // ==============================
+
+            let imageHTML;
+
+
+            if (material.image_url) {
+
+                imageHTML = `
+
+                    <img
+                        src="${material.image_url}"
+                        alt="${material.title}"
+                        class="material-thumbnail"
+                    >
+
+                `;
+
+            } else {
+
+                imageHTML = `
+
+                    <div
+                        class="
+                            material-thumbnail
+                            no-image
+                        "
+                    >
+                        📚
+                    </div>
+
+                `;
+
+            }
+
+
+            // ==============================
+            // カード内容
+            // ==============================
+
+            card.innerHTML = `
+
+
+                ${imageHTML}
+
+
+                <div class="material-card-content">
+
+
+                    <p class="material-category">
+
+                        ${material.category || ""}
+
+                    </p>
+
+
+                    <h3>
+
+                        ${material.title || ""}
+
+                    </h3>
+
+
+                    <p class="material-description">
+
+                        ${material.description || ""}
+
+                    </p>
+
+
+                    <p>
+
+                        対象：
+
+                        ${material.target || ""}
+
+                    </p>
+
+
+                    <p class="material-price">
+
+                        ¥${Number(
+                            material.price || 0
+                        ).toLocaleString()}
+
+                    </p>
+
+
+                    <a
+                        href="material.html?id=${material.id}"
+                        class="detail-button"
+                    >
+
+                        詳細を見る
+
+                    </a>
+
+
+                </div>
+
+
+            `;
+
+
+            myMaterialsArea.appendChild(
+                card
+            );
+
+
         }
-
-    </div>
-
-    <p>${material.category}</p>
-
-    <h3>${material.title}</h3>
-
-    <p>${material.description}</p>
-
-    <p>
-        対象：${material.target}
-    </p>
-
-    <p>
-        ¥${Number(material.price).toLocaleString()}
-    </p>
-
-    <a
-        href="material.html?id=${material.id}"
-        class="detail-button"
-    >
-        詳細を見る
-    </a>
-
-`;
-       
-
-            <p>
-                ¥${Number(
-                    material.price
-                ).toLocaleString()}
-            </p>
-
-            <a
-                href="material.html?id=${material.id}"
-                class="detail-button"
-            >
-                詳細を見る
-            </a>
-
-        `;
-
-
-        myMaterialsArea.appendChild(card);
-
-    });
+    );
 
 }
 
 
-displayMyMaterials();
+// ==============================
+// マイページで実行
+// ==============================
+
+if (
+    document.getElementById(
+        "my-materials"
+    )
+) {
+
+    displayMyMaterials();
+
+}
 // ==============================
 // Stripe Checkoutで教材を購入
 // ==============================
