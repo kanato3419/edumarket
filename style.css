@@ -765,7 +765,7 @@ button:hover {
   right: 0;
   bottom: 0;
 
-  height: 70px;
+  height: 76px;
 
   background: white;
 
@@ -781,6 +781,8 @@ button:hover {
 }
 
 
+/* ボタン */
+
 .bottom-nav .nav-item {
 
   display: flex;
@@ -791,27 +793,31 @@ button:hover {
 
   justify-content: center;
 
-  gap: 3px;
+  gap: 5px;
 
   text-decoration: none !important;
 
   color: #7c8799 !important;
 
-  font-size: 10px;
+  font-size: 12px;
 
   font-weight: 600;
 
 }
 
 
+/* アイコン */
+
 .bottom-nav .nav-icon {
 
-  font-size: 21px;
+  font-size: 25px;
 
   line-height: 1;
 
 }
 
+
+/* 選択中 */
 
 .bottom-nav .nav-item.active {
 
@@ -823,11 +829,15 @@ button:hover {
 /* 下部ナビにコンテンツが隠れないようにする */
 
 body {
-  padding-bottom: 90px;
+
+  padding-bottom: 100px;
+
 }
 
 
-/* PC版 */
+/* =====================
+   PC版
+===================== */
 
 @media (min-width: 700px) {
 
