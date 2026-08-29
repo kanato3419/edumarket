@@ -876,17 +876,20 @@ async function displayMaterialDetail() {
     `;
 }
 
-
-// 教材詳細を実行
-displayMaterialDetail();
-
 // ==============================
 // ページ読み込み時の処理
 // ==============================
 
-displayMaterials();
+// 教材一覧ページの場合
+if (document.getElementById("material-list")) {
+    displayMaterials();
+}
 
-displayMaterialDetail();
+// 教材詳細ページの場合
+if (document.getElementById("material-detail")) {
+    displayMaterialDetail();
+}
+
 // ==============================
 // 会員登録（Supabase版）
 // ==============================
