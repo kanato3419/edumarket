@@ -1298,7 +1298,7 @@ async function purchaseMaterial(materialId) {
 }
 
 // ==============================
-// 購入した教材を表示（Supabase版）
+// 購入した教材を表示
 // ==============================
 
 async function displayPurchasedMaterials() {
@@ -1308,70 +1308,8 @@ async function displayPurchasedMaterials() {
             "purchased-material-list"
         );
 
-    if (!purchasedArea) {
-        return;
-    }
 
-
-    // ログイン中のユーザーを取得
-    const {
-        data: {
-            user
-        },
-        error: userError
-    } =
-        await supabaseClient.auth.getUser();
-
-
-    // ユーザー取得エラー
-    if (userError) {
-
-        console.error(
-            "ユーザー取得エラー:",
-            userError
-        );
-
-        purchasedArea.innerHTML = `
-            <p>
-                ユーザー情報を取得できませんでした。
-            </p>
-        `;
-
-        return;
-    }
-
-
-    // ログインしていない
-    if (!user) {
-
-        purchasedArea.innerHTML = `
-            <p>
-                ログインすると購入履歴を確認できます。
-            </p>
-        `;
-
-        return;
-    }
-
-
-    // 読み込み中
-    purchasedArea.innerHTML = `
-        <p>
-            購入履歴を読み込んでいます...
-        </p>
-    `;
-
-// ==============================
-// 購入した教材を表示（Supabase版）
-// ==============================
-
-async function displayPurchasedMaterials() {
-
-    const purchasedArea =
-        document.getElementById(
-            "purchased-material-list"
-        );
-
+    // この要素がないページでは何もしない
     if (!purchasedArea) {
         return;
     }
@@ -1400,9 +1338,9 @@ async function displayPurchasedMaterials() {
         );
 
         purchasedArea.innerHTML = `
-            <p>
+            <div class="empty">
                 ユーザー情報を取得できませんでした。
-            </p>
+            </div>
         `;
 
         return;
@@ -1416,9 +1354,9 @@ async function displayPurchasedMaterials() {
     if (!user) {
 
         purchasedArea.innerHTML = `
-            <p>
+            <div class="empty">
                 ログインすると購入履歴を確認できます。
-            </p>
+            </div>
         `;
 
         return;
@@ -1430,9 +1368,9 @@ async function displayPurchasedMaterials() {
     // ==============================
 
     purchasedArea.innerHTML = `
-        <p>
+        <div class="empty">
             購入履歴を読み込んでいます...
-        </p>
+        </div>
     `;
 
 
@@ -1441,7 +1379,7 @@ async function displayPurchasedMaterials() {
     // ==============================
 
     console.log(
-        "① 購入履歴取得を開始"
+        "購入履歴取得を開始"
     );
 
 
@@ -1469,13 +1407,13 @@ async function displayPurchasedMaterials() {
 
 
     console.log(
-        "② 購入履歴取得結果:",
+        "購入履歴:",
         purchases
     );
 
 
     console.log(
-        "③ 購入履歴取得エラー:",
+        "購入履歴エラー:",
         purchaseError
     );
 
@@ -1492,9 +1430,9 @@ async function displayPurchasedMaterials() {
         );
 
         purchasedArea.innerHTML = `
-            <p>
+            <div class="empty">
                 購入履歴を取得できませんでした。
-            </p>
+            </div>
         `;
 
         return;
@@ -1502,7 +1440,7 @@ async function displayPurchasedMaterials() {
 
 
     // ==============================
-    // 購入履歴がない
+    // 購入履歴なし
     // ==============================
 
     if (
@@ -1511,9 +1449,9 @@ async function displayPurchasedMaterials() {
     ) {
 
         purchasedArea.innerHTML = `
-            <p>
+            <div class="empty">
                 まだ購入した教材はありません。
-            </p>
+            </div>
         `;
 
         return;
@@ -1534,23 +1472,24 @@ async function displayPurchasedMaterials() {
     purchases.forEach(
         function(purchase) {
 
+            const material =
+                purchase.materials;
+
+
             const card =
                 document.createElement(
                     "div"
                 );
 
 
+            // purchases.htmlのCSSに合わせる
             card.className =
-                "material-card";
-
-
-            const material =
-                purchase.materials;
+                "purchase-card";
 
 
             card.innerHTML = `
 
-                <div class="purchase-card-category">
+                <div class="purchase-category">
 
                     ${
                         material?.category ||
@@ -1560,7 +1499,7 @@ async function displayPurchasedMaterials() {
                 </div>
 
 
-                <h3 class="purchase-card-title">
+                <h3 class="purchase-title">
 
                     ${
                         material?.title ||
@@ -1570,7 +1509,7 @@ async function displayPurchasedMaterials() {
                 </h3>
 
 
-                <p class="purchase-card-description">
+                <p class="purchase-description">
 
                     ${
                         material?.description ||
@@ -1580,33 +1519,27 @@ async function displayPurchasedMaterials() {
                 </p>
 
 
-                <div class="purchase-card-footer">
+                <div class="purchase-price">
 
-                    <div class="purchase-card-price">
+                    購入価格
 
-                        <span>
-                            購入価格
-                        </span>
+                    <strong>
 
-                        <strong>
+                        ¥${Number(
+                            purchase.price
+                        ).toLocaleString()}
 
-                            ¥${Number(
-                                purchase.price
-                            ).toLocaleString()}
-
-                        </strong>
-
-                    </div>
+                    </strong>
 
                 </div>
 
 
-                <div class="purchase-card-buttons">
+                <div class="purchase-actions">
 
 
                     <a
                         href="material.html?id=${purchase.material_id}"
-                        class="purchase-detail-button"
+                        class="purchase-button material-button"
                     >
 
                         教材を見る
@@ -1615,7 +1548,7 @@ async function displayPurchasedMaterials() {
 
 
                     <button
-                        class="purchase-pdf-button"
+                        class="purchase-button pdf-button"
                         onclick="openPurchasedPDF('${purchase.material_id}')"
                     >
 
@@ -1639,6 +1572,11 @@ async function displayPurchasedMaterials() {
 }
 
 
+// ==============================
+// 実行
+// ==============================
+
+displayPurchasedMaterials();
 // ==============================
 // 実行
 // ==============================
