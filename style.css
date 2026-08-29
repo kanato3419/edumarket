@@ -754,3 +754,93 @@ button:hover {
     }
 
 }
+/* =====================
+   下部ナビ
+===================== */
+
+.bottom-nav {
+  position: fixed;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 70px;
+
+  background: white;
+
+  border-top: 1px solid #e3e7ef;
+
+  display: grid;
+
+  grid-template-columns: repeat(5, 1fr);
+
+  z-index: 999;
+
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+
+.bottom-nav .nav-item {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 3px;
+
+  text-decoration: none !important;
+
+  color: #7c8799 !important;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+}
+
+
+.bottom-nav .nav-icon {
+
+  font-size: 21px;
+
+  line-height: 1;
+
+}
+
+
+.bottom-nav .nav-item.active {
+
+  color: #102344 !important;
+
+}
+
+
+/* 下部ナビにコンテンツが隠れないようにする */
+
+body {
+  padding-bottom: 90px;
+}
+
+
+/* PC版 */
+
+@media (min-width: 700px) {
+
+  .bottom-nav {
+
+    max-width: 520px;
+
+    left: 50%;
+
+    right: auto;
+
+    transform: translateX(-50%);
+
+  }
+
+}
