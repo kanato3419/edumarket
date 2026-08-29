@@ -2924,13 +2924,6 @@ async function displaySalesManagement() {
 
                 </div>
 
-
-
-
-                    </div>
-
-                </div>
-
             `;
 
         }
@@ -2949,5 +2942,3 @@ async function displaySalesManagement() {
 
 displaySalesManagement();
 displayPurchasedMaterials();
-
-
