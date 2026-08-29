@@ -2,15 +2,27 @@
 <html lang="ja">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>教材を出品する - EduMarket</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
 
+
 <body>
+
+
 <nav class="site-nav">
 
     <a href="index.html">
@@ -26,170 +38,233 @@
     </a>
 
 </nav>
-    <header>
-        <h1>EduMarket</h1>
-        <p>先生が作った教材を、必要な人へ。</p>
-    </header>
 
 
-    <main>
+<header>
 
-        <a href="index.html" class="back-link">
-            ← トップページに戻る
-        </a>
+    <h1>
+        EduMarket
+    </h1>
 
-        <section class="sell-section">
-
-            <h2>教材を出品する</h2>
-
-            <p>
-                あなたが作った教材を登録できます。
-            </p>
-
-
-            <form id="sell-form">
-
-                <!-- 教材タイトル -->
-                <div class="form-group">
-
-                    <label for="title">
-                        教材タイトル
-                    </label>
-
-                    <input
-                        type="text"
-                        id="title"
-                        placeholder="例：中学1年生 数学 方程式"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- カテゴリー -->
-                <div class="form-group">
-
-                    <label for="category">
-                        カテゴリー
-                    </label>
-
-                    <select id="category" required>
-
-                        <option value="">
-                            選択してください
-                        </option>
-
-                        <option value="数学">
-                            数学
-                        </option>
-
-                        <option value="英語">
-                            英語
-                        </option>
-
-                        <option value="国語">
-                            国語
-                        </option>
-
-                        <option value="理科">
-                            理科
-                        </option>
-
-                        <option value="社会">
-                            社会
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <!-- 対象学年 -->
-                <div class="form-group">
-
-                    <label for="target">
-                        対象
-                    </label>
-
-                    <input
-                        type="text"
-                        id="target"
-                        placeholder="例：中学1年生"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- 説明 -->
-                <div class="form-group">
-
-                    <label for="description">
-                        教材の説明
-                    </label>
-
-                    <textarea
-                        id="description"
-                        rows="6"
-                        placeholder="教材の内容や特徴を説明してください"
-                        required
-                    ></textarea>
-
-                </div>
-
-
-                <!-- 価格 -->
-                <div class="form-group">
-
-                    <label for="price">
-                        価格（円）
-                    </label>
-
-                    <input
-                        type="number"
-                        id="price"
-                        placeholder="500"
-                        min="0"
-                        required
-                    >
-
-                </div>
-<div class="form-group">
-
-    <label for="material-file">
-        教材ファイル（PDF）
-    </label>
-
-    <input
-        type="file"
-        id="material-file"
-        accept=".pdf,application/pdf"
-        required
-    >
-
-    <p class="file-help">
-        PDF形式の教材を選択してください。
+    <p>
+        先生が作った教材を、必要な人へ。
     </p>
 
-</div>
+</header>
 
-                <button
-                    type="submit"
-                    class="submit-button"
+
+<main>
+
+
+    <a
+        href="index.html"
+        class="back-link"
+    >
+        ← トップページに戻る
+    </a>
+
+
+    <section class="sell-section">
+
+
+        <h2>
+            教材を出品する
+        </h2>
+
+
+        <p>
+            あなたが作った教材を登録できます。
+        </p>
+
+
+        <form id="sell-form">
+
+
+            <!-- 教材タイトル -->
+
+            <div class="form-group">
+
+                <label for="title">
+                    教材タイトル
+                </label>
+
+                <input
+                    type="text"
+                    id="title"
+                    placeholder="例：中学1年生 数学 方程式"
+                    required
                 >
-                    教材を登録する
-                </button>
 
-            </form>
-
-        </section>
-
-    </main>
+            </div>
 
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            <!-- カテゴリー -->
+
+            <div class="form-group">
+
+                <label for="category">
+                    カテゴリー
+                </label>
+
+                <select
+                    id="category"
+                    required
+                >
+
+                    <option value="">
+                        選択してください
+                    </option>
+
+                    <option value="数学">
+                        数学
+                    </option>
+
+                    <option value="英語">
+                        英語
+                    </option>
+
+                    <option value="国語">
+                        国語
+                    </option>
+
+                    <option value="理科">
+                        理科
+                    </option>
+
+                    <option value="社会">
+                        社会
+                    </option>
+
+                    <option value="その他">
+                        その他
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- 対象 -->
+
+            <div class="form-group">
+
+                <label for="target">
+                    対象
+                </label>
+
+                <input
+                    type="text"
+                    id="target"
+                    placeholder="例：中学1年生"
+                    required
+                >
+
+            </div>
+
+
+            <!-- 説明 -->
+
+            <div class="form-group">
+
+                <label for="description">
+                    教材の説明
+                </label>
+
+                <textarea
+                    id="description"
+                    rows="6"
+                    placeholder="教材の内容や特徴を説明してください"
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- 価格 -->
+
+            <div class="form-group">
+
+                <label for="price">
+                    価格（円）
+                </label>
+
+                <input
+                    type="number"
+                    id="price"
+                    placeholder="500"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+
+            <!-- 教材イメージ画像 -->
+
+            <div class="form-group">
+
+                <label for="material-image">
+                    教材のイメージ画像
+                </label>
+
+                <input
+                    type="file"
+                    id="material-image"
+                    accept="image/*"
+                >
+
+                <p class="file-help">
+                    教材一覧に表示するイメージ画像を選択できます。
+                </p>
+
+            </div>
+
+
+            <!-- 教材ファイル -->
+
+            <div class="form-group">
+
+                <label for="material-file">
+                    教材ファイル（PDF）
+                </label>
+
+                <input
+                    type="file"
+                    id="material-file"
+                    accept=".pdf,application/pdf"
+                    required
+                >
+
+                <p class="file-help">
+                    PDF形式の教材を選択してください。
+                </p>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-button"
+            >
+                教材を登録する
+            </button>
+
+
+        </form>
+
+
+    </section>
+
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
+
 <script src="script.js"></script>
+
 
 </body>
 
