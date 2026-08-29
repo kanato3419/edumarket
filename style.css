@@ -745,7 +745,7 @@ button:hover {
 .material-image img,
 .material-thumbnail {
     width: 100%;
-    height: 100%;
+    height: 110%;
     object-fit: cover;
     display: block;
 }
