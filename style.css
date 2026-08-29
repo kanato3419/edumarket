@@ -845,11 +845,13 @@ button:hover {
 
     width: 520px;
 
-    max-width: 100%;
+    height: 70px;
 
     left: 50%;
 
     right: auto;
+
+    bottom: 0;
 
     transform: translateX(-50%);
 
