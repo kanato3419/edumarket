@@ -63,7 +63,6 @@ async function getMaterials() {
 
 }
 
-
 // ==============================
 // 教材一覧を表示
 // ==============================
@@ -73,21 +72,32 @@ async function displayMaterials(category = "all") {
     const materialList =
         document.getElementById("material-list");
 
+
     if (!materialList) {
         return;
     }
 
+
     // 読み込み中
+
     materialList.innerHTML = `
         <p>教材を読み込んでいます...</p>
     `;
 
+
     // Supabaseから教材を取得
-    const materials = await getMaterials();
+
+    const materials =
+        await getMaterials();
+
 
     materialList.innerHTML = "";
 
-    if (!materials || materials.length === 0) {
+
+    if (
+        !materials ||
+        materials.length === 0
+    ) {
 
         materialList.innerHTML = `
             <p>現在、教材はありません。</p>
@@ -96,48 +106,137 @@ async function displayMaterials(category = "all") {
         return;
     }
 
-    materials.forEach(function(material) {
 
-        if (
-            category !== "all" &&
-            material.category !== category
-        ) {
-            return;
+    // ==============================
+    // 教材カード作成
+    // ==============================
+
+    materials.forEach(
+        function(material) {
+
+
+            // カテゴリーで絞り込み
+
+            if (
+                category !== "all" &&
+                material.category !== category
+            ) {
+                return;
+            }
+
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "material-card";
+
+
+            // ==============================
+            // 画像
+            // ==============================
+
+            let imageHTML;
+
+
+            if (material.image_url) {
+
+                imageHTML = `
+
+                    <img
+                        src="${material.image_url}"
+                        alt="${material.title}"
+                        class="material-thumbnail"
+                    >
+
+                `;
+
+            } else {
+
+                imageHTML = `
+
+                    <div class="material-thumbnail no-image">
+                        📚
+                    </div>
+
+                `;
+
+            }
+
+
+            // ==============================
+            // カード内容
+            // ==============================
+
+            card.innerHTML = `
+
+                ${imageHTML}
+
+
+                <div class="material-card-content">
+
+
+                    <p class="material-category">
+
+                        ${material.category}
+
+                    </p>
+
+
+                    <h3>
+
+                        ${material.title}
+
+                    </h3>
+
+
+                    <p class="material-description">
+
+                        ${material.description}
+
+                    </p>
+
+
+                    <p>
+
+                        対象：
+                        ${material.target}
+
+                    </p>
+
+
+                    <p class="material-price">
+
+                        ¥${Number(
+                            material.price
+                        ).toLocaleString()}
+
+                    </p>
+
+
+                    <a
+                        href="material.html?id=${material.id}"
+                        class="detail-button"
+                    >
+
+                        詳細を見る
+
+                    </a>
+
+
+                </div>
+
+            `;
+
+
+            materialList.appendChild(
+                card
+            );
+
         }
+    );
 
-        const card =
-            document.createElement("div");
-
-        card.className = "material-card";
-
-        card.innerHTML = `
-
-            <p>${material.category}</p>
-
-            <h3>${material.title}</h3>
-
-            <p>${material.description}</p>
-
-            <p>
-                対象：${material.target}
-            </p>
-
-            <p>
-                ¥${Number(material.price).toLocaleString()}
-            </p>
-
-            <a
-                href="material.html?id=${material.id}"
-                class="detail-button"
-            >
-                詳細を見る
-            </a>
-
-        `;
-
-        materialList.appendChild(card);
-
-    });
 }
 
 
