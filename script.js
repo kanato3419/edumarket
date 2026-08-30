@@ -3759,3 +3759,240 @@ if (
     displaySales();
 
 }
+// ==============================
+// 販売履歴ページを表示
+// ==============================
+
+async function displaySalesHistoryPage() {
+
+    const salesHistoryList =
+        document.getElementById(
+            "sales-history-list"
+        );
+
+
+    // 販売履歴ページ以外では実行しない
+
+    if (!salesHistoryList) {
+        return;
+    }
+
+
+    // ==============================
+    // ログインユーザーを確認
+    // ==============================
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (userError || !user) {
+
+        salesHistoryList.innerHTML = `
+
+            <p>
+                販売履歴を見るには
+                ログインしてください。
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    // ==============================
+    // 読み込み中
+    // ==============================
+
+    salesHistoryList.innerHTML = `
+
+        <p>
+            販売履歴を読み込んでいます...
+        </p>
+
+    `;
+
+
+    // ==============================
+    // Edge Functionから取得
+    // ==============================
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .functions
+            .invoke(
+                "get-sales-data",
+                {
+                    body: {}
+                }
+            );
+
+
+    // ==============================
+    // エラー
+    // ==============================
+
+    if (error) {
+
+        console.error(
+            "販売履歴取得エラー:",
+            error
+        );
+
+
+        salesHistoryList.innerHTML = `
+
+            <p>
+                販売履歴を取得できませんでした。
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    // ==============================
+    // 販売履歴がない場合
+    // ==============================
+
+    if (
+        !data ||
+        !data.sales ||
+        data.sales.length === 0
+    ) {
+
+        salesHistoryList.innerHTML = `
+
+            <p>
+                まだ教材は売れていません。
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    // ==============================
+    // 一度画面を空にする
+    // ==============================
+
+    salesHistoryList.innerHTML = "";
+
+
+    // ==============================
+    // 1件ずつ表示
+    // ==============================
+
+    data.sales.forEach(
+        function(sale) {
+
+
+            const saleItem =
+                document.createElement(
+                    "div"
+                );
+
+
+            saleItem.className =
+                "sales-history-item";
+
+
+            saleItem.innerHTML = `
+
+                <div class="sales-history-info">
+
+
+                    <h3>
+                        ${sale.title || "教材"}
+                    </h3>
+
+
+                    <p>
+                        販売日時：
+                        ${
+                            sale.purchased_at ||
+                            "日時データなし"
+                        }
+                    </p>
+
+
+                </div>
+
+
+                <div class="sales-history-right">
+
+
+                    <div class="sales-history-price">
+
+                        ¥${Number(
+                            sale.price || 0
+                        ).toLocaleString()}
+
+                    </div>
+
+
+                    <div class="sales-history-fee">
+
+                        手数料：
+                        ¥${Number(
+                            sale.platform_fee || 0
+                        ).toLocaleString()}
+
+                    </div>
+
+
+                    <div class="sales-history-earnings">
+
+                        受取額：
+                        ¥${Number(
+                            sale.seller_amount || 0
+                        ).toLocaleString()}
+
+                    </div>
+
+
+                </div>
+
+            `;
+
+
+            salesHistoryList.appendChild(
+                saleItem
+            );
+
+
+        }
+    );
+
+}
+
+
+// ==============================
+// 販売履歴ページで実行
+// ==============================
+
+if (
+    document.getElementById(
+        "sales-history-list"
+    )
+) {
+
+    displaySalesHistoryPage();
+
+}
