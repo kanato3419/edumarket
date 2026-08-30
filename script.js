@@ -1156,12 +1156,13 @@ if (
     displayMaterialDetail();
 
 }
-// ==============================
+    // ==============================
 // 会員登録（Supabase版）
 // ==============================
 
 const registerForm =
     document.getElementById("register-form");
+
 
 if (registerForm) {
 
@@ -1171,16 +1172,22 @@ if (registerForm) {
 
             event.preventDefault();
 
+
+            // ==============================
             // 入力された情報を取得
-            const name =
+            // ==============================
+
+            const nickname =
                 document.getElementById(
                     "register-name"
                 ).value.trim();
+
 
             const email =
                 document.getElementById(
                     "register-email"
                 ).value.trim();
+
 
             const password =
                 document.getElementById(
@@ -1188,37 +1195,66 @@ if (registerForm) {
                 ).value;
 
 
-            // ボタンを取得
+            if (!nickname) {
+
+                alert(
+                    "出品者名を入力してください。"
+                );
+
+                return;
+
+            }
+
+
+            // ==============================
+            // ボタン取得
+            // ==============================
+
             const submitButton =
                 registerForm.querySelector(
                     ".submit-button"
                 );
 
 
-            // ボタンを一時的に無効化
             submitButton.disabled = true;
+
             submitButton.textContent =
                 "登録しています...";
 
 
-            // Supabaseでアカウント作成
-            const { data, error } =
-                await supabaseClient.auth.signUp({
+            // ==============================
+            // Supabase Authでアカウント作成
+            // ==============================
 
-                    email: email,
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .signUp({
 
-                    password: password,
+                        email: email,
 
-                    options: {
-                        data: {
-                            name: name
+                        password: password,
+
+                        options: {
+
+                            data: {
+
+                                nickname: nickname
+
+                            }
+
                         }
-                    }
 
-                });
+                    });
 
 
-            // エラーが発生した場合
+            // ==============================
+            // 登録エラー
+            // ==============================
+
             if (error) {
 
                 console.error(
@@ -1226,27 +1262,76 @@ if (registerForm) {
                     error
                 );
 
+
                 alert(
                     "会員登録に失敗しました。\n\n" +
                     error.message
                 );
 
+
                 submitButton.disabled = false;
+
                 submitButton.textContent =
                     "アカウントを作成する";
 
+
                 return;
+
             }
 
 
-            // 登録成功
-            console.log(
-                "会員登録成功:",
-                data
-            );
+            // ==============================
+            // profilesに保存
+            // ==============================
+
+            if (data.user) {
+
+                const {
+                    error: profileError
+                } =
+                    await supabaseClient
+                        .from("profiles")
+                        .insert({
+
+                            id: data.user.id,
+
+                            nickname: nickname
+
+                        });
 
 
+                if (profileError) {
+
+                    console.error(
+                        "プロフィール保存エラー:",
+                        profileError
+                    );
+
+
+                    alert(
+                        "アカウントは作成されましたが、" +
+                        "プロフィールの保存に失敗しました。\n\n" +
+                        profileError.message
+                    );
+
+
+                    submitButton.disabled = false;
+
+                    submitButton.textContent =
+                        "アカウントを作成する";
+
+
+                    return;
+
+                }
+
+            }
+
+
+            // ==============================
             // メール確認が必要な場合
+            // ==============================
+
             if (
                 data.user &&
                 !data.session
@@ -1258,17 +1343,24 @@ if (registerForm) {
                     "メール内のリンクをクリックしてください。"
                 );
 
+
                 window.location.href =
                     "login.html";
 
+
                 return;
+
             }
 
 
-            // すぐログインできる設定の場合
+            // ==============================
+            // 登録成功
+            // ==============================
+
             alert(
                 "アカウントを作成しました！"
             );
+
 
             window.location.href =
                 "index.html";
@@ -1277,7 +1369,6 @@ if (registerForm) {
     );
 
 }
-            
 
 // ==============================
 // ログイン（Supabase版）
