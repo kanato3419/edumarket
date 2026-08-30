@@ -1356,12 +1356,12 @@ if (registerForm) {
                         });
 
 
-                if (profileError) {
+               if (profileError) {
 
-                    console.error(
-    "プロフィール保存エラー詳細:",
-    JSON.stringify(error, null, 2)
-);
+    console.error(
+        "プロフィール保存エラー詳細:",
+        JSON.stringify(profileError, null, 2)
+    );
 
 
                     alert(
