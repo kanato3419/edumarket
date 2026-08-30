@@ -1101,3 +1101,120 @@ button:hover {
   font-size: 15px;
 
 }
+/* =====================
+   マイページ メニュー
+===================== */
+
+.mypage-dashboard {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-top: 20px;
+
+}
+
+
+.mypage-menu-card {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 18px;
+
+  background: white;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 2px 8px rgba(20, 33, 61, 0.07);
+
+  text-decoration: none;
+
+  color: #102344;
+
+  transition:
+    transform 0.15s;
+
+}
+
+
+.mypage-menu-card:active {
+
+  transform:
+    scale(0.98);
+
+}
+
+
+/* アイコン */
+
+.menu-icon {
+
+  width: 46px;
+
+  height: 46px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 24px;
+
+  background: #eef3fa;
+
+  border-radius: 12px;
+
+}
+
+
+/* 真ん中の文字 */
+
+.menu-content {
+
+  flex: 1;
+
+}
+
+
+.menu-content h2 {
+
+  margin: 0;
+
+  font-size: 16px;
+
+  color: #102344;
+
+}
+
+
+.menu-content p {
+
+  margin: 5px 0 0;
+
+  font-size: 12px;
+
+  color: #7c8799;
+
+}
+
+
+/* 右矢印 */
+
+.menu-arrow {
+
+  font-size: 28px;
+
+  color: #a0a8b5;
+
+}
