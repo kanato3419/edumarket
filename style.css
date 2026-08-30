@@ -875,3 +875,229 @@ button:hover {
   }
 
 }
+/* =====================
+   マイページ
+===================== */
+
+.mypage-main {
+
+  padding:
+    30px 16px
+    100px;
+
+}
+
+
+.mypage-title {
+
+  font-size: 28px;
+
+  margin-bottom: 25px;
+
+}
+
+
+/* プロフィール */
+
+.profile-card {
+
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 24px;
+
+  margin-bottom: 20px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(20, 35, 68, 0.08);
+
+}
+
+
+.profile-info {
+
+  min-height: 70px;
+
+  display: flex;
+
+  align-items: center;
+
+}
+
+
+/* ダッシュボード */
+
+.mypage-dashboard {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 14px;
+
+}
+
+
+.dashboard-card {
+
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 18px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(20, 35, 68, 0.08);
+
+}
+
+
+.dashboard-icon {
+
+  font-size: 30px;
+
+  margin-bottom: 10px;
+
+}
+
+
+.dashboard-card h2 {
+
+  font-size: 16px;
+
+  margin: 0 0 8px;
+
+}
+
+
+.dashboard-text {
+
+  font-size: 12px;
+
+  color: #7c8799;
+
+  line-height: 1.5;
+
+}
+
+
+/* Stripe */
+
+.stripe-card {
+
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 22px;
+
+  margin-top: 16px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(20, 35, 68, 0.08);
+
+}
+
+
+.stripe-title {
+
+  display: flex;
+
+  gap: 15px;
+
+  align-items: center;
+
+}
+
+
+.stripe-title h2 {
+
+  margin: 0;
+
+  font-size: 18px;
+
+}
+
+
+.stripe-title p {
+
+  font-size: 12px;
+
+  color: #7c8799;
+
+}
+
+
+.stripe-button {
+
+  width: 100%;
+
+  margin-top: 18px;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #102344;
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+}
+
+
+/* アカウント */
+
+.account-card {
+
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 22px;
+
+  margin-top: 16px;
+
+  margin-bottom: 20px;
+
+  box-shadow:
+    0 3px 15px
+    rgba(20, 35, 68, 0.08);
+
+}
+
+
+.account-card h2 {
+
+  margin-top: 0;
+
+}
+
+
+.logout-button {
+
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #f3f4f6;
+
+  color: #555;
+
+  font-size: 15px;
+
+}
