@@ -1257,3 +1257,35 @@ button:hover {
   }
 
 }
+/* =====================
+   スマホ用 売上ページ
+===================== */
+
+.sales-page-card {
+
+  margin-bottom: 100px;
+
+}
+
+
+#sales-summary {
+
+  display: block;
+
+  width: 100%;
+
+}
+
+
+.sales-total,
+.sales-count,
+.sales-fee,
+.seller-earnings {
+
+  display: block;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+}
