@@ -2522,67 +2522,127 @@ async function displayMyMaterials() {
     materials.forEach(function(material) {
 
         const card =
-            document.createElement("div");
-
-        card.className =
-            "material-card";
+    document.createElement("div");
 
 
-        card.innerHTML = `
+card.className =
+    "my-material-card";
 
-            <p>
-                ${material.category}
+
+let imageHTML;
+
+
+if (material.image_url) {
+
+    imageHTML = `
+        <img
+            src="${material.image_url}"
+            alt="${material.title}"
+            class="my-material-image"
+        >
+    `;
+
+} else {
+
+    imageHTML = `
+        <div class="my-material-no-image">
+            📚
+        </div>
+    `;
+
+}
+
+
+card.innerHTML = `
+
+    <div class="my-material-top">
+
+
+        ${imageHTML}
+
+
+        <div class="my-material-info">
+
+
+            <p class="my-material-category">
+
+                ${material.category || ""}
+
             </p>
 
 
             <h3>
-                ${material.title}
+
+                ${material.title || ""}
+
             </h3>
 
 
-            <p>
-                ${material.description}
-            </p>
+            <p class="my-material-target">
 
-
-            <p>
                 対象：
-                ${material.target}
+                ${material.target || ""}
+
             </p>
 
 
-            <p>
-                価格：
+            <p class="my-material-price">
+
                 ¥${Number(
-                    material.price
+                    material.price || 0
                 ).toLocaleString()}
+
             </p>
 
 
-            <a
-                href="material.html?id=${material.id}"
-                class="detail-button"
-            >
-                詳細を見る
-            </a>
+        </div>
 
 
-            <a
-                href="edit-material.html?id=${material.id}"
-                class="detail-button"
-            >
-                編集する
-            </a>
-<button
-    class="detail-button"
-    onclick="deleteMaterial('${material.id}')"
->
-    削除する
-</button>
-        `;
+    </div>
 
 
-        myMaterialsArea.appendChild(card);
+    <div class="my-material-buttons">
+
+
+        <a
+            href="material.html?id=${material.id}"
+            class="my-material-button"
+        >
+
+            詳細を見る
+
+        </a>
+
+
+        <a
+            href="edit-material.html?id=${material.id}"
+            class="my-material-button edit-button"
+        >
+
+            編集する
+
+        </a>
+
+
+    </div>
+
+
+    <button
+        class="my-material-delete"
+        onclick="deleteMaterial('${material.id}')"
+    >
+
+        削除する
+
+    </button>
+
+
+`;
+
+
+myMaterialsArea.appendChild(
+    card
+);
 
     });
 
