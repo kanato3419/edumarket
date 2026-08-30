@@ -3996,3 +3996,16 @@ if (
     displaySalesHistoryPage();
 
 }
+// ==============================
+// 自分が出品した教材ページで実行
+// ==============================
+
+if (
+    document.getElementById(
+        "my-material-list"
+    )
+) {
+
+    displayMyMaterials();
+
+}
