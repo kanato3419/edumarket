@@ -4564,3 +4564,28 @@ if (
     );
 
 }
+// ==============================
+// 検索をリセット
+// ==============================
+
+const clearSearchButton =
+    document.getElementById(
+        "clear-search-button"
+    );
+
+
+if (clearSearchButton) {
+
+    clearSearchButton.addEventListener(
+        "click",
+        function() {
+
+            // 検索条件なしの教材一覧へ
+
+            window.location.href =
+                "materials.html";
+
+        }
+    );
+
+}
