@@ -47,133 +47,216 @@
     </header>
 
 
-    <main>
-
-        <section class="mypage-section">
-
-            <h2>マイページ</h2>
+   <main class="mypage-main">
 
 
-            <!-- ユーザー情報 -->
+    <h2 class="mypage-title">
+        マイページ
+    </h2>
 
-            <div id="user-info">
 
-                <p>
-                    ユーザー情報を読み込んでいます...
-                </p>
+    <!-- プロフィール -->
 
+    <section class="profile-card">
+
+        <div
+            id="user-info"
+            class="profile-info"
+        >
+
+            <p>
+                ユーザー情報を読み込んでいます...
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- メインメニュー -->
+
+    <div class="mypage-dashboard">
+
+
+        <!-- 自分が出品した教材 -->
+
+        <section
+            id="my-materials"
+            class="dashboard-card"
+        >
+
+            <div class="dashboard-icon">
+                📚
             </div>
 
+            <h2>
+                自分が出品した教材
+            </h2>
 
-            <!-- 自分が出品した教材 -->
-
-            <section id="my-materials">
-
-                <h2>
-                    自分が出品した教材
-                </h2>
-
-                <div id="my-material-list">
-
-                    <p>
-                        出品した教材を読み込んでいます...
-                    </p>
-
-                </div>
-
-            </section>
+            <p class="dashboard-text">
+                出品した教材の確認・編集ができます
+            </p>
 
 
-            <!-- 購入した教材 -->
+            <div id="my-material-list">
 
-            <section id="purchased-materials">
-
-                <h2>
-                    購入した教材
-                </h2>
-
-                <div id="purchased-material-list">
-
-                    <p>
-                        購入した教材を読み込んでいます...
-                    </p>
-
-                </div>
-
-            </section>
-
-
-            <!-- 売上管理 -->
-
-            <section id="sales-management">
-
-                <h2>
-                    売上管理
-                </h2>
-
-                <div id="sales-summary">
-
-                    <p>
-                        売上情報を読み込んでいます...
-                    </p>
-
-                </div>
-
-
-                <div id="sales-history">
-
-                    <h3>
-                        販売履歴
-                    </h3>
-
-                    <p>
-                        販売履歴を読み込んでいます...
-                    </p>
-
-                </div>
-
-            </section>
-
-
-            <!-- メニュー -->
-
-            <div class="mypage-menu">
-
-                <a
-                    href="materials.html"
-                    class="main-button"
-                >
-                    教材を探す
-                </a>
-
-
-                <a
-                    href="sell.html"
-                    class="main-button"
-                >
-                    教材を出品する
-                </a>
-
-
-                <button
-                    id="stripe-connect-button"
-                    class="main-button"
-                >
-                    Stripe販売者登録
-                </button>
-
-
-                <button id="logout-button">
-
-                    ログアウト
-
-                </button>
+                <p>
+                    出品した教材を読み込んでいます...
+                </p>
 
             </div>
 
         </section>
 
-    </main>
+
+        <!-- 購入した教材 -->
+
+        <section
+            id="purchased-materials"
+            class="dashboard-card"
+        >
+
+            <div class="dashboard-icon">
+                🛒
+            </div>
+
+            <h2>
+                購入した教材
+            </h2>
+
+            <p class="dashboard-text">
+                購入した教材を確認できます
+            </p>
+
+
+            <div id="purchased-material-list">
+
+                <p>
+                    購入した教材を読み込んでいます...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- 売上管理 -->
+
+        <section
+            id="sales-management"
+            class="dashboard-card"
+        >
+
+            <div class="dashboard-icon">
+                📊
+            </div>
+
+            <h2>
+                売上管理
+            </h2>
+
+            <p class="dashboard-text">
+                売上を確認できます
+            </p>
+
+
+            <div id="sales-summary">
+
+                <p>
+                    売上情報を読み込んでいます...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- 販売履歴 -->
+
+        <section
+            id="sales-history"
+            class="dashboard-card"
+        >
+
+            <div class="dashboard-icon">
+                📋
+            </div>
+
+            <h2>
+                販売履歴
+            </h2>
+
+            <p class="dashboard-text">
+                これまでの販売履歴を確認できます
+            </p>
+
+            <p>
+                販売履歴を読み込んでいます...
+            </p>
+
+        </section>
+
+
+    </div>
+
+
+    <!-- Stripe -->
+
+    <section class="stripe-card">
+
+        <div class="stripe-title">
+
+            <div class="dashboard-icon">
+                💳
+            </div>
+
+            <div>
+
+                <h2>
+                    Stripe販売者登録
+                </h2>
+
+                <p>
+                    教材を販売するにはStripeの販売者登録が必要です
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+            id="stripe-connect-button"
+            class="stripe-button"
+        >
+            Stripeを設定する
+        </button>
+
+    </section>
+
+
+    <!-- アカウント -->
+
+    <section class="account-card">
+
+        <h2>
+            アカウント
+        </h2>
+
+
+        <button
+            id="logout-button"
+            class="logout-button"
+        >
+
+            ログアウト
+
+        </button>
+
+    </section>
+
+
+</main>
 
 
     <!-- 下部ナビ -->
