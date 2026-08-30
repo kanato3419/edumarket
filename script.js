@@ -283,65 +283,44 @@ async function displayMaterials(
             // カード内容
             // ==============================
 
-            card.innerHTML = `
+           card.innerHTML = `
 
-                ${imageHTML}
+    <a
+        href="material.html?id=${material.id}"
+        class="material-card-link"
+    >
 
+        ${imageHTML}
 
-                <div class="material-card-content">
+        <div class="material-card-content">
 
+            <p class="material-category">
 
-                    <p class="material-category">
+                ${material.category || ""}
 
-                        ${material.category || ""}
-
-                    </p>
-
-
-                    <h3>
-
-                        ${material.title || ""}
-
-                    </h3>
+            </p>
 
 
-                    <p class="material-description">
+            <h3>
 
-                        ${material.description || ""}
+                ${material.title || ""}
 
-                    </p>
-
-
-                    <p>
-
-                        対象：
-
-                        ${material.target || ""}
-
-                    </p>
+            </h3>
 
 
-                    <p class="material-price">
+            <p class="material-price">
 
-                        ¥${Number(
-                            material.price || 0
-                        ).toLocaleString()}
+                ¥${Number(
+                    material.price || 0
+                ).toLocaleString()}
 
-                    </p>
+            </p>
 
+        </div>
 
-                    <a
-                        href="material.html?id=${material.id}"
-                        class="detail-button"
-                    >
-                        詳細を見る
-                    </a>
+    </a>
 
-
-                </div>
-
-            `;
-
+`;
 
             materialList.appendChild(
                 card
