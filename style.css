@@ -1289,3 +1289,210 @@ button:hover {
   box-sizing: border-box;
 
 }
+/* ==============================
+   自分が出品した教材
+============================== */
+
+#my-material-list {
+    display: grid;
+    gap: 16px;
+}
+
+
+.my-material-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 18px;
+
+    padding: 18px;
+
+    box-sizing: border-box;
+
+}
+
+
+.my-material-top {
+
+    display: flex;
+
+    gap: 15px;
+
+    align-items: center;
+
+}
+
+
+.my-material-image {
+
+    width: 90px;
+
+    height: 90px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    flex-shrink: 0;
+
+}
+
+
+.my-material-no-image {
+
+    width: 90px;
+
+    height: 90px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 32px;
+
+    background: #f1f5f9;
+
+    border-radius: 12px;
+
+    flex-shrink: 0;
+
+}
+
+
+.my-material-info {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.my-material-category {
+
+    font-size: 13px;
+
+    margin: 0 0 5px;
+
+    color: #64748b;
+
+}
+
+
+.my-material-info h3 {
+
+    font-size: 19px;
+
+    margin: 0 0 10px;
+
+    color: #1e293b;
+
+}
+
+
+.my-material-target {
+
+    font-size: 14px;
+
+    margin: 0 0 5px;
+
+    color: #64748b;
+
+}
+
+
+.my-material-price {
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    margin: 0;
+
+    color: #1e293b;
+
+}
+
+
+/* ボタン */
+
+.my-material-buttons {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 18px;
+
+}
+
+
+.my-material-button {
+
+    flex: 1;
+
+    text-align: center;
+
+    padding: 12px;
+
+    background: #1e2d47;
+
+    color: white;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    box-sizing: border-box;
+
+    font-size: 15px;
+
+}
+
+
+.my-material-button:hover {
+
+    opacity: 0.85;
+
+}
+
+
+/* 削除 */
+
+.my-material-delete {
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    padding: 10px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+}
+
+
+/* パソコン */
+
+@media (min-width: 768px) {
+
+    #my-material-list {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+}
