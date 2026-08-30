@@ -1359,9 +1359,9 @@ if (registerForm) {
                 if (profileError) {
 
                     console.error(
-                        "プロフィール保存エラー:",
-                        profileError
-                    );
+    "プロフィール保存エラー詳細:",
+    JSON.stringify(error, null, 2)
+);
 
 
                     alert(
