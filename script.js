@@ -4496,3 +4496,71 @@ function searchMaterials() {
         );
 
 }
+// ==============================
+// 教材を探すページの検索
+// ==============================
+
+const materialsSearchInput =
+    document.getElementById(
+        "materials-search-input"
+    );
+
+
+const materialsSearchButton =
+    document.getElementById(
+        "materials-search-button"
+    );
+
+
+if (
+    materialsSearchInput &&
+    materialsSearchButton
+) {
+
+    // 検索ボタン
+
+    materialsSearchButton.addEventListener(
+        "click",
+        function() {
+
+            const keyword =
+                materialsSearchInput.value.trim();
+
+
+            if (keyword) {
+
+                window.location.href =
+                    "materials.html?search=" +
+                    encodeURIComponent(
+                        keyword
+                    );
+
+            } else {
+
+                window.location.href =
+                    "materials.html";
+
+            }
+
+        }
+    );
+
+
+    // Enterキーでも検索
+
+    materialsSearchInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                materialsSearchButton.click();
+
+            }
+
+        }
+    );
+
+}
