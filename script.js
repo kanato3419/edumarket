@@ -2655,21 +2655,31 @@ displayMyMaterials();
 // 教材編集画面
 // ==============================
 
+let currentMaterialImageUrl = null;
+
+
+// ==============================
+// 教材情報を読み込む
+// ==============================
+
 async function loadEditMaterial() {
 
     const form =
-        document.getElementById("edit-material-form");
+        document.getElementById(
+            "edit-material-form"
+        );
+
 
     if (!form) {
         return;
     }
 
 
-    // URLから教材IDを取得
     const params =
         new URLSearchParams(
             window.location.search
         );
+
 
     const materialId =
         params.get("id");
@@ -2681,21 +2691,22 @@ async function loadEditMaterial() {
             "教材IDが見つかりません。"
         );
 
-        window.location.href =
-            "mypage.html";
-
         return;
+
     }
 
 
-    // ログインユーザーを取得
+    // ログインユーザー取得
+
     const {
         data: {
             user
         },
         error: userError
     } =
-        await supabaseClient.auth.getUser();
+        await supabaseClient
+            .auth
+            .getUser();
 
 
     if (userError || !user) {
@@ -2708,10 +2719,12 @@ async function loadEditMaterial() {
             "login.html";
 
         return;
+
     }
 
 
-    // 教材を取得
+    // 教材取得
+
     const {
         data: material,
         error: materialError
@@ -2719,7 +2732,10 @@ async function loadEditMaterial() {
         await supabaseClient
             .from("materials")
             .select("*")
-            .eq("id", materialId)
+            .eq(
+                "id",
+                materialId
+            )
             .single();
 
 
@@ -2734,18 +2750,16 @@ async function loadEditMaterial() {
             "教材を取得できませんでした。"
         );
 
-        window.location.href =
-            "mypage.html";
-
         return;
+
     }
 
 
-    // ==============================
     // 自分の教材か確認
-    // ==============================
 
-    if (material.seller_id !== user.id) {
+    if (
+        material.seller_id !== user.id
+    ) {
 
         alert(
             "この教材を編集する権限がありません。"
@@ -2755,43 +2769,155 @@ async function loadEditMaterial() {
             "mypage.html";
 
         return;
+
     }
 
 
     // ==============================
-    // 現在の情報をフォームに入れる
+    // フォームに情報を入れる
     // ==============================
 
-    document.getElementById("title").value =
+    document.getElementById(
+        "title"
+    ).value =
         material.title || "";
 
 
-    document.getElementById("category").value =
+    document.getElementById(
+        "category"
+    ).value =
         material.category || "";
 
 
-    document.getElementById("target").value =
+    document.getElementById(
+        "target"
+    ).value =
         material.target || "";
 
 
-    document.getElementById("description").value =
+    document.getElementById(
+        "description"
+    ).value =
         material.description || "";
 
 
-    document.getElementById("price").value =
+    document.getElementById(
+        "price"
+    ).value =
         material.price || "";
+
+
+    // ==============================
+    // 現在の画像を表示
+    // ==============================
+
+    currentMaterialImageUrl =
+        material.image_url || null;
+
+
+    const imagePreview =
+        document.getElementById(
+            "edit-image-preview"
+        );
+
+
+    if (
+        imagePreview &&
+        material.image_url
+    ) {
+
+        imagePreview.innerHTML = `
+
+            <img
+                src="${material.image_url}"
+                alt="${material.title}"
+            >
+
+        `;
+
+    }
 
 }
 
 
-// 編集画面で実行
-loadEditMaterial();
 // ==============================
-// 教材情報を編集して保存
+// 画像を選択した時
+// ==============================
+
+const editImageInput =
+    document.getElementById(
+        "edit-image"
+    );
+
+
+if (editImageInput) {
+
+    editImageInput.addEventListener(
+        "change",
+        function(event) {
+
+            const imageFile =
+                event.target.files[0];
+
+
+            if (!imageFile) {
+                return;
+            }
+
+
+            if (
+                !imageFile.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                alert(
+                    "画像ファイルを選択してください。"
+                );
+
+                editImageInput.value = "";
+
+                return;
+
+            }
+
+
+            const imagePreview =
+                document.getElementById(
+                    "edit-image-preview"
+                );
+
+
+            const previewUrl =
+                URL.createObjectURL(
+                    imageFile
+                );
+
+
+            imagePreview.innerHTML = `
+
+                <img
+                    src="${previewUrl}"
+                    alt="選択した画像"
+                >
+
+            `;
+
+        }
+    );
+
+}
+
+
+// ==============================
+// 教材情報を保存
 // ==============================
 
 const editForm =
-    document.getElementById("edit-material-form");
+    document.getElementById(
+        "edit-material-form"
+    );
+
 
 if (editForm) {
 
@@ -2802,69 +2928,76 @@ if (editForm) {
             event.preventDefault();
 
 
-            // URLから教材IDを取得
+            const submitButton =
+                editForm.querySelector(
+                    'button[type="submit"]'
+                );
+
+
+            // 二重送信防止
+
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                "保存しています...";
+
+
             const params =
                 new URLSearchParams(
                     window.location.search
                 );
 
+
             const materialId =
                 params.get("id");
 
 
-            if (!materialId) {
-
-                alert(
-                    "教材IDが見つかりません。"
-                );
-
-                return;
-            }
-
-
-            // ログインユーザーを取得
             const {
                 data: {
                     user
-                },
-                error: userError
+                }
             } =
-                await supabaseClient.auth.getUser();
+                await supabaseClient
+                    .auth
+                    .getUser();
 
 
-            if (userError || !user) {
+            if (!user) {
 
                 alert(
                     "ログインしてください。"
                 );
 
-                window.location.href =
-                    "login.html";
-
                 return;
+
             }
 
 
-            // フォームの値を取得
+            // フォームの値
+
             const title =
                 document.getElementById(
                     "title"
                 ).value;
+
 
             const category =
                 document.getElementById(
                     "category"
                 ).value;
 
+
             const target =
                 document.getElementById(
                     "target"
                 ).value;
 
+
             const description =
                 document.getElementById(
                     "description"
                 ).value;
+
 
             const price =
                 Number(
@@ -2875,26 +3008,139 @@ if (editForm) {
 
 
             // ==============================
-            // Supabaseの教材情報を更新
+            // 現在の画像URL
+            // ==============================
+
+            let imageUrl =
+                currentMaterialImageUrl;
+
+
+            const imageFile =
+                document.getElementById(
+                    "edit-image"
+                ).files[0];
+
+
+            // ==============================
+            // 新しい画像がある場合
+            // ==============================
+
+            if (imageFile) {
+
+                const extension =
+                    imageFile.name
+                        .split(".")
+                        .pop()
+                        .toLowerCase();
+
+
+                const timestamp =
+                    Date.now();
+
+
+                const imagePath =
+                    user.id +
+                    "/image_" +
+                    timestamp +
+                    "." +
+                    extension;
+
+
+                // Storageへアップロード
+
+                const {
+                    error: imageUploadError
+                } =
+                    await supabaseClient
+                        .storage
+                        .from(
+                            "material-images"
+                        )
+                        .upload(
+                            imagePath,
+                            imageFile,
+                            {
+                                contentType:
+                                    imageFile.type,
+
+                                upsert: false
+                            }
+                        );
+
+
+                if (imageUploadError) {
+
+                    console.error(
+                        "画像アップロードエラー:",
+                        imageUploadError
+                    );
+
+
+                    alert(
+                        "画像のアップロードに失敗しました。\n\n" +
+                        imageUploadError.message
+                    );
+
+
+                    submitButton.disabled = false;
+
+                    submitButton.textContent =
+                        "変更を保存する";
+
+                    return;
+
+                }
+
+
+                // 公開URL取得
+
+                const {
+                    data: imageUrlData
+                } =
+                    supabaseClient
+                        .storage
+                        .from(
+                            "material-images"
+                        )
+                        .getPublicUrl(
+                            imagePath
+                        );
+
+
+                imageUrl =
+                    imageUrlData.publicUrl;
+
+            }
+
+
+            // ==============================
+            // DBを更新
             // ==============================
 
             const {
-                data,
                 error
             } =
                 await supabaseClient
                     .from("materials")
                     .update({
 
-                        title: title,
+                        title:
+                            title,
 
-                        category: category,
+                        category:
+                            category,
 
-                        target: target,
+                        target:
+                            target,
 
-                        description: description,
+                        description:
+                            description,
 
-                        price: price
+                        price:
+                            price,
+
+                        image_url:
+                            imageUrl
 
                     })
                     .eq(
@@ -2904,12 +3150,9 @@ if (editForm) {
                     .eq(
                         "seller_id",
                         user.id
-                    )
-                    .select()
-                    .single();
+                    );
 
 
-            // 更新エラー
             if (error) {
 
                 console.error(
@@ -2917,20 +3160,21 @@ if (editForm) {
                     error
                 );
 
+
                 alert(
                     "教材の更新に失敗しました。\n\n" +
                     error.message
                 );
 
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "変更を保存する";
+
                 return;
+
             }
-
-
-            // 更新成功
-            console.log(
-                "教材更新成功:",
-                data
-            );
 
 
             alert(
@@ -2938,14 +3182,22 @@ if (editForm) {
             );
 
 
-            // マイページへ戻る
+            // 出品教材一覧へ戻る
+
             window.location.href =
-                "mypage.html";
+                "my-materials.html";
 
         }
     );
 
 }
+
+
+// ==============================
+// 編集画面を読み込む
+// ==============================
+
+loadEditMaterial();
 // ==============================
 // 自分が出品した教材を削除
 // ==============================
