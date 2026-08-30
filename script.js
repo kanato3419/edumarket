@@ -1212,7 +1212,7 @@ if (
     displayMaterialDetail();
 
 }
-    // ==============================
+// ==============================
 // 会員登録（Supabase版）
 // ==============================
 
@@ -1332,54 +1332,6 @@ if (registerForm) {
 
 
                 return;
-
-            }
-
-
-            // ==============================
-            // profilesに保存
-            // ==============================
-
-            if (data.user) {
-
-                const {
-                    error: profileError
-                } =
-                    await supabaseClient
-                        .from("profiles")
-                        .insert({
-
-                            id: data.user.id,
-
-                            nickname: nickname
-
-                        });
-
-
-               if (profileError) {
-
-    console.error(
-        "プロフィール保存エラー詳細:",
-        JSON.stringify(profileError, null, 2)
-    );
-
-
-                    alert(
-                        "アカウントは作成されましたが、" +
-                        "プロフィールの保存に失敗しました。\n\n" +
-                        profileError.message
-                    );
-
-
-                    submitButton.disabled = false;
-
-                    submitButton.textContent =
-                        "アカウントを作成する";
-
-
-                    return;
-
-                }
 
             }
 
