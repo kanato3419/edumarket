@@ -3445,3 +3445,227 @@ if (document.getElementById("material-list")) {
     displayMaterials("all");
 
 }
+// ==============================
+// 売上管理を表示
+// ==============================
+
+async function displaySales() {
+
+    const salesSummary =
+        document.getElementById(
+            "sales-summary"
+        );
+
+
+    // sales.html以外では実行しない
+    if (!salesSummary) {
+        return;
+    }
+
+
+    // ==============================
+    // ログインユーザー取得
+    // ==============================
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (userError || !user) {
+
+        salesSummary.innerHTML = `
+            <p>
+                売上を確認するにはログインしてください。
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    // ==============================
+    // 自分が出品した教材を取得
+    // ==============================
+
+    const {
+        data: myMaterials,
+        error: materialError
+    } =
+        await supabaseClient
+            .from("materials")
+            .select(`
+                id,
+                title
+            `)
+            .eq(
+                "seller_id",
+                user.id
+            );
+
+
+    if (materialError) {
+
+        console.error(
+            "出品教材取得エラー:",
+            materialError
+        );
+
+        salesSummary.innerHTML = `
+            <p>
+                売上情報を取得できませんでした。
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    // 出品教材がない場合
+
+    if (
+        !myMaterials ||
+        myMaterials.length === 0
+    ) {
+
+        salesSummary.innerHTML = `
+            <p>
+                まだ教材を出品していません。
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    // ==============================
+    // 教材ID一覧を作成
+    // ==============================
+
+    const materialIds =
+        myMaterials.map(
+            material => material.id
+        );
+
+
+    // ==============================
+    // 購入履歴を取得
+    // ==============================
+
+    const {
+        data: sales,
+        error: salesError
+    } =
+        await supabaseClient
+            .from("purchases")
+            .select(`
+                id,
+                material_id,
+                price
+            `)
+            .in(
+                "material_id",
+                materialIds
+            );
+
+
+    if (salesError) {
+
+        console.error(
+            "売上取得エラー:",
+            salesError
+        );
+
+        salesSummary.innerHTML = `
+            <p>
+                売上情報を取得できませんでした。
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    // ==============================
+    // 売上計算
+    // ==============================
+
+    const totalSales =
+        sales.reduce(
+            function(total, sale) {
+
+                return (
+                    total +
+                    Number(
+                        sale.price || 0
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    const salesCount =
+        sales.length;
+
+
+    // ==============================
+    // 表示
+    // ==============================
+
+    salesSummary.innerHTML = `
+
+        <div class="sales-total">
+
+            <p>
+                総売上
+            </p>
+
+            <h2>
+                ¥${totalSales.toLocaleString()}
+            </h2>
+
+        </div>
+
+
+        <div class="sales-count">
+
+            <p>
+                販売件数
+            </p>
+
+            <h3>
+                ${salesCount}件
+            </h3>
+
+        </div>
+
+    `;
+
+}
+
+
+// ==============================
+// 売上管理ページで実行
+// ==============================
+
+if (
+    document.getElementById(
+        "sales-summary"
+    )
+) {
+
+    displaySales();
+
+}
