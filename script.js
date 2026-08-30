@@ -954,7 +954,51 @@ async function displayMaterialDetail() {
 
         return;
     }
+// ==============================
+// 出品者情報を取得
+// ==============================
 
+let sellerNickname =
+    "出品者情報なし";
+
+
+if (material.seller_id) {
+
+    const {
+        data: seller,
+        error: sellerError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("nickname")
+            .eq(
+                "id",
+                material.seller_id
+            )
+            .single();
+
+
+    if (sellerError) {
+
+        console.error(
+            "出品者情報取得エラー:",
+            sellerError
+        );
+
+    }
+
+
+    if (
+        seller &&
+        seller.nickname
+    ) {
+
+        sellerNickname =
+            seller.nickname;
+
+    }
+
+}
 
     // ==============================
     // 画像
@@ -1037,7 +1081,19 @@ async function displayMaterialDetail() {
             </p>
 
         </div>
+<div class="detail-box seller-box">
 
+    <h3>
+        👤 出品者
+    </h3>
+
+    <p class="seller-name">
+
+        ${sellerNickname}
+
+    </p>
+
+</div>
 
         <div class="detail-box">
 
