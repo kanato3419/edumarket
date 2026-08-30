@@ -1995,3 +1995,270 @@ button:hover {
     }
 
 }
+/* =========================
+   教材を探すページ
+   スマホ版調整
+========================= */
+
+@media screen and (max-width: 600px) {
+
+
+    /* メインの余白 */
+
+    main {
+
+        padding-left: 24px;
+
+        padding-right: 24px;
+
+    }
+
+
+    /* =====================
+       検索エリア
+    ===================== */
+
+    .materials-search-area {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+        margin-bottom: 20px;
+
+    }
+
+
+    #materials-search-input {
+
+        flex: 1;
+
+        width: 100%;
+
+        height: 46px;
+
+        padding: 0 14px;
+
+        font-size: 14px;
+
+        border-radius: 12px;
+
+    }
+
+
+    #materials-search-button {
+
+        width: 82px;
+
+        height: 46px;
+
+        padding: 0;
+
+        border-radius: 12px;
+
+    }
+
+
+    /* =====================
+       リセットボタン
+    ===================== */
+
+    #reset-search-button {
+
+        margin-bottom: 18px;
+
+        padding: 10px 16px;
+
+        font-size: 14px;
+
+    }
+
+
+    /* =====================
+       カテゴリー
+    ===================== */
+
+    .category-buttons {
+
+        display: flex;
+
+        flex-wrap: nowrap;
+
+        overflow-x: auto;
+
+        gap: 10px;
+
+        margin-bottom: 35px;
+
+        padding-bottom: 5px;
+
+    }
+
+
+    .category-buttons button {
+
+        flex-shrink: 0;
+
+        width: auto;
+
+        min-width: 0;
+
+        padding: 11px 20px;
+
+        font-size: 16px;
+
+        border-radius: 22px;
+
+    }
+
+
+    /* スクロールバーを隠す */
+
+    .category-buttons::-webkit-scrollbar {
+
+        display: none;
+
+    }
+
+
+    /* =====================
+       教材一覧
+    ===================== */
+
+    #material-list {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 16px;
+
+    }
+
+
+    /* =====================
+       教材カード
+    ===================== */
+
+    .material-card {
+
+        width: 100%;
+
+        min-width: 0;
+
+        border-radius: 20px;
+
+        overflow: hidden;
+
+    }
+
+
+    /* 教材画像 */
+
+    .material-image {
+
+        height: 180px;
+
+    }
+
+
+    .material-thumbnail {
+
+        width: 100%;
+
+        height: 100%;
+
+        object-fit: cover;
+
+    }
+
+
+    /* 画像なし */
+
+    .no-image {
+
+        font-size: 38px;
+
+    }
+
+
+    /* カードの内容 */
+
+    .material-card-content {
+
+        padding: 14px;
+
+    }
+
+
+    /* カテゴリー */
+
+    .material-category {
+
+        font-size: 13px;
+
+        margin: 0 0 8px;
+
+    }
+
+
+    /* タイトル */
+
+    .material-card-content h3 {
+
+        font-size: 18px;
+
+        line-height: 1.4;
+
+        margin: 0 0 8px;
+
+    }
+
+
+    /* 説明を非表示 */
+
+    .material-description {
+
+        display: none;
+
+    }
+
+
+    /* 対象 */
+
+    .material-card-content p:not(
+        .material-category
+    ):not(
+        .material-price
+    ) {
+
+        display: none;
+
+    }
+
+
+    /* 価格 */
+
+    .material-price {
+
+        font-size: 18px;
+
+        margin: 0;
+
+        font-weight: 700;
+
+    }
+
+
+    /* 詳細ボタンを非表示 */
+
+    .material-card .detail-button {
+
+        display: none;
+
+    }
+
+}
