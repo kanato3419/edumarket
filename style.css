@@ -1218,3 +1218,42 @@ button:hover {
   color: #a0a8b5;
 
 }
+/* =====================
+   マイページ PC版
+===================== */
+
+@media (min-width: 700px) {
+
+  .mypage-dashboard {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+  }
+
+
+  .mypage-menu-card {
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 18px;
+
+    background: white;
+
+    border-radius: 14px;
+
+    box-shadow:
+      0 2px 8px rgba(20, 33, 61, 0.07);
+
+  }
+
+}
