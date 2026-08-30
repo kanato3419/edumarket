@@ -4454,3 +4454,45 @@ if (
     displayMyMaterials();
 
 }
+// ==============================
+// ホームの教材検索
+// ==============================
+
+function searchMaterials() {
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+
+    if (!searchInput) {
+        return;
+    }
+
+
+    const keyword =
+        searchInput.value.trim();
+
+
+    // 何も入力されていない場合
+
+    if (!keyword) {
+
+        window.location.href =
+            "materials.html";
+
+        return;
+
+    }
+
+
+    // 検索キーワードをURLに渡す
+
+    window.location.href =
+        "materials.html?search=" +
+        encodeURIComponent(
+            keyword
+        );
+
+}
