@@ -1496,3 +1496,362 @@ button:hover {
     }
 
 }
+/* =========================
+   教材編集ページ
+========================= */
+
+.edit-page-main {
+
+    max-width: 800px;
+
+    margin: 0 auto;
+
+    padding:
+        40px
+        24px
+        100px;
+
+}
+
+
+.edit-page-heading {
+
+    margin-top: 35px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.edit-page-label {
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    color: #6b7280;
+
+    margin-bottom: 8px;
+
+}
+
+
+.edit-page-heading h2 {
+
+    font-size: 38px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.edit-page-heading p {
+
+    color: #6b7280;
+
+}
+
+
+/* 編集カード */
+
+.edit-material-card {
+
+    background: white;
+
+    border-radius: 24px;
+
+    padding: 40px;
+
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.08);
+
+}
+
+
+/* フォーム */
+
+.form-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-bottom: 28px;
+
+}
+
+
+.form-group > label {
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+}
+
+
+/* 入力欄 */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 15px;
+
+    font-size: 16px;
+
+    border:
+
+        1px solid
+        #d1d5db;
+
+    border-radius: 12px;
+
+    background: white;
+
+}
+
+
+.form-group textarea {
+
+    resize: vertical;
+
+    line-height: 1.7;
+
+}
+
+
+/* 画像プレビュー */
+
+.edit-image-preview {
+
+    width: 100%;
+
+    max-width: 500px;
+
+    aspect-ratio: 16 / 9;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    background: #f3f4f6;
+
+}
+
+
+.edit-image-preview img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+.edit-image-placeholder {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: #6b7280;
+
+    font-size: 15px;
+
+}
+
+
+.edit-image-placeholder:first-letter {
+
+    font-size: 40px;
+
+}
+
+
+/* 画像変更ボタン */
+
+.image-select-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: fit-content;
+
+    padding:
+
+        12px
+        20px;
+
+    border-radius: 10px;
+
+    background: #f3f4f6;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+.image-select-button:hover {
+
+    background: #e5e7eb;
+
+}
+
+
+.form-help {
+
+    font-size: 13px;
+
+    color: #9ca3af;
+
+}
+
+
+/* 価格 */
+
+.price-input-wrap {
+
+    display: flex;
+
+    align-items: center;
+
+    border:
+
+        1px solid
+        #d1d5db;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+}
+
+
+.price-input-wrap span {
+
+    padding-left: 16px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+}
+
+
+.price-input-wrap input {
+
+    border: none;
+
+    outline: none;
+
+}
+
+
+/* 保存ボタン */
+
+.edit-save-button {
+
+    width: 100%;
+
+    padding: 18px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: #1f304d;
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    margin-top: 10px;
+
+}
+
+
+.edit-save-button:hover {
+
+    opacity: 0.9;
+
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media screen and (max-width: 600px) {
+
+    .edit-page-main {
+
+        padding:
+
+            25px
+            16px
+            100px;
+
+    }
+
+
+    .edit-page-heading {
+
+        margin-top: 30px;
+
+    }
+
+
+    .edit-page-heading h2 {
+
+        font-size: 32px;
+
+    }
+
+
+    .edit-material-card {
+
+        padding: 24px 18px;
+
+        border-radius: 20px;
+
+    }
+
+
+    .edit-image-preview {
+
+        max-width: 100%;
+
+    }
+
+}
