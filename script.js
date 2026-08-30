@@ -82,35 +82,93 @@ async function displayMaterials(
         );
 
 
-    // 教材一覧ページ以外では実行しない
     if (!materialList) {
         return;
     }
 
 
+    // ==============================
+    // URLから検索キーワード取得
+    // ==============================
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const searchKeyword =
+        (
+            params.get("search") || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    // 検索欄にキーワードを表示
+
+    const searchInput =
+        document.getElementById(
+            "materials-search-input"
+        );
+
+
+    if (
+        searchInput &&
+        searchKeyword
+    ) {
+
+        searchInput.value =
+            params.get("search");
+
+    }
+
+
+    // ==============================
+    // 検索結果テキスト
+    // ==============================
+
+    const searchResultText =
+        document.getElementById(
+            "search-result-text"
+        );
+
+
+    // ==============================
     // 読み込み中
+    // ==============================
+
     materialList.innerHTML = `
-        <p>教材を読み込んでいます...</p>
+        <p>
+            教材を読み込んでいます...
+        </p>
     `;
 
 
+    // ==============================
     // Supabaseから教材取得
+    // ==============================
+
     const materials =
         await getMaterials();
 
 
-    // 一度画面を空にする
     materialList.innerHTML = "";
 
 
+    // ==============================
     // 教材がない場合
+    // ==============================
+
     if (
         !materials ||
         materials.length === 0
     ) {
 
         materialList.innerHTML = `
-            <p>現在、教材はありません。</p>
+            <p>
+                現在、教材はありません。
+            </p>
         `;
 
         return;
@@ -121,12 +179,18 @@ async function displayMaterials(
     let displayCount = 0;
 
 
-    // 教材を1つずつ表示
+    // ==============================
+    // 教材を1つずつ確認
+    // ==============================
+
     materials.forEach(
         function(material) {
 
 
-            // カテゴリー絞り込み
+            // ==============================
+            // カテゴリー検索
+            // ==============================
+
             if (
                 category !== "all" &&
                 material.category !== category
@@ -137,8 +201,49 @@ async function displayMaterials(
             }
 
 
+            // ==============================
+            // キーワード検索
+            // ==============================
+
+            if (searchKeyword) {
+
+                const searchText =
+                    (
+
+                        (material.title || "") +
+                        " " +
+
+                        (material.description || "") +
+                        " " +
+
+                        (material.category || "") +
+                        " " +
+
+                        (material.target || "")
+
+                    )
+                    .toLowerCase();
+
+
+                if (
+                    !searchText.includes(
+                        searchKeyword
+                    )
+                ) {
+
+                    return;
+
+                }
+
+            }
+
+
             displayCount++;
 
+
+            // ==============================
+            // カード作成
+            // ==============================
 
             const card =
                 document.createElement(
@@ -158,11 +263,13 @@ async function displayMaterials(
                 material.image_url
                     ? `
                         <div class="material-image">
+
                             <img
                                 src="${material.image_url}"
                                 alt="${material.title}"
                                 class="material-thumbnail"
                             >
+
                         </div>
                     `
                     : `
@@ -173,7 +280,7 @@ async function displayMaterials(
 
 
             // ==============================
-            // 教材カード
+            // カード内容
             // ==============================
 
             card.innerHTML = `
@@ -208,6 +315,7 @@ async function displayMaterials(
                     <p>
 
                         対象：
+
                         ${material.target || ""}
 
                     </p>
@@ -243,13 +351,38 @@ async function displayMaterials(
     );
 
 
-    // 絞り込み結果がない場合
+    // ==============================
+    // 検索結果表示
+    // ==============================
+
+    if (searchResultText) {
+
+        if (searchKeyword) {
+
+            searchResultText.textContent =
+                `「${params.get("search")}」の検索結果：${displayCount}件`;
+
+        } else {
+
+            searchResultText.textContent = "";
+
+        }
+
+    }
+
+
+    // ==============================
+    // 結果なし
+    // ==============================
+
     if (displayCount === 0) {
 
         materialList.innerHTML = `
+
             <p>
-                このカテゴリーの教材はまだありません。
+                条件に一致する教材がありませんでした。
             </p>
+
         `;
 
     }
