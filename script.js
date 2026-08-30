@@ -3458,6 +3458,7 @@ async function displaySales() {
 
 
     // sales.html以外では実行しない
+
     if (!salesSummary) {
         return;
     }
@@ -3478,12 +3479,16 @@ async function displaySales() {
             .getUser();
 
 
+    // ログインしていない場合
+
     if (userError || !user) {
 
         salesSummary.innerHTML = `
+
             <p>
                 売上を確認するにはログインしてください。
             </p>
+
         `;
 
         return;
@@ -3511,6 +3516,8 @@ async function displaySales() {
             );
 
 
+    // 出品教材取得エラー
+
     if (materialError) {
 
         console.error(
@@ -3518,28 +3525,13 @@ async function displaySales() {
             materialError
         );
 
+
         salesSummary.innerHTML = `
+
             <p>
                 売上情報を取得できませんでした。
             </p>
-        `;
 
-        return;
-
-    }
-
-
-    // 出品教材がない場合
-
-    if (
-        !myMaterials ||
-        myMaterials.length === 0
-    ) {
-
-        salesSummary.innerHTML = `
-            <p>
-                まだ教材を出品していません。
-            </p>
         `;
 
         return;
@@ -3548,7 +3540,29 @@ async function displaySales() {
 
 
     // ==============================
-    // 教材ID一覧を作成
+    // 出品教材がない場合
+    // ==============================
+
+    if (
+        !myMaterials ||
+        myMaterials.length === 0
+    ) {
+
+        salesSummary.innerHTML = `
+
+            <p>
+                まだ教材を出品していません。
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    // ==============================
+    // 自分の教材IDを取得
     // ==============================
 
     const materialIds =
@@ -3558,7 +3572,7 @@ async function displaySales() {
 
 
     // ==============================
-    // 購入履歴を取得
+    // 自分の教材の購入履歴を取得
     // ==============================
 
     const {
@@ -3578,6 +3592,8 @@ async function displaySales() {
             );
 
 
+    // 売上取得エラー
+
     if (salesError) {
 
         console.error(
@@ -3585,10 +3601,13 @@ async function displaySales() {
             salesError
         );
 
+
         salesSummary.innerHTML = `
+
             <p>
                 売上情報を取得できませんでした。
             </p>
+
         `;
 
         return;
@@ -3597,12 +3616,15 @@ async function displaySales() {
 
 
     // ==============================
-    // 売上計算
+    // 総売上を計算
     // ==============================
 
     const totalSales =
         sales.reduce(
-            function(total, sale) {
+            function(
+                total,
+                sale
+            ) {
 
                 return (
                     total +
@@ -3616,15 +3638,47 @@ async function displaySales() {
         );
 
 
+    // ==============================
+    // 販売件数
+    // ==============================
+
     const salesCount =
         sales.length;
 
 
     // ==============================
-    // 表示
+    // EduMarket手数料
+    // 13%
+    // ==============================
+
+    const platformFeeRate =
+        0.13;
+
+
+    const platformFee =
+        Math.floor(
+            totalSales *
+            platformFeeRate
+        );
+
+
+    // ==============================
+    // 出品者の受取予定額
+    // ==============================
+
+    const sellerEarnings =
+        totalSales -
+        platformFee;
+
+
+    // ==============================
+    // 画面に表示
     // ==============================
 
     salesSummary.innerHTML = `
+
+
+        <!-- 総売上 -->
 
         <div class="sales-total">
 
@@ -3639,6 +3693,8 @@ async function displaySales() {
         </div>
 
 
+        <!-- 販売件数 -->
+
         <div class="sales-count">
 
             <p>
@@ -3650,6 +3706,40 @@ async function displaySales() {
             </h3>
 
         </div>
+
+
+        <!-- EduMarket手数料 -->
+
+        <div class="sales-fee">
+
+            <p>
+                EduMarket手数料（13%）
+            </p>
+
+            <h3>
+                −¥${platformFee.toLocaleString()}
+            </h3>
+
+        </div>
+
+
+        <hr>
+
+
+        <!-- 受取予定額 -->
+
+        <div class="seller-earnings">
+
+            <p>
+                受取予定額
+            </p>
+
+            <h2>
+                ¥${sellerEarnings.toLocaleString()}
+            </h2>
+
+        </div>
+
 
     `;
 
