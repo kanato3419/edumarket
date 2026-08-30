@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 
 <head>
@@ -10,7 +11,9 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>教材を編集 - EduMarket</title>
+    <title>
+        教材を編集 - EduMarket
+    </title>
 
     <link
         rel="stylesheet"
@@ -21,24 +24,32 @@
 
 
 <body>
-<nav class="site-nav">
 
-    <a href="index.html">
-        EduMarket
-    </a>
 
-    <a href="materials.html">
-        教材を探す
-    </a>
+    <!-- PC用ナビ -->
 
-    <a href="mypage.html">
-        マイページ
-    </a>
+    <nav class="site-nav">
 
-</nav>
+        <a href="index.html">
+            EduMarket
+        </a>
+
+        <a href="materials.html">
+            教材を探す
+        </a>
+
+        <a href="mypage.html">
+            マイページ
+        </a>
+
+    </nav>
+
+
     <header>
 
-        <h1>EduMarket</h1>
+        <h1>
+            EduMarket
+        </h1>
 
         <p>
             先生が作った教材を、必要な人へ。
@@ -47,108 +58,231 @@
     </header>
 
 
-    <main>
+    <main class="edit-page-main">
 
-        <section class="sell-section">
+
+        <!-- 戻る -->
+
+        <a
+            href="mypage.html"
+            class="back-link"
+        >
+            ← マイページに戻る
+        </a>
+
+
+        <!-- タイトル -->
+
+        <div class="edit-page-heading">
+
+            <p class="edit-page-label">
+                MATERIAL EDIT
+            </p>
 
             <h2>
                 教材を編集
             </h2>
 
+            <p>
+                教材の情報を変更できます
+            </p>
+
+        </div>
+
+
+        <!-- 編集カード -->
+
+        <section class="edit-material-card">
+
 
             <form id="edit-material-form">
 
 
+                <!-- ================= -->
+                <!-- 教材画像 -->
+                <!-- ================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        教材画像
+                    </label>
+
+
+                    <!-- 現在の画像 -->
+
+                    <div
+                        id="edit-image-preview"
+                        class="edit-image-preview"
+                    >
+
+                        <div class="edit-image-placeholder">
+                            📚
+                            <span>
+                                画像を読み込んでいます
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- 画像選択 -->
+
+                    <label
+                        for="edit-image"
+                        class="image-select-button"
+                    >
+                        画像を変更する
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="edit-image"
+                        accept="image/*"
+                        hidden
+                    >
+
+
+                    <p class="form-help">
+                        PNG・JPGなどの画像を変更できます
+                    </p>
+
+                </div>
+
+
+                <!-- ================= -->
                 <!-- タイトル -->
+                <!-- ================= -->
 
-                <label for="title">
-                    教材タイトル
-                </label>
+                <div class="form-group">
 
-                <input
-                    type="text"
-                    id="title"
-                    required
-                >
+                    <label for="title">
+                        教材タイトル
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        required
+                    >
+
+                </div>
 
 
+                <!-- ================= -->
                 <!-- カテゴリー -->
+                <!-- ================= -->
 
-                <label for="category">
-                    カテゴリー
-                </label>
+                <div class="form-group">
 
-                <select
-                    id="category"
-                    required
-                >
+                    <label for="category">
+                        カテゴリー
+                    </label>
 
-                    <option value="数学">
-                        数学
-                    </option>
+                    <select
+                        id="category"
+                        required
+                    >
 
-                    <option value="英語">
-                        英語
-                    </option>
+                        <option value="数学">
+                            数学
+                        </option>
 
-                    <option value="国語">
-                        国語
-                    </option>
+                        <option value="英語">
+                            英語
+                        </option>
 
-                    <option value="理科">
-                        理科
-                    </option>
+                        <option value="国語">
+                            国語
+                        </option>
 
-                    <option value="社会">
-                        社会
-                    </option>
+                        <option value="理科">
+                            理科
+                        </option>
 
-                </select>
+                        <option value="社会">
+                            社会
+                        </option>
+
+                    </select>
+
+                </div>
 
 
+                <!-- ================= -->
                 <!-- 対象 -->
+                <!-- ================= -->
 
-                <label for="target">
-                    対象
-                </label>
+                <div class="form-group">
 
-                <input
-                    type="text"
-                    id="target"
-                    required
-                >
+                    <label for="target">
+                        対象
+                    </label>
+
+                    <input
+                        type="text"
+                        id="target"
+                        placeholder="例：中学1年生"
+                        required
+                    >
+
+                </div>
 
 
+                <!-- ================= -->
                 <!-- 説明 -->
+                <!-- ================= -->
 
-                <label for="description">
-                    教材の説明
-                </label>
+                <div class="form-group">
 
-                <textarea
-                    id="description"
-                    rows="6"
-                    required
-                ></textarea>
+                    <label for="description">
+                        教材の説明
+                    </label>
+
+                    <textarea
+                        id="description"
+                        rows="7"
+                        required
+                    ></textarea>
+
+                </div>
 
 
+                <!-- ================= -->
                 <!-- 価格 -->
+                <!-- ================= -->
 
-                <label for="price">
-                    価格
-                </label>
+                <div class="form-group">
 
-                <input
-                    type="number"
-                    id="price"
-                    min="0"
-                    required
-                >
+                    <label for="price">
+                        価格
+                    </label>
 
+
+                    <div class="price-input-wrap">
+
+                        <span>
+                            ¥
+                        </span>
+
+                        <input
+                            type="number"
+                            id="price"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- 保存 -->
 
                 <button
                     type="submit"
-                    class="main-button"
+                    class="edit-save-button"
                 >
                     変更を保存する
                 </button>
@@ -157,21 +291,91 @@
             </form>
 
 
-            <br>
-
-
-            <a
-                href="mypage.html"
-                class="detail-button"
-            >
-                マイページに戻る
-            </a>
-
-
         </section>
+
 
     </main>
 
+
+    <!-- 下部ナビ -->
+
+    <nav class="bottom-nav">
+
+
+        <a
+            href="index.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">
+                ⌂
+            </span>
+
+            <span>
+                ホーム
+            </span>
+        </a>
+
+
+        <a
+            href="materials.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">
+                ⌕
+            </span>
+
+            <span>
+                探す
+            </span>
+        </a>
+
+
+        <a
+            href="sell.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">
+                ＋
+            </span>
+
+            <span>
+                出品
+            </span>
+        </a>
+
+
+        <a
+            href="purchases.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">
+                🛒
+            </span>
+
+            <span>
+                購入
+            </span>
+        </a>
+
+
+        <a
+            href="mypage.html"
+            class="nav-item active"
+        >
+            <span class="nav-icon">
+                ♙
+            </span>
+
+            <span>
+                マイページ
+            </span>
+        </a>
+
+
+    </nav>
+
+
+    <!-- Supabase -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
