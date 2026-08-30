@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        販売履歴 - EduMarket
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <main class="mypage-main">
+
+
+        <!-- 戻る -->
+
+        <a
+            href="mypage.html"
+            class="back-link"
+        >
+            ← マイページに戻る
+        </a>
+
+
+        <!-- タイトル -->
+
+        <h2 class="mypage-title">
+            販売履歴
+        </h2>
+
+
+        <!-- 販売履歴 -->
+
+        <section class="sales-page-card">
+
+            <h3>
+                これまでの販売
+            </h3>
+
+
+            <div id="sales-history-list">
+
+                <p>
+                    販売履歴を読み込んでいます...
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- 下部ナビ -->
+
+    <nav class="bottom-nav">
+
+
+        <a
+            href="index.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">⌂</span>
+            <span>ホーム</span>
+        </a>
+
+
+        <a
+            href="materials.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">⌕</span>
+            <span>探す</span>
+        </a>
+
+
+        <a
+            href="sell.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">＋</span>
+            <span>出品</span>
+        </a>
+
+
+        <a
+            href="purchases.html"
+            class="nav-item"
+        >
+            <span class="nav-icon">🛒</span>
+            <span>購入</span>
+        </a>
+
+
+        <a
+            href="mypage.html"
+            class="nav-item active"
+        >
+            <span class="nav-icon">♙</span>
+            <span>マイページ</span>
+        </a>
+
+
+    </nav>
+
+
+    <!-- Supabase -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
