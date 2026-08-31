@@ -4732,7 +4732,7 @@ async function loadProfileEdit() {
                 "id",
                 user.id
             )
-            .single();
+            .maybeSingle();
 
 
     if (profileError) {
@@ -4754,14 +4754,14 @@ async function loadProfileEdit() {
     document.getElementById(
         "profile-nickname"
     ).value =
-        profile.nickname || "";
+       profile?.nickname || "";
 
 
     // ==============================
     // アイコンがある場合
     // ==============================
 
-    if (profile.avatar_url) {
+   if (profile?.avatar_url) {
 
         document.getElementById(
             "profile-image-preview"
