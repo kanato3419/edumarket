@@ -5186,15 +5186,44 @@ async function displayMyProfile() {
 
     if (userError || !user) {
 
-        userInfo.innerHTML = `
-            <p>
-                ログインしていません。
-            </p>
-        `;
+    userInfo.innerHTML = `
 
-        return;
+        <div class="mypage-not-logged-in">
 
-    }
+            <div class="mypage-avatar-placeholder">
+                👤
+            </div>
+
+
+            <div>
+
+                <h2>
+                    ログインしていません
+                </h2>
+
+
+                <p>
+                    EduMarketを利用するには
+                    ログインしてください。
+                </p>
+
+
+                <a
+                    href="login.html"
+                    class="profile-edit-button"
+                >
+                    ログインする
+                </a>
+
+            </div>
+
+        </div>
+
+    `;
+
+    return;
+
+}
 
 
     // ==============================
