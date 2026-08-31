@@ -5087,22 +5087,28 @@ if (profileEditForm) {
             // profilesを更新
             // ==============================
 
-            const {
-                error: updateError
-            } =
-                await supabaseClient
-                    .from("profiles")
-                    .update({
+           const {
+    data: savedProfile,
+    error: updateError
+} =
+    await supabaseClient
+        .from("profiles")
+        .upsert(
+            {
 
-                        nickname: nickname,
+                id: user.id,
 
-                        avatar_url: avatarUrl
+                nickname: nickname,
 
-                    })
-                    .eq(
-                        "id",
-                        user.id
-                    );
+                avatar_url: avatarUrl
+
+            },
+            {
+                onConflict: "id"
+            }
+        )
+        .select()
+        .single();
 
 
             if (updateError) {
