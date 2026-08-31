@@ -4933,17 +4933,17 @@ if (profileEditForm) {
             // ==============================
 
             const {
-                data: currentProfile,
-                error: currentProfileError
-            } =
-                await supabaseClient
-                    .from("profiles")
-                    .select("*")
-                    .eq(
-                        "id",
-                        user.id
-                    )
-                    .single();
+    data: currentProfile,
+    error: currentProfileError
+} =
+    await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq(
+            "id",
+            user.id
+        )
+        .maybeSingle();
 
 
             if (currentProfileError) {
