@@ -4667,3 +4667,183 @@ if (clearSearchButton) {
     );
 
 }
+// ==============================
+// プロフィール編集画面
+// 現在の情報を読み込む
+// ==============================
+
+async function loadProfileEdit() {
+
+    const form =
+        document.getElementById(
+            "profile-edit-form"
+        );
+
+
+    // profile-edit.html以外では実行しない
+    if (!form) {
+        return;
+    }
+
+
+    // ==============================
+    // ログインユーザー取得
+    // ==============================
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (userError || !user) {
+
+        alert(
+            "ログインしてください。"
+        );
+
+
+        window.location.href =
+            "login.html";
+
+
+        return;
+
+    }
+
+
+    // ==============================
+    // profilesから取得
+    // ==============================
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq(
+                "id",
+                user.id
+            )
+            .single();
+
+
+    if (profileError) {
+
+        console.error(
+            "プロフィール取得エラー:",
+            profileError
+        );
+
+        return;
+
+    }
+
+
+    // ==============================
+    // ニックネーム表示
+    // ==============================
+
+    document.getElementById(
+        "profile-nickname"
+    ).value =
+        profile.nickname || "";
+
+
+    // ==============================
+    // アイコンがある場合
+    // ==============================
+
+    if (profile.avatar_url) {
+
+        document.getElementById(
+            "profile-image-preview"
+        ).innerHTML = `
+
+            <img
+                src="${profile.avatar_url}"
+                alt="プロフィール画像"
+            >
+
+        `;
+
+    }
+
+}
+
+
+// ページ読み込み時に実行
+
+loadProfileEdit();
+// ==============================
+// プロフィール画像プレビュー
+// ==============================
+
+const profileImageInput =
+    document.getElementById(
+        "profile-image"
+    );
+
+
+if (profileImageInput) {
+
+    profileImageInput.addEventListener(
+        "change",
+        function(event) {
+
+            const file =
+                event.target.files[0];
+
+
+            if (!file) {
+                return;
+            }
+
+
+            // 画像か確認
+
+            if (
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                alert(
+                    "画像ファイルを選択してください。"
+                );
+
+                return;
+
+            }
+
+
+            // プレビュー表示
+
+            const imageUrl =
+                URL.createObjectURL(
+                    file
+                );
+
+
+            document.getElementById(
+                "profile-image-preview"
+            ).innerHTML = `
+
+                <img
+                    src="${imageUrl}"
+                    alt="プロフィール画像"
+                >
+
+            `;
+
+        }
+    );
+
+}
