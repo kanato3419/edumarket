@@ -2672,3 +2672,34 @@ button:hover {
     font-size: 13px;
 
 }
+/* ログインしていない場合 */
+
+.mypage-not-logged-in {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+}
+
+
+.mypage-not-logged-in h2 {
+
+    margin: 0 0 8px;
+
+    font-size: 20px;
+
+}
+
+
+.mypage-not-logged-in p {
+
+    margin: 0 0 12px;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+}
