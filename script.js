@@ -5151,3 +5151,159 @@ if (profileEditForm) {
     );
 
 }
+// ==============================
+// マイページのプロフィール表示
+// ==============================
+
+async function displayMyProfile() {
+
+    const userInfo =
+        document.getElementById(
+            "user-info"
+        );
+
+
+    // mypage.html以外では実行しない
+    if (!userInfo) {
+        return;
+    }
+
+
+    // ==============================
+    // ログインユーザー取得
+    // ==============================
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (userError || !user) {
+
+        userInfo.innerHTML = `
+            <p>
+                ログインしていません。
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    // ==============================
+    // profilesからプロフィール取得
+    // ==============================
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq(
+                "id",
+                user.id
+            )
+            .maybeSingle();
+
+
+    if (profileError) {
+
+        console.error(
+            "プロフィール取得エラー:",
+            profileError
+        );
+
+    }
+
+
+    // ==============================
+    // ニックネーム
+    // ==============================
+
+    const nickname =
+        profile?.nickname ||
+        user.user_metadata?.nickname ||
+        "ユーザー";
+
+
+    // ==============================
+    // アイコン
+    // ==============================
+
+    let avatarHTML;
+
+
+    if (profile?.avatar_url) {
+
+        avatarHTML = `
+            <img
+                src="${profile.avatar_url}"
+                alt="プロフィール画像"
+                class="mypage-avatar"
+            >
+        `;
+
+    } else {
+
+        avatarHTML = `
+            <div class="mypage-avatar-placeholder">
+                👤
+            </div>
+        `;
+
+    }
+
+
+    // ==============================
+    // マイページに表示
+    // ==============================
+
+    userInfo.innerHTML = `
+
+        <div class="mypage-profile-header">
+
+            ${avatarHTML}
+
+
+            <div class="mypage-profile-text">
+
+                <h2>
+                    ${nickname}
+                </h2>
+
+
+                <p>
+                    ${user.email}
+                </p>
+
+
+                <a
+                    href="profile-edit.html"
+                    class="profile-edit-button"
+                >
+                    プロフィールを編集
+                </a>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+// ==============================
+// 実行
+// ==============================
+
+displayMyProfile();
