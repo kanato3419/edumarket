@@ -4847,3 +4847,301 @@ if (profileImageInput) {
     );
 
 }
+// ==============================
+// プロフィール編集を保存
+// ==============================
+
+const profileEditForm =
+    document.getElementById(
+        "profile-edit-form"
+    );
+
+
+if (profileEditForm) {
+
+    profileEditForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const submitButton =
+                profileEditForm.querySelector(
+                    ".submit-button"
+                );
+
+
+            // ==============================
+            // ログインユーザー取得
+            // ==============================
+
+            const {
+                data: {
+                    user
+                },
+                error: userError
+            } =
+                await supabaseClient
+                    .auth
+                    .getUser();
+
+
+            if (userError || !user) {
+
+                alert(
+                    "ログインしてください。"
+                );
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            // ==============================
+            // ニックネーム取得
+            // ==============================
+
+            const nickname =
+                document.getElementById(
+                    "profile-nickname"
+                ).value.trim();
+
+
+            if (!nickname) {
+
+                alert(
+                    "ニックネームを入力してください。"
+                );
+
+                return;
+
+            }
+
+
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                "保存しています...";
+
+
+            // ==============================
+            // 現在のプロフィール取得
+            // ==============================
+
+            const {
+                data: currentProfile,
+                error: currentProfileError
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("*")
+                    .eq(
+                        "id",
+                        user.id
+                    )
+                    .single();
+
+
+            if (currentProfileError) {
+
+                console.error(
+                    "プロフィール取得エラー:",
+                    currentProfileError
+                );
+
+            }
+
+
+            let avatarUrl =
+                currentProfile?.avatar_url ||
+                null;
+
+
+            // ==============================
+            // 新しい画像が選択されている場合
+            // ==============================
+
+            const imageInput =
+                document.getElementById(
+                    "profile-image"
+                );
+
+
+            const imageFile =
+                imageInput.files[0];
+
+
+            if (imageFile) {
+
+                // 画像か確認
+
+                if (
+                    !imageFile.type.startsWith(
+                        "image/"
+                    )
+                ) {
+
+                    alert(
+                        "画像ファイルを選択してください。"
+                    );
+
+                    submitButton.disabled = false;
+
+                    submitButton.textContent =
+                        "保存する";
+
+                    return;
+
+                }
+
+
+                // ==============================
+                // ファイル名作成
+                // ==============================
+
+                const extension =
+                    imageFile.name
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+
+                const filePath =
+                    user.id +
+                    "/avatar." +
+                    extension;
+
+
+                // ==============================
+                // Storageへアップロード
+                // ==============================
+
+                const {
+                    error: uploadError
+                } =
+                    await supabaseClient
+                        .storage
+                        .from("avatars")
+                        .upload(
+                            filePath,
+                            imageFile,
+                            {
+                                contentType:
+                                    imageFile.type,
+
+                                upsert: true
+                            }
+                        );
+
+
+                if (uploadError) {
+
+                    console.error(
+                        "アイコンアップロードエラー:",
+                        uploadError
+                    );
+
+
+                    alert(
+                        "アイコン画像のアップロードに失敗しました。\n\n" +
+                        uploadError.message
+                    );
+
+
+                    submitButton.disabled = false;
+
+                    submitButton.textContent =
+                        "保存する";
+
+                    return;
+
+                }
+
+
+                // ==============================
+                // 公開URL取得
+                // ==============================
+
+                const {
+                    data: avatarUrlData
+                } =
+                    supabaseClient
+                        .storage
+                        .from("avatars")
+                        .getPublicUrl(
+                            filePath
+                        );
+
+
+                avatarUrl =
+                    avatarUrlData.publicUrl;
+
+            }
+
+
+            // ==============================
+            // profilesを更新
+            // ==============================
+
+            const {
+                error: updateError
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .update({
+
+                        nickname: nickname,
+
+                        avatar_url: avatarUrl
+
+                    })
+                    .eq(
+                        "id",
+                        user.id
+                    );
+
+
+            if (updateError) {
+
+                console.error(
+                    "プロフィール更新エラー:",
+                    updateError
+                );
+
+
+                alert(
+                    "プロフィールの保存に失敗しました。\n\n" +
+                    updateError.message
+                );
+
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "保存する";
+
+                return;
+
+            }
+
+
+            // ==============================
+            // 保存成功
+            // ==============================
+
+            alert(
+                "プロフィールを保存しました！"
+            );
+
+
+            window.location.href =
+                "mypage.html";
+
+        }
+    );
+
+}
