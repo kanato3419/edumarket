@@ -961,6 +961,9 @@ async function displayMaterialDetail() {
 let sellerNickname =
     "出品者情報なし";
 
+let sellerAvatarUrl =
+    null;
+
 
 if (material.seller_id) {
 
@@ -970,12 +973,14 @@ if (material.seller_id) {
     } =
         await supabaseClient
             .from("profiles")
-            .select("nickname")
+            .select(
+                "nickname, avatar_url"
+            )
             .eq(
                 "id",
                 material.seller_id
             )
-            .single();
+            .maybeSingle();
 
 
     if (sellerError) {
@@ -988,18 +993,26 @@ if (material.seller_id) {
     }
 
 
-    if (
-        seller &&
-        seller.nickname
-    ) {
+    if (seller) {
 
-        sellerNickname =
-            seller.nickname;
+        if (seller.nickname) {
+
+            sellerNickname =
+                seller.nickname;
+
+        }
+
+
+        if (seller.avatar_url) {
+
+            sellerAvatarUrl =
+                seller.avatar_url;
+
+        }
 
     }
 
 }
-
     // ==============================
     // 画像
     // ==============================
@@ -1087,11 +1100,42 @@ if (material.seller_id) {
         👤 出品者
     </h3>
 
-    <p class="seller-name">
 
-        ${sellerNickname}
+    <div class="seller-profile">
 
-    </p>
+
+        <div class="seller-avatar">
+
+            ${
+                sellerAvatarUrl
+
+                    ? `
+
+                        <img
+                            src="${sellerAvatarUrl}"
+                            alt="${sellerNickname}"
+                        >
+
+                    `
+
+                    : `
+
+                        👤
+
+                    `
+            }
+
+        </div>
+
+
+        <p class="seller-name">
+
+            ${sellerNickname}
+
+        </p>
+
+
+    </div>
 
 </div>
 
