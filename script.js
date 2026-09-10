@@ -2062,20 +2062,40 @@ async function purchaseMaterial(materialId) {
 
 
     // Edge Functionエラー
-    if (error) {
+   if (error) {
 
+    console.error(
+        "Stripe Checkout作成エラー:",
+        error
+    );
+
+    let detail = error.message;
+
+    try {
+        if (error.context) {
+            const responseText = await error.context.text();
+
+            console.error(
+                "Edge Functionの詳細:",
+                responseText
+            );
+
+            detail += "\n\n" + responseText;
+        }
+    } catch (e) {
         console.error(
-            "Stripe Checkout作成エラー:",
-            error
+            "詳細エラー取得失敗:",
+            e
         );
-
-        alert(
-            "決済ページを作成できませんでした。\n\n" +
-            error.message
-        );
-
-        return;
     }
+
+    alert(
+        "決済ページを作成できませんでした。\n\n" +
+        detail
+    );
+
+    return;
+}
 
 
     // Checkout URLがない
