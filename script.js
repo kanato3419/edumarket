@@ -2672,10 +2672,8 @@ async function openPurchasedPDF(materialId) {
     // PDFを開く
     // ==============================
 
-    window.open(
-        signedData.signedUrl,
-        "_blank"
-    );
+    window.location.href = signedData.signedUrl;
+
 
 }
 // ==============================
