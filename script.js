@@ -1415,15 +1415,22 @@ async function displayReviewForm(materialId) {
         return;
     }
 
+
+    // ログインユーザーを取得
+
     const {
         data: {
             user
         }
     } = await supabaseClient.auth.getUser();
 
+
     if (!user) {
         return;
     }
+
+
+    // この教材を購入しているか確認
 
     const {
         data: purchase,
@@ -1435,6 +1442,7 @@ async function displayReviewForm(materialId) {
         .eq("material_id", materialId)
         .maybeSingle();
 
+
     if (error) {
 
         console.error(
@@ -1445,9 +1453,15 @@ async function displayReviewForm(materialId) {
         return;
     }
 
+
+    // 購入していない場合
+
     if (!purchase) {
         return;
     }
+
+
+    // 購入済みならフォームを表示
 
     formArea.innerHTML = `
 
@@ -1462,12 +1476,29 @@ async function displayReviewForm(materialId) {
             </label>
 
             <select id="review-rating">
-                <option value="5">⭐⭐⭐⭐⭐</option>
-                <option value="4">⭐⭐⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="1">⭐</option>
+
+                <option value="5">
+                    ⭐⭐⭐⭐⭐
+                </option>
+
+                <option value="4">
+                    ⭐⭐⭐⭐
+                </option>
+
+                <option value="3">
+                    ⭐⭐⭐
+                </option>
+
+                <option value="2">
+                    ⭐⭐
+                </option>
+
+                <option value="1">
+                    ⭐
+                </option>
+
             </select>
+
 
             <label>
                 コメント
@@ -1477,6 +1508,7 @@ async function displayReviewForm(materialId) {
                 id="review-comment"
                 placeholder="教材についての感想を書いてください"
             ></textarea>
+
 
             <button
                 type="button"
@@ -1488,6 +1520,152 @@ async function displayReviewForm(materialId) {
         </div>
 
     `;
+
+
+    // ==============================
+    // レビュー投稿
+    // ==============================
+
+    const submitButton =
+        document.getElementById(
+            "review-submit-button"
+        );
+
+
+    submitButton.addEventListener(
+        "click",
+        async function () {
+
+            const rating =
+                Number(
+                    document.getElementById(
+                        "review-rating"
+                    ).value
+                );
+
+
+            const comment =
+                document.getElementById(
+                    "review-comment"
+                ).value.trim();
+
+
+            // 評価チェック
+
+            if (
+                rating < 1 ||
+                rating > 5
+            ) {
+
+                alert(
+                    "評価を選択してください。"
+                );
+
+                return;
+            }
+
+
+            // コメントチェック
+
+            if (!comment) {
+
+                alert(
+                    "コメントを入力してください。"
+                );
+
+                return;
+            }
+
+
+            // ボタンを無効化
+
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                "投稿中...";
+
+
+            // レビューを保存
+
+            const {
+                error: insertError
+            } = await supabaseClient
+                .from("reviews")
+                .insert({
+
+                    user_id:
+                        user.id,
+
+                    material_id:
+                        materialId,
+
+                    rating:
+                        rating,
+
+                    comment:
+                        comment
+
+                });
+
+
+            // エラー
+
+            if (insertError) {
+
+                console.error(
+                    "レビュー投稿エラー:",
+                    insertError
+                );
+
+
+                alert(
+                    "レビューの投稿に失敗しました。"
+                );
+
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "レビューを投稿";
+
+                return;
+            }
+
+
+            // 成功
+
+            alert(
+                "レビューを投稿しました！"
+            );
+
+
+            // レビューを再表示
+
+            await displayReviews(
+                materialId
+            );
+
+
+            // フォームをリセット
+
+            document.getElementById(
+                "review-rating"
+            ).value = "5";
+
+
+            document.getElementById(
+                "review-comment"
+            ).value = "";
+
+
+            submitButton.disabled = false;
+
+            submitButton.textContent =
+                "レビューを投稿";
+
+        }
+    );
+
 }
 // ==============================
 // 会員登録（Supabase版）
