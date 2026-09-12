@@ -1225,10 +1225,12 @@ if (material.seller_id) {
             <h3>
                 ⭐ レビュー
             </h3>
+<div id="review-area">
+    レビューを読み込んでいます...
+</div>
 
-            <div id="review-area">
-                レビューを読み込んでいます...
-            </div>
+<div id="review-form-area"></div>
+           
 
         </div>
 
