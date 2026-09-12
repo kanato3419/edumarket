@@ -1233,7 +1233,8 @@ if (material.seller_id) {
         </div>
 
     `;
-
+// レビューを表示
+displayReviews(material.id);
 }
 
 
