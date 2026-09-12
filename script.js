@@ -1400,6 +1400,93 @@ async function displayReviews(materialId) {
     `;
 }
 // ==============================
+// レビュー投稿フォームを表示
+// ==============================
+
+async function displayReviewForm(materialId) {
+
+    const formArea =
+        document.getElementById("review-form-area");
+
+    if (!formArea) {
+        return;
+    }
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+        return;
+    }
+
+    const {
+        data: purchase,
+        error
+    } = await supabaseClient
+        .from("purchases")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("material_id", materialId)
+        .maybeSingle();
+
+    if (error) {
+
+        console.error(
+            "購入確認エラー:",
+            error
+        );
+
+        return;
+    }
+
+    if (!purchase) {
+        return;
+    }
+
+    formArea.innerHTML = `
+
+        <div class="review-form">
+
+            <h4>
+                この教材を評価する
+            </h4>
+
+            <label>
+                評価
+            </label>
+
+            <select id="review-rating">
+                <option value="5">⭐⭐⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="1">⭐</option>
+            </select>
+
+            <label>
+                コメント
+            </label>
+
+            <textarea
+                id="review-comment"
+                placeholder="教材についての感想を書いてください"
+            ></textarea>
+
+            <button
+                type="button"
+                id="review-submit-button"
+            >
+                レビューを投稿
+            </button>
+
+        </div>
+
+    `;
+}
+// ==============================
 // 会員登録（Supabase版）
 // ==============================
 
