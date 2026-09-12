@@ -1220,7 +1220,17 @@ if (material.seller_id) {
 
 
         </div>
+        <div class="detail-box">
 
+            <h3>
+                ⭐ レビュー
+            </h3>
+
+            <div id="review-area">
+                レビューを読み込んでいます...
+            </div>
+
+        </div>
 
     `;
 
