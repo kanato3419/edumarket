@@ -1237,6 +1237,9 @@ if (material.seller_id) {
     `;
 // レビューを表示
 displayReviews(material.id);
+
+// レビュー投稿フォームを表示
+displayReviewForm(material.id);
 }
 
 
