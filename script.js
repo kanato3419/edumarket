@@ -1415,6 +1415,10 @@ async function displayReviewForm(materialId) {
         return;
     }
 
+    // ==============================
+    // ログインユーザーを取得
+    // ==============================
+
     const {
         data: {
             user
@@ -1449,8 +1453,20 @@ async function displayReviewForm(materialId) {
         return;
     }
 
+    // ==============================
     // 購入していなければレビュー不可
+    // ==============================
+
     if (!purchase) {
+
+        formArea.innerHTML = `
+            <div class="review-not-allowed">
+                <p>
+                    この教材を購入した方のみレビューできます。
+                </p>
+            </div>
+        `;
+
         return;
     }
 
@@ -1478,7 +1494,10 @@ async function displayReviewForm(materialId) {
         return;
     }
 
-    // すでにレビュー済みならフォームを表示しない
+    // ==============================
+    // すでにレビュー済み
+    // ==============================
+
     if (existingReview) {
 
         formArea.innerHTML = `
@@ -1504,19 +1523,35 @@ async function displayReviewForm(materialId) {
                 この教材を評価する
             </h4>
 
-            <label>
+            <label for="review-rating">
                 評価
             </label>
 
             <select id="review-rating">
-                <option value="5">⭐⭐⭐⭐⭐</option>
-                <option value="4">⭐⭐⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="1">⭐</option>
+
+                <option value="5">
+                    ⭐⭐⭐⭐⭐
+                </option>
+
+                <option value="4">
+                    ⭐⭐⭐⭐
+                </option>
+
+                <option value="3">
+                    ⭐⭐⭐
+                </option>
+
+                <option value="2">
+                    ⭐⭐
+                </option>
+
+                <option value="1">
+                    ⭐
+                </option>
+
             </select>
 
-            <label>
+            <label for="review-comment">
                 コメント
             </label>
 
@@ -1545,9 +1580,17 @@ async function displayReviewForm(materialId) {
             "review-submit-button"
         );
 
+    if (!submitButton) {
+        return;
+    }
+
     submitButton.addEventListener(
         "click",
         async function () {
+
+            // ==============================
+            // 評価取得
+            // ==============================
 
             const rating =
                 Number(
@@ -1556,127 +1599,18 @@ async function displayReviewForm(materialId) {
                     ).value
                 );
 
-            const comment =
-                document.getElementById(
-                    "review-comment"
-                ).value.trim();
-
-            if (
-                rating < 1 ||
-                rating > 5
-            ) {
-
-                alert(
-                    "評価を選択してください。"
-                );
-
-                return;
-            }
-
-            if (!comment) {
-
-                alert(
-                    "コメントを入力してください。"
-                );
-
-                return;
-            }
-
-            submitButton.disabled = true;
-            submitButton.textContent =
-                "投稿中...";
-
-            const {
-                error: insertError
-            } = await supabaseClient
-                .from("reviews")
-                .insert({
-                    user_id: user.id,
-                    material_id: materialId,
-                    rating: rating,
-                    comment: comment
-                });
-
-            if (insertError) {
-
-                console.error(
-                    "レビュー投稿エラー:",
-                    insertError
-                );
-
-                // 重複レビュー
-                if (
-                    insertError.code === "23505"
-                ) {
-
-                    alert(
-                        "この教材にはすでにレビューを投稿しています。"
-                    );
-
-                } else {
-
-                    alert(
-                        "レビューの投稿に失敗しました。"
-                    );
-                }
-
-                submitButton.disabled = false;
-                submitButton.textContent =
-                    "レビューを投稿";
-
-                return;
-            }
-
-            alert(
-                "レビューを投稿しました！"
-            );
-
-            // レビュー一覧を更新
-            await displayReviews(
-                materialId
-            );
-
-            // 投稿済み表示に変更
-            formArea.innerHTML = `
-                <div class="review-already-posted">
-                    <p>
-                        ✅ レビューを投稿しました！
-                    </p>
-                </div>
-            `;
-        }
-    );
-}
-
-    // ==============================
-    // レビュー投稿
-    // ==============================
-
-    const submitButton =
-        document.getElementById(
-            "review-submit-button"
-        );
-
-
-    submitButton.addEventListener(
-        "click",
-        async function () {
-
-            const rating =
-                Number(
-                    document.getElementById(
-                        "review-rating"
-                    ).value
-                );
-
+            // ==============================
+            // コメント取得
+            // ==============================
 
             const comment =
                 document.getElementById(
                     "review-comment"
                 ).value.trim();
 
-
+            // ==============================
             // 評価チェック
+            // ==============================
 
             if (
                 rating < 1 ||
@@ -1690,8 +1624,9 @@ async function displayReviewForm(materialId) {
                 return;
             }
 
-
+            // ==============================
             // コメントチェック
+            // ==============================
 
             if (!comment) {
 
@@ -1702,16 +1637,18 @@ async function displayReviewForm(materialId) {
                 return;
             }
 
-
+            // ==============================
             // ボタンを無効化
+            // ==============================
 
             submitButton.disabled = true;
 
             submitButton.textContent =
                 "投稿中...";
 
-
+            // ==============================
             // レビューを保存
+            // ==============================
 
             const {
                 error: insertError
@@ -1733,8 +1670,9 @@ async function displayReviewForm(materialId) {
 
                 });
 
-
-            // エラー
+            // ==============================
+            // 保存エラー
+            // ==============================
 
             if (insertError) {
 
@@ -1743,11 +1681,29 @@ async function displayReviewForm(materialId) {
                     insertError
                 );
 
+                // 重複レビュー
+                if (
+                    insertError.code === "23505"
+                ) {
+
+                    alert(
+                        "この教材にはすでにレビューを投稿しています。"
+                    );
+
+                    formArea.innerHTML = `
+                        <div class="review-already-posted">
+                            <p>
+                                ✅ この教材にはレビュー済みです。
+                            </p>
+                        </div>
+                    `;
+
+                    return;
+                }
 
                 alert(
                     "レビューの投稿に失敗しました。"
                 );
-
 
                 submitButton.disabled = false;
 
@@ -1757,41 +1713,36 @@ async function displayReviewForm(materialId) {
                 return;
             }
 
-
-            // 成功
+            // ==============================
+            // 投稿成功
+            // ==============================
 
             alert(
                 "レビューを投稿しました！"
             );
 
-
-            // レビューを再表示
+            // ==============================
+            // レビュー一覧を更新
+            // ==============================
 
             await displayReviews(
                 materialId
             );
 
+            // ==============================
+            // 投稿済み表示
+            // ==============================
 
-            // フォームをリセット
-
-            document.getElementById(
-                "review-rating"
-            ).value = "5";
-
-
-            document.getElementById(
-                "review-comment"
-            ).value = "";
-
-
-            submitButton.disabled = false;
-
-            submitButton.textContent =
-                "レビューを投稿";
+            formArea.innerHTML = `
+                <div class="review-already-posted">
+                    <p>
+                        ✅ レビューを投稿しました！
+                    </p>
+                </div>
+            `;
 
         }
     );
-
 }
 // ==============================
 // 会員登録（Supabase版）
