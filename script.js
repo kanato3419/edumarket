@@ -1267,6 +1267,136 @@ if (
 
 }
 // ==============================
+// レビューを表示
+// ==============================
+
+async function displayReviews(materialId) {
+
+    const reviewArea =
+        document.getElementById("review-area");
+
+    if (!reviewArea) {
+        return;
+    }
+
+    const {
+        data: reviews,
+        error
+    } = await supabaseClient
+        .from("reviews")
+        .select("*")
+        .eq("material_id", materialId)
+        .order("created_at", {
+            ascending: false
+        });
+
+
+    if (error) {
+
+        console.error(
+            "レビュー取得エラー:",
+            error
+        );
+
+        reviewArea.innerHTML = `
+            <p>
+                レビューを読み込めませんでした。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    // レビューがない場合
+
+    if (!reviews || reviews.length === 0) {
+
+        reviewArea.innerHTML = `
+            <p>
+                まだレビューはありません。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    // 平均評価
+
+    const totalRating =
+        reviews.reduce(
+            (sum, review) =>
+                sum + Number(review.rating || 0),
+            0
+        );
+
+    const averageRating =
+        totalRating / reviews.length;
+
+
+    // 星を作る
+
+    const stars =
+        "⭐".repeat(
+            Math.round(averageRating)
+        );
+
+
+    // レビュー一覧
+
+    const reviewHTML =
+        reviews.map(review => {
+
+            return `
+                <div class="review-item">
+
+                    <div class="review-rating">
+                        ${"⭐".repeat(
+                            Number(review.rating)
+                        )}
+                    </div>
+
+                    <p class="review-comment">
+                        ${review.comment || ""}
+                    </p>
+
+                    <small>
+                        ${new Date(
+                            review.created_at
+                        ).toLocaleDateString("ja-JP")}
+                    </small>
+
+                </div>
+            `;
+
+        }).join("");
+
+
+    reviewArea.innerHTML = `
+
+        <div class="review-summary">
+
+            <strong>
+                ${stars}
+                ${averageRating.toFixed(1)} / 5.0
+            </strong>
+
+            <span>
+                （${reviews.length}件）
+            </span>
+
+        </div>
+
+        <div class="review-list">
+
+            ${reviewHTML}
+
+        </div>
+
+    `;
+}
+// ==============================
 // 会員登録（Supabase版）
 // ==============================
 
