@@ -3102,3 +3102,35 @@ button:hover {
     }
 
 }
+/* ==============================
+   教材カードのレビュー評価
+============================== */
+
+.material-card-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.rating-stars {
+    color: #f5b400;
+    letter-spacing: 1px;
+    font-size: 16px;
+}
+
+.rating-number {
+    font-weight: bold;
+    color: #14213d;
+}
+
+.rating-count {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.material-card-rating.no-rating {
+    color: #94a3b8;
+    font-size: 13px;
+}
