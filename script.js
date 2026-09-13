@@ -177,6 +177,50 @@ async function displayMaterials(
     }
 
 
+    // ==============================
+    // レビューを取得
+    // ==============================
+
+    const materialIds =
+        materials.map(
+            material => material.id
+        );
+
+
+    let reviewData = [];
+
+
+    if (materialIds.length > 0) {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("reviews")
+            .select("material_id, rating")
+            .in(
+                "material_id",
+                materialIds
+            );
+
+
+        if (error) {
+
+            console.error(
+                "レビュー取得エラー:",
+                error
+            );
+
+        } else {
+
+            reviewData =
+                data || [];
+
+        }
+
+    }
+
+
     let displayCount = 0;
 
 
@@ -243,6 +287,87 @@ async function displayMaterials(
 
 
             // ==============================
+            // この教材のレビュー
+            // ==============================
+
+            const materialReviews =
+                reviewData.filter(
+                    review =>
+                        review.material_id ===
+                        material.id
+                );
+
+
+            // ==============================
+            // 平均評価
+            // ==============================
+
+            let ratingHTML;
+
+
+            if (
+                materialReviews.length > 0
+            ) {
+
+                const totalRating =
+                    materialReviews.reduce(
+                        function(sum, review) {
+
+                            return (
+                                sum +
+                                Number(
+                                    review.rating
+                                )
+                            );
+
+                        },
+                        0
+                    );
+
+
+                const averageRating =
+                    (
+                        totalRating /
+                        materialReviews.length
+                    ).toFixed(1);
+
+
+                ratingHTML = `
+
+                    <div class="material-card-rating">
+
+                        <span class="rating-stars">
+                            ★★★★★
+                        </span>
+
+                        <span class="rating-number">
+                            ${averageRating}
+                        </span>
+
+                        <span class="rating-count">
+                            （${materialReviews.length}件）
+                        </span>
+
+                    </div>
+
+                `;
+
+            } else {
+
+                ratingHTML = `
+
+                    <div class="material-card-rating no-rating">
+
+                        まだレビューはありません
+
+                    </div>
+
+                `;
+
+            }
+
+
+            // ==============================
             // カード作成
             // ==============================
 
@@ -284,44 +409,48 @@ async function displayMaterials(
             // カード内容
             // ==============================
 
-           card.innerHTML = `
+            card.innerHTML = `
 
-    <a
-        href="material.html?id=${material.id}"
-        class="material-card-link"
-    >
+                <a
+                    href="material.html?id=${material.id}"
+                    class="material-card-link"
+                >
 
-        ${imageHTML}
+                    ${imageHTML}
 
-        <div class="material-card-content">
+                    <div class="material-card-content">
 
-            <p class="material-category">
+                        <p class="material-category">
 
-                ${material.category || ""}
+                            ${material.category || ""}
 
-            </p>
-
-
-            <h3>
-
-                ${material.title || ""}
-
-            </h3>
+                        </p>
 
 
-            <p class="material-price">
+                        <h3>
 
-                ¥${Number(
-                    material.price || 0
-                ).toLocaleString()}
+                            ${material.title || ""}
 
-            </p>
+                        </h3>
 
-        </div>
 
-    </a>
+                        ${ratingHTML}
 
-`;
+
+                        <p class="material-price">
+
+                            ¥${Number(
+                                material.price || 0
+                            ).toLocaleString()}
+
+                        </p>
+
+                    </div>
+
+                </a>
+
+            `;
+
 
             materialList.appendChild(
                 card
@@ -344,7 +473,8 @@ async function displayMaterials(
 
         } else {
 
-            searchResultText.textContent = "";
+            searchResultText.textContent =
+                "";
 
         }
 
