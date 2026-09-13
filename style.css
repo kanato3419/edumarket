@@ -2784,3 +2784,321 @@ button:hover {
     opacity: 0.5;
     cursor: not-allowed;
 }
+/* ==============================
+   レビューエリア
+============================== */
+
+.material-reviews {
+    margin-top: 45px;
+}
+
+.material-reviews > h3 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #14213d;
+}
+
+
+/* ==============================
+   レビュー集計
+============================== */
+
+.review-summary {
+    background: white;
+    border: 1px solid #e5eaf2;
+    border-radius: 18px;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    box-shadow:
+        0 4px 18px rgba(20, 33, 61, 0.06);
+    margin-bottom: 20px;
+}
+
+
+/* 平均評価 */
+
+.review-summary strong {
+    min-width: 150px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 30px;
+    color: #14213d;
+}
+
+
+/* 星 */
+
+.review-summary strong:first-line {
+    color: #f5b400;
+}
+
+
+/* 件数 */
+
+.review-summary span {
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* ==============================
+   レビュー一覧
+============================== */
+
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+
+/* レビュー1件 */
+
+.review-item {
+    background: white;
+    border: 1px solid #e5eaf2;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow:
+        0 3px 12px rgba(20, 33, 61, 0.05);
+}
+
+
+/* 星評価 */
+
+.review-item .review-rating {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+
+/* コメント */
+
+.review-item .review-comment {
+    margin: 0 0 10px;
+    color: #334155;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+
+/* 日付 */
+
+.review-item small {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+
+/* ==============================
+   レビュー投稿フォーム
+============================== */
+
+#review-form-area {
+    margin-top: 20px;
+}
+
+
+.review-form {
+    background: white;
+    border: 1px solid #e5eaf2;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow:
+        0 4px 18px rgba(20, 33, 61, 0.06);
+}
+
+
+.review-form h4 {
+    margin: 0 0 22px;
+    font-size: 21px;
+    color: #14213d;
+}
+
+
+.review-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #334155;
+}
+
+
+/* 評価 */
+
+#review-rating {
+    width: 100%;
+    max-width: 220px;
+    height: 48px;
+    padding: 0 12px;
+    margin-bottom: 22px;
+
+    border: 1px solid #d8dee9;
+    border-radius: 10px;
+
+    background: white;
+
+    font-size: 18px;
+    color: #14213d;
+}
+
+
+/* コメント */
+
+#review-comment {
+    width: 100%;
+    min-height: 120px;
+    padding: 14px;
+
+    border: 1px solid #d8dee9;
+    border-radius: 12px;
+
+    background: #fff;
+
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.6;
+
+    resize: vertical;
+
+    margin-bottom: 18px;
+}
+
+
+#review-comment:focus,
+#review-rating:focus {
+    outline: none;
+    border-color: #102344;
+    box-shadow:
+        0 0 0 3px rgba(16, 35, 68, 0.08);
+}
+
+
+/* 投稿ボタン */
+
+#review-submit-button {
+    width: 100%;
+    padding: 15px;
+
+    border-radius: 12px;
+
+    background: #102344;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+#review-submit-button:hover {
+    opacity: 0.9;
+}
+
+
+/* ==============================
+   レビュー不可
+============================== */
+
+.review-not-allowed,
+.review-already-posted {
+    background: #f8fafc;
+    border: 1px solid #e5eaf2;
+    border-radius: 16px;
+    padding: 20px;
+    color: #64748b;
+}
+
+
+.review-not-allowed p,
+.review-already-posted p {
+    margin: 0;
+}
+
+
+/* ==============================
+   レビューなし
+============================== */
+
+#review-area > p {
+    background: white;
+    border: 1px solid #e5eaf2;
+    border-radius: 16px;
+    padding: 35px 20px;
+    text-align: center;
+    color: #64748b;
+}
+
+
+/* ==============================
+   スマホ
+============================== */
+
+@media (max-width: 700px) {
+
+    .material-reviews {
+        margin-top: 35px;
+    }
+
+
+    .material-reviews > h3 {
+        font-size: 26px;
+        margin-bottom: 16px;
+    }
+
+
+    .review-summary {
+        padding: 22px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+
+    .review-summary strong {
+        min-width: auto;
+        font-size: 28px;
+    }
+
+
+    .review-form {
+        padding: 22px 18px;
+        border-radius: 16px;
+    }
+
+
+    .review-form h4 {
+        font-size: 20px;
+    }
+
+
+    #review-rating {
+        max-width: 100%;
+        height: 48px;
+    }
+
+
+    #review-comment {
+        min-height: 130px;
+        font-size: 15px;
+    }
+
+
+    #review-submit-button {
+        height: 52px;
+        font-size: 16px;
+    }
+
+
+    .review-item {
+        padding: 18px;
+    }
+
+}
