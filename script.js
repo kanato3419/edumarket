@@ -1052,227 +1052,6 @@ if (material.seller_id) {
 
     }
 
-
-    // ==============================
-    // 教材詳細を表示
-    // ==============================
-
-    detailArea.innerHTML = `
-
-
-        ${imageHTML}
-
-
-        <p class="material-category">
-
-            ${material.category || ""}
-
-            /
-
-            ${material.target || ""}
-
-        </p>
-
-
-        <h2>
-
-            ${material.title || ""}
-
-        </h2>
-
-
-        <div class="detail-box">
-
-            <h3>
-                この教材について
-            </h3>
-
-            <p>
-
-                ${material.description || ""}
-
-            </p>
-
-        </div>
-<div class="detail-box seller-box">
-
-    <h3>
-        👤 出品者
-    </h3>
-
-
-    <div class="seller-profile">
-
-
-        <div class="seller-avatar">
-
-            ${
-                sellerAvatarUrl
-
-                    ? `
-
-                        <img
-                            src="${sellerAvatarUrl}"
-                            alt="${sellerNickname}"
-                        >
-
-                    `
-
-                    : `
-
-                        👤
-
-                    `
-            }
-
-        </div>
-
-
-        <p class="seller-name">
-
-            ${sellerNickname}
-
-        </p>
-
-
-    </div>
-
-</div>
-
-        <div class="detail-box">
-
-            <h3>
-                教材情報
-            </h3>
-
-
-            <p>
-
-                対象：
-
-                ${material.target || ""}
-
-            </p>
-
-
-            <p>
-
-                カテゴリー：
-
-                ${material.category || ""}
-
-            </p>
-
-
-            ${
-
-                material.file_name
-
-                    ? `
-
-                        <p>
-
-                            ファイル：
-
-                            ${material.file_name}
-
-                        </p>
-
-                    `
-
-                    : ""
-
-            }
-
-
-        </div>
-
-
-        <div class="purchase-box">
-
-
-            <p>
-                価格
-            </p>
-
-
-            <h2>
-
-                ¥${Number(
-                    material.price || 0
-                ).toLocaleString()}
-
-            </h2>
-
-
-            <button
-                class="purchase-button"
-                onclick="
-                    purchaseMaterial(
-                        '${material.id}'
-                    )
-                "
-            >
-
-                購入する
-
-            </button>
-
-
-        </div>
-        <div class="detail-box">
-
-            <h3>
-                ⭐ レビュー
-            </h3>
-<div id="review-area">
-    レビューを読み込んでいます...
-</div>
-
-<div id="review-form-area"></div>
-           
-
-        </div>
-
-    `;
-// レビューを表示
-displayReviews(material.id);
-
-// レビュー投稿フォームを表示
-displayReviewForm(material.id);
-}
-
-
-// ==============================
-// ページ読み込み時
-// ==============================
-
-
-// 教材一覧ページ
-
-if (
-    document.getElementById(
-        "material-list"
-    )
-) {
-
-    displayMaterials();
-
-}
-
-
-// 教材詳細ページ
-
-if (
-    document.getElementById(
-        "material-detail"
-    )
-) {
-
-    displayMaterialDetail();
-
-}
-
 // ==============================
 // レビューを表示
 // ==============================
@@ -1296,6 +1075,7 @@ async function displayReviews(materialId) {
         }
     } = await supabaseClient.auth.getUser();
 
+
     // ==============================
     // レビューを取得
     // ==============================
@@ -1310,6 +1090,7 @@ async function displayReviews(materialId) {
         .order("created_at", {
             ascending: false
         });
+
 
     if (error) {
 
@@ -1327,6 +1108,7 @@ async function displayReviews(materialId) {
         return;
     }
 
+
     // ==============================
     // レビューがない場合
     // ==============================
@@ -1342,6 +1124,7 @@ async function displayReviews(materialId) {
         return;
     }
 
+
     // ==============================
     // 平均評価
     // ==============================
@@ -1353,8 +1136,10 @@ async function displayReviews(materialId) {
             0
         );
 
+
     const averageRating =
         totalRating / reviews.length;
+
 
     // ==============================
     // 星を作る
@@ -1365,6 +1150,7 @@ async function displayReviews(materialId) {
             Math.round(averageRating)
         );
 
+
     // ==============================
     // レビュー一覧
     // ==============================
@@ -1372,10 +1158,10 @@ async function displayReviews(materialId) {
     const reviewHTML =
         reviews.map(review => {
 
-            // 自分のレビューか確認
             const isMyReview =
                 user &&
                 review.user_id === user.id;
+
 
             return `
                 <div class="review-item">
@@ -1406,7 +1192,7 @@ async function displayReviews(materialId) {
                                 >
                                     削除
                                 </button>
-                              `
+                            `
                             : ""
                     }
 
@@ -1415,8 +1201,9 @@ async function displayReviews(materialId) {
 
         }).join("");
 
+
     // ==============================
-    // HTML表示
+    // レビュー表示
     // ==============================
 
     reviewArea.innerHTML = `
@@ -1434,6 +1221,7 @@ async function displayReviews(materialId) {
 
         </div>
 
+
         <div class="review-list">
 
             ${reviewHTML}
@@ -1441,6 +1229,7 @@ async function displayReviews(materialId) {
         </div>
 
     `;
+
 
     // ==============================
     // 削除ボタン
@@ -1451,6 +1240,7 @@ async function displayReviews(materialId) {
             ".review-delete-button"
         );
 
+
     deleteButtons.forEach(button => {
 
         button.addEventListener(
@@ -1459,6 +1249,7 @@ async function displayReviews(materialId) {
 
                 const reviewId =
                     this.dataset.reviewId;
+
 
                 // ==============================
                 // 削除確認
@@ -1469,9 +1260,11 @@ async function displayReviews(materialId) {
                         "このレビューを削除しますか？"
                     );
 
+
                 if (!confirmed) {
                     return;
                 }
+
 
                 // ==============================
                 // ボタンを無効化
@@ -1481,6 +1274,7 @@ async function displayReviews(materialId) {
 
                 this.textContent =
                     "削除中...";
+
 
                 // ==============================
                 // レビュー削除
@@ -1493,6 +1287,7 @@ async function displayReviews(materialId) {
                     .delete()
                     .eq("id", reviewId)
                     .eq("user_id", user.id);
+
 
                 // ==============================
                 // 削除エラー
@@ -1517,6 +1312,7 @@ async function displayReviews(materialId) {
                     return;
                 }
 
+
                 // ==============================
                 // 削除成功
                 // ==============================
@@ -1525,16 +1321,18 @@ async function displayReviews(materialId) {
                     "レビューを削除しました。"
                 );
 
+
                 // ==============================
-                // レビュー一覧を再表示
+                // レビュー一覧を更新
                 // ==============================
 
                 await displayReviews(
                     materialId
                 );
 
+
                 // ==============================
-                // レビュー投稿フォームを再表示
+                // レビュー投稿フォームを更新
                 // ==============================
 
                 await displayReviewForm(
@@ -1547,7 +1345,7 @@ async function displayReviews(materialId) {
     });
 
 }
-```
+   
 
 // ==============================
 // レビュー投稿フォームを表示
