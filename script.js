@@ -331,7 +331,12 @@ async function displayMaterials(
                         materialReviews.length
                     ).toFixed(1);
 
+const roundedRating =
+    Math.round(Number(averageRating));
 
+const stars =
+    "★".repeat(roundedRating) +
+    "☆".repeat(5 - roundedRating);
                 ratingHTML = `
 
                     <div class="material-card-rating">
