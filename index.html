@@ -822,7 +822,9 @@ const stars =
   "☆".repeat(5 - roundedRating);
         ratingHTML = `
           <div class="material-card-rating">
-            <span class="rating-stars">★★★★★</span>
+          <span class="rating-stars">
+  ${stars}
+</span>
             <span class="rating-number">${averageRating}</span>
             <span class="rating-count">（${materialReviews.length}件）</span>
           </div>
