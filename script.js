@@ -2287,13 +2287,85 @@ async function displayMyMaterials() {
 
     `;
 
+// ==============================
+// 教材のレビュー評価を取得
+// ==============================
 
+const materialIds = myMaterials.map(
+    material => material.id
+);
+
+let reviewData = [];
+
+if (materialIds.length > 0) {
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("reviews")
+        .select("material_id, rating")
+        .in("material_id", materialIds);
+
+    if (error) {
+
+        console.error(
+            "レビュー取得エラー:",
+            error
+        );
+
+    } else {
+
+        reviewData = data || [];
+
+    }
+
+}
     // ==============================
     // 教材カードを表示
     // ==============================
 
-    myMaterials.forEach(
-        function(material) {
+   myMaterials.forEach(
+    function(material) {
+
+        // この教材のレビューだけ取得
+        const materialReviews =
+            reviewData.filter(
+                review =>
+                    review.material_id === material.id
+            );
+
+        // 平均評価
+        const averageRating =
+            materialReviews.length > 0
+                ? (
+                    materialReviews.reduce(
+                        (sum, review) =>
+                            sum + Number(review.rating),
+                        0
+                    ) / materialReviews.length
+                  ).toFixed(1)
+                : null;
+
+        // 星表示
+        const ratingHTML =
+            averageRating
+                ? `
+                    <div class="material-card-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-number">
+                            ${averageRating}
+                        </span>
+                        <span class="rating-count">
+                            （${materialReviews.length}件）
+                        </span>
+                    </div>
+                  `
+                : `
+                    <div class="material-card-rating no-rating">
+                        まだレビューはありません
+                    </div>
+                  `;
 
 
             const card =
@@ -2373,7 +2445,7 @@ async function displayMyMaterials() {
                         ${material.description || ""}
 
                     </p>
-
+　　　　　　　　　　　${ratingHTML}
 
                     <p>
 
