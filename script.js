@@ -336,9 +336,9 @@ async function displayMaterials(
 
                     <div class="material-card-rating">
 
-                        <span class="rating-stars">
-                            ★★★★★
-                        </span>
+                       <span class="rating-stars">
+ 　　　　　　　　　　　　 ${stars}
+　　　　　　　　　　　　　</span>
 
                         <span class="rating-number">
                             ${averageRating}
@@ -2482,7 +2482,9 @@ if (materialIds.length > 0) {
             averageRating
                 ? `
                     <div class="material-card-rating">
-                        <span class="rating-stars">★★★★★</span>
+                       <span class="rating-stars">
+    ${stars}
+</span>
                         <span class="rating-number">
                             ${averageRating}
                         </span>
