@@ -3134,3 +3134,33 @@ button:hover {
     color: #94a3b8;
     font-size: 13px;
 }
+/* おすすめ教材のレビュー評価 */
+
+.material-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 5px;
+  font-size: 11px;
+}
+
+.rating-stars {
+  color: #f5b400;
+  letter-spacing: 0.5px;
+  font-size: 13px;
+}
+
+.rating-number {
+  font-weight: 700;
+  color: #14213d;
+}
+
+.rating-count {
+  color: #8a94a6;
+  font-size: 10px;
+}
+
+.material-card-rating.no-rating {
+  color: #8a94a6;
+  font-size: 10px;
+}
