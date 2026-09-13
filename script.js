@@ -1202,6 +1202,152 @@ async function displayReviews(materialId) {
         }).join("");
 
 
+ 
+   // ==============================
+// レビューを表示
+// ==============================
+
+async function displayReviews(materialId) {
+
+    const reviewArea =
+        document.getElementById("review-area");
+
+    if (!reviewArea) {
+        return;
+    }
+
+    // ==============================
+    // ログインユーザーを取得
+    // ==============================
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+
+    // ==============================
+    // レビューを取得
+    // ==============================
+
+    const {
+        data: reviews,
+        error
+    } = await supabaseClient
+        .from("reviews")
+        .select("*")
+        .eq("material_id", materialId)
+        .order("created_at", {
+            ascending: false
+        });
+
+
+    if (error) {
+
+        console.error(
+            "レビュー取得エラー:",
+            error
+        );
+
+        reviewArea.innerHTML = `
+            <p>レビューを読み込めませんでした。</p>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // レビューがない場合
+    // ==============================
+
+    if (!reviews || reviews.length === 0) {
+
+        reviewArea.innerHTML = `
+            <p>まだレビューはありません。</p>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // 平均評価
+    // ==============================
+
+    const totalRating =
+        reviews.reduce(
+            (sum, review) =>
+                sum + Number(review.rating || 0),
+            0
+        );
+
+    const averageRating =
+        totalRating / reviews.length;
+
+
+    // ==============================
+    // 平均星
+    // ==============================
+
+    const stars =
+        "⭐".repeat(
+            Math.round(averageRating)
+        );
+
+
+    // ==============================
+    // レビューHTML
+    // ==============================
+
+    const reviewHTML =
+        reviews.map(review => {
+
+            const isMyReview =
+                user &&
+                review.user_id === user.id;
+
+
+            return `
+                <div class="review-item">
+
+                    <div class="review-rating">
+                        ${"⭐".repeat(
+                            Number(review.rating)
+                        )}
+                    </div>
+
+                    <p class="review-comment">
+                        ${review.comment || ""}
+                    </p>
+
+                    <small>
+                        ${new Date(
+                            review.created_at
+                        ).toLocaleDateString("ja-JP")}
+                    </small>
+
+                    ${
+                        isMyReview
+                            ? `
+                                <button
+                                    type="button"
+                                    class="review-delete-button"
+                                    data-review-id="${review.id}"
+                                >
+                                    削除
+                                </button>
+                            `
+                            : ""
+                    }
+
+                </div>
+            `;
+
+        }).join("");
+
+
     // ==============================
     // レビュー表示
     // ==============================
@@ -1221,7 +1367,6 @@ async function displayReviews(materialId) {
 
         </div>
 
-
         <div class="review-list">
 
             ${reviewHTML}
@@ -1232,11 +1377,11 @@ async function displayReviews(materialId) {
 
 
     // ==============================
-    // 削除ボタン
+    // 自分のレビューの削除ボタン
     // ==============================
 
     const deleteButtons =
-        document.querySelectorAll(
+        reviewArea.querySelectorAll(
             ".review-delete-button"
         );
 
@@ -1251,9 +1396,9 @@ async function displayReviews(materialId) {
                     this.dataset.reviewId;
 
 
-                // ==============================
-                // 削除確認
-                // ==============================
+                // ------------------------------
+                // 確認
+                // ------------------------------
 
                 const confirmed =
                     confirm(
@@ -1266,9 +1411,9 @@ async function displayReviews(materialId) {
                 }
 
 
-                // ==============================
-                // ボタンを無効化
-                // ==============================
+                // ------------------------------
+                // ボタン無効化
+                // ------------------------------
 
                 this.disabled = true;
 
@@ -1276,9 +1421,9 @@ async function displayReviews(materialId) {
                     "削除中...";
 
 
-                // ==============================
-                // レビュー削除
-                // ==============================
+                // ------------------------------
+                // 削除
+                // ------------------------------
 
                 const {
                     error: deleteError
@@ -1289,9 +1434,9 @@ async function displayReviews(materialId) {
                     .eq("user_id", user.id);
 
 
-                // ==============================
-                // 削除エラー
-                // ==============================
+                // ------------------------------
+                // エラー
+                // ------------------------------
 
                 if (deleteError) {
 
@@ -1313,28 +1458,22 @@ async function displayReviews(materialId) {
                 }
 
 
-                // ==============================
-                // 削除成功
-                // ==============================
+                // ------------------------------
+                // 成功
+                // ------------------------------
 
                 alert(
                     "レビューを削除しました。"
                 );
 
 
-                // ==============================
-                // レビュー一覧を更新
-                // ==============================
-
+                // レビュー一覧更新
                 await displayReviews(
                     materialId
                 );
 
 
-                // ==============================
-                // レビュー投稿フォームを更新
-                // ==============================
-
+                // レビュー投稿フォーム更新
                 await displayReviewForm(
                     materialId
                 );
@@ -1345,7 +1484,6 @@ async function displayReviews(materialId) {
     });
 
 }
-   
 
 // ==============================
 // レビュー投稿フォームを表示
