@@ -717,7 +717,32 @@ async function displayRecommendedMaterials() {
       .from("materials")
       .select("*")
       .limit(6);
+  // レビューを取得
+  const materialIds =
+    (materials || []).map(
+      material => material.id
+    );
 
+  let reviewData = [];
+
+  if (materialIds.length > 0) {
+
+    const {
+      data,
+      error: reviewError
+    } =
+      await supabaseClient
+        .from("reviews")
+        .select("material_id, rating")
+        .in("material_id", materialIds);
+
+    if (reviewError) {
+      console.error("レビュー取得エラー:", reviewError);
+    } else {
+      reviewData = data || [];
+    }
+
+  }
 
   console.log(
     "取得した教材:",
@@ -766,7 +791,47 @@ async function displayRecommendedMaterials() {
 
       const card =
         document.createElement("div");
+      const materialReviews =
+        reviewData.filter(
+          review =>
+            review.material_id === material.id
+        );
 
+      let ratingHTML;
+
+      if (materialReviews.length > 0) {
+
+        const totalRating =
+          materialReviews.reduce(
+            function(sum, review) {
+              return sum + Number(review.rating);
+            },
+            0
+          );
+
+        const averageRating =
+          (
+            totalRating /
+            materialReviews.length
+          ).toFixed(1);
+
+        ratingHTML = `
+          <div class="material-card-rating">
+            <span class="rating-stars">★★★★★</span>
+            <span class="rating-number">${averageRating}</span>
+            <span class="rating-count">（${materialReviews.length}件）</span>
+          </div>
+        `;
+
+      } else {
+
+        ratingHTML = `
+          <div class="material-card-rating no-rating">
+            まだレビューはありません
+          </div>
+        `;
+
+      }
 
       card.className =
         "material-card";
@@ -811,7 +876,7 @@ async function displayRecommendedMaterials() {
             ${material.category || ""}
           </div>
 
-
+　　　　　　${ratingHTML}
           <div class="material-price">
             ¥${Number(
               material.price || 0
