@@ -1020,40 +1020,90 @@ if (material.seller_id) {
 
     let imageHTML;
 
-
     if (material.image_url) {
 
         imageHTML = `
-
             <div class="material-detail-image">
 
                 <img
                     src="${material.image_url}"
-                    alt="${material.title}"
+                    alt="${material.title || "教材"}"
                 >
 
             </div>
-
         `;
 
     } else {
 
         imageHTML = `
-
-            <div
-                class="
-                    material-detail-image
-                    no-image
-                "
-            >
+            <div class="material-detail-image no-image">
                 📚
             </div>
-
         `;
 
     }
-}
 
+
+    // ==============================
+    // 教材情報を画面に表示
+    // ==============================
+
+    detailArea.innerHTML = `
+
+        ${imageHTML}
+
+        <div class="material-detail-content">
+
+            <h2>
+                ${material.title || "教材タイトルなし"}
+            </h2>
+
+            <p>
+                ${material.description || "教材の説明はありません。"}
+            </p>
+
+            <p>
+                出品者：${sellerNickname}
+            </p>
+
+            <p class="material-price">
+                ¥${Number(material.price || 0).toLocaleString()}
+            </p>
+
+            <button
+                type="button"
+                class="purchase-button"
+                onclick="purchaseMaterial('${material.id}')"
+            >
+                この教材を購入する
+            </button>
+
+        </div>
+
+        <section class="material-reviews">
+
+            <h3>レビュー</h3>
+
+            <div id="review-area">
+                <p>レビューを読み込んでいます...</p>
+            </div>
+
+            <div id="review-form-area"></div>
+
+        </section>
+
+    `;
+
+
+    // ==============================
+    // レビュー表示
+    // ==============================
+
+    await displayReviews(material.id);
+
+    await displayReviewForm(material.id);
+
+}
 // ==============================
 // レビューを表示
 // ==============================
@@ -5827,3 +5877,6 @@ async function displayMyProfile() {
 // ==============================
 console.log("★★★ displayMyProfileを実行します ★★★");
 displayMyProfile();
+if (document.getElementById("material-detail")) {
+    displayMaterialDetail();
+}
