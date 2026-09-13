@@ -1272,6 +1272,7 @@ if (
     displayMaterialDetail();
 
 }
+```javascript
 // ==============================
 // レビューを表示
 // ==============================
@@ -1285,6 +1286,20 @@ async function displayReviews(materialId) {
         return;
     }
 
+    // ==============================
+    // ログインユーザーを取得
+    // ==============================
+
+    const {
+        data: {
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+    // ==============================
+    // レビューを取得
+    // ==============================
+
     const {
         data: reviews,
         error
@@ -1295,7 +1310,6 @@ async function displayReviews(materialId) {
         .order("created_at", {
             ascending: false
         });
-
 
     if (error) {
 
@@ -1313,8 +1327,9 @@ async function displayReviews(materialId) {
         return;
     }
 
-
+    // ==============================
     // レビューがない場合
+    // ==============================
 
     if (!reviews || reviews.length === 0) {
 
@@ -1327,8 +1342,9 @@ async function displayReviews(materialId) {
         return;
     }
 
-
+    // ==============================
     // 平均評価
+    // ==============================
 
     const totalRating =
         reviews.reduce(
@@ -1340,19 +1356,26 @@ async function displayReviews(materialId) {
     const averageRating =
         totalRating / reviews.length;
 
-
+    // ==============================
     // 星を作る
+    // ==============================
 
     const stars =
         "⭐".repeat(
             Math.round(averageRating)
         );
 
-
+    // ==============================
     // レビュー一覧
+    // ==============================
 
     const reviewHTML =
         reviews.map(review => {
+
+            // 自分のレビューか確認
+            const isMyReview =
+                user &&
+                review.user_id === user.id;
 
             return `
                 <div class="review-item">
@@ -1373,11 +1396,28 @@ async function displayReviews(materialId) {
                         ).toLocaleDateString("ja-JP")}
                     </small>
 
+                    ${
+                        isMyReview
+                            ? `
+                                <button
+                                    type="button"
+                                    class="review-delete-button"
+                                    data-review-id="${review.id}"
+                                >
+                                    削除
+                                </button>
+                              `
+                            : ""
+                    }
+
                 </div>
             `;
 
         }).join("");
 
+    // ==============================
+    // HTML表示
+    // ==============================
 
     reviewArea.innerHTML = `
 
@@ -1401,7 +1441,114 @@ async function displayReviews(materialId) {
         </div>
 
     `;
+
+    // ==============================
+    // 削除ボタン
+    // ==============================
+
+    const deleteButtons =
+        document.querySelectorAll(
+            ".review-delete-button"
+        );
+
+    deleteButtons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            async function () {
+
+                const reviewId =
+                    this.dataset.reviewId;
+
+                // ==============================
+                // 削除確認
+                // ==============================
+
+                const confirmed =
+                    confirm(
+                        "このレビューを削除しますか？"
+                    );
+
+                if (!confirmed) {
+                    return;
+                }
+
+                // ==============================
+                // ボタンを無効化
+                // ==============================
+
+                this.disabled = true;
+
+                this.textContent =
+                    "削除中...";
+
+                // ==============================
+                // レビュー削除
+                // ==============================
+
+                const {
+                    error: deleteError
+                } = await supabaseClient
+                    .from("reviews")
+                    .delete()
+                    .eq("id", reviewId)
+                    .eq("user_id", user.id);
+
+                // ==============================
+                // 削除エラー
+                // ==============================
+
+                if (deleteError) {
+
+                    console.error(
+                        "レビュー削除エラー:",
+                        deleteError
+                    );
+
+                    alert(
+                        "レビューの削除に失敗しました。"
+                    );
+
+                    this.disabled = false;
+
+                    this.textContent =
+                        "削除";
+
+                    return;
+                }
+
+                // ==============================
+                // 削除成功
+                // ==============================
+
+                alert(
+                    "レビューを削除しました。"
+                );
+
+                // ==============================
+                // レビュー一覧を再表示
+                // ==============================
+
+                await displayReviews(
+                    materialId
+                );
+
+                // ==============================
+                // レビュー投稿フォームを再表示
+                // ==============================
+
+                await displayReviewForm(
+                    materialId
+                );
+
+            }
+        );
+
+    });
+
 }
+```
+
 // ==============================
 // レビュー投稿フォームを表示
 // ==============================
