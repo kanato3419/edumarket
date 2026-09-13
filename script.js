@@ -5823,5 +5823,5 @@ async function displayMyProfile() {
 // ==============================
 // 実行
 // ==============================
-
+console.log("★★★ displayMyProfileを実行します ★★★");
 displayMyProfile();
