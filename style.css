@@ -2779,3 +2779,8 @@ button:hover {
 .review-delete-button:hover {
     background: #f5f5f5;
 }
+
+.review-delete-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
