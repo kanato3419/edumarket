@@ -3154,3 +3154,41 @@ button:hover {
     line-height: 1.7;
     margin: 8px 0 12px !important;
 }
+/* ==============================
+   お気に入りボタン
+============================== */
+
+.material-card {
+    position: relative;
+}
+
+.favorite-button {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+
+    border: none;
+    background: transparent;
+
+    padding: 4px;
+
+    font-size: 26px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    color: #64748b;
+
+    z-index: 10;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.favorite-button:hover {
+    transform: scale(1.1);
+}
+
+.favorite-button.is-favorite {
+    color: #e63946;
+}
