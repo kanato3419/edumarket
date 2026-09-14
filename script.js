@@ -5504,14 +5504,31 @@ async function loadProfileEdit() {
     document.getElementById(
         "profile-nickname"
     ).value =
-       profile?.nickname || "";
+        profile?.nickname || "";
+
+
+    // ==============================
+    // 自己紹介表示
+    // ==============================
+
+    const profileBio =
+        document.getElementById(
+            "profile-bio"
+        );
+
+    if (profileBio) {
+
+        profileBio.value =
+            profile?.bio || "";
+
+    }
 
 
     // ==============================
     // アイコンがある場合
     // ==============================
 
-   if (profile?.avatar_url) {
+    if (profile?.avatar_url) {
 
         document.getElementById(
             "profile-image-preview"
@@ -5529,7 +5546,9 @@ async function loadProfileEdit() {
 }
 
 
+// ==============================
 // ページ読み込み時に実行
+// ==============================
 
 loadProfileEdit();
 // ==============================
