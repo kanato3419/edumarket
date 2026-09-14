@@ -6411,3 +6411,240 @@ console.log(
 );
 
 displayMyProfile();
+// ==============================
+// いいねした教材を表示
+// ==============================
+
+async function displayFavoriteMaterials() {
+
+    const favoriteList =
+        document.getElementById(
+            "favorite-materials-list"
+        );
+
+
+    // マイページ以外では実行しない
+    if (!favoriteList) {
+        return;
+    }
+
+
+    // ==============================
+    // ログインユーザー取得
+    // ==============================
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (userError || !user) {
+
+        favoriteList.innerHTML = `
+            <p>
+                いいねした教材を見るには
+                ログインしてください。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // いいねした教材を取得
+    // ==============================
+
+    const {
+        data: favorites,
+        error: favoriteError
+    } =
+        await supabaseClient
+            .from("favorites")
+            .select("material_id")
+            .eq(
+                "user_id",
+                user.id
+            );
+
+
+    if (favoriteError) {
+
+        console.error(
+            "お気に入り取得エラー:",
+            favoriteError
+        );
+
+        favoriteList.innerHTML = `
+            <p>
+                いいねした教材を
+                読み込めませんでした。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // いいねがない場合
+    // ==============================
+
+    if (
+        !favorites ||
+        favorites.length === 0
+    ) {
+
+        favoriteList.innerHTML = `
+            <div class="favorite-empty">
+                <p>
+                    まだいいねした教材はありません。
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // 教材IDを取得
+    // ==============================
+
+    const materialIds =
+        favorites.map(
+            favorite =>
+                favorite.material_id
+        );
+
+
+    // ==============================
+    // 教材を取得
+    // ==============================
+
+    const {
+        data: materials,
+        error: materialError
+    } =
+        await supabaseClient
+            .from("materials")
+            .select("*")
+            .in(
+                "id",
+                materialIds
+            );
+
+
+    if (materialError) {
+
+        console.error(
+            "お気に入り教材取得エラー:",
+            materialError
+        );
+
+        favoriteList.innerHTML = `
+            <p>
+                教材を読み込めませんでした。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // 表示
+    // ==============================
+
+    favoriteList.innerHTML = "";
+
+
+    materials.forEach(
+        function(material) {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "favorite-material-card";
+
+
+            card.innerHTML = `
+
+                <div class="favorite-material-image">
+
+                    ${
+                        material.image_url
+                            ? `
+                                <img
+                                    src="${material.image_url}"
+                                    alt="${material.title}"
+                                >
+                            `
+                            : "📚"
+                    }
+
+                </div>
+
+
+                <div class="favorite-material-info">
+
+                    <h3>
+                        ${material.title || "教材"}
+                    </h3>
+
+                    <p class="favorite-material-category">
+                        ${material.category || ""}
+                    </p>
+
+                    <p class="favorite-material-price">
+                        ¥${Number(
+                            material.price || 0
+                        ).toLocaleString()}
+                    </p>
+
+                </div>
+
+            `;
+
+
+            // ==========================
+            // 教材ページへ
+            // ==========================
+
+            card.addEventListener(
+                "click",
+                function() {
+
+                    window.location.href =
+                        "material.html?id=" +
+                        material.id;
+
+                }
+            );
+
+
+            favoriteList.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+// ==============================
+// いいねした教材を実行
+// ==============================
+
+displayFavoriteMaterials();
