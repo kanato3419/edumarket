@@ -1259,6 +1259,14 @@ button:hover {
   font-size: 15px;
 
 }
+/* マイページの自己紹介 */
+.mypage-profile-bio {
+    color: #334155;
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 500;
+    margin: 8px 0 12px;
+}
 /* =====================
    マイページ メニュー
 ===================== */
