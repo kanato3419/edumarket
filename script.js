@@ -534,7 +534,174 @@ const stars =
 
     }
 
+    // ==============================
+    // お気に入りボタン
+    // ==============================
 
+    const favoriteButtons =
+        document.querySelectorAll(
+            ".favorite-button"
+        );
+
+
+    favoriteButtons.forEach(
+        function(button) {
+
+            const materialId =
+                button.dataset.materialId;
+
+
+            // すでにお気に入りか確認
+
+            const isFavorite =
+                favoriteData.some(
+                    favorite =>
+                        favorite.material_id ===
+                        materialId
+                );
+
+
+            if (isFavorite) {
+
+                button.textContent = "♥";
+
+                button.classList.add(
+                    "is-favorite"
+                );
+
+            }
+
+
+            // クリック
+
+            button.addEventListener(
+                "click",
+                async function(event) {
+
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+
+                    // ログインしていない場合
+
+                    if (!currentUser) {
+
+                        alert(
+                            "お気に入りを使うにはログインしてください。"
+                        );
+
+                        window.location.href =
+                            "login.html";
+
+                        return;
+
+                    }
+
+
+                    // ==============================
+                    // すでにお気に入りの場合 → 削除
+                    // ==============================
+
+                    if (
+                        button.classList.contains(
+                            "is-favorite"
+                        )
+                    ) {
+
+                        const {
+                            error
+                        } =
+                            await supabaseClient
+                                .from("favorites")
+                                .delete()
+                                .eq(
+                                    "user_id",
+                                    currentUser.id
+                                )
+                                .eq(
+                                    "material_id",
+                                    materialId
+                                );
+
+
+                        if (error) {
+
+                            console.error(
+                                "お気に入り削除エラー:",
+                                error
+                            );
+
+                            alert(
+                                "お気に入りの解除に失敗しました。\n\n" +
+                                error.message
+                            );
+
+                            return;
+
+                        }
+
+
+                        button.textContent = "♡";
+
+                        button.classList.remove(
+                            "is-favorite"
+                        );
+
+                    }
+
+                    // ==============================
+                    // お気に入りではない → 追加
+                    // ==============================
+
+                    else {
+
+                        const {
+                            error
+                        } =
+                            await supabaseClient
+                                .from("favorites")
+                                .insert({
+
+                                    user_id:
+                                        currentUser.id,
+
+                                    material_id:
+                                        materialId
+
+                                });
+
+
+                        if (error) {
+
+                            console.error(
+                                "お気に入り登録エラー:",
+                                error
+                            );
+
+                            alert(
+                                "お気に入りの登録に失敗しました。\n\n" +
+                                error.message
+                            );
+
+                            return;
+
+                        }
+
+
+                        button.textContent = "♥";
+
+                        button.classList.add(
+                            "is-favorite"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
     // ==============================
     // 結果なし
     // ==============================
