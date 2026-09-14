@@ -453,65 +453,54 @@ const stars =
                     `;
 
 
-            // ==============================
-            // カード内容
-            // ==============================
+           // ==============================
+// カード内容
+// ==============================
 
-            card.innerHTML = `
+card.innerHTML = `
 
-                <a
-                    href="material.html?id=${material.id}"
-                    class="material-card-link"
-                >
-　　　　　　　　　<button
-    type="button"
-    class="favorite-button"
-    data-material-id="${material.id}"
->
-    ♡
-</button>
-                    ${imageHTML}
+    <a
+        href="material.html?id=${material.id}"
+        class="material-card-link"
+    >
 
-                    <div class="material-card-content">
+        ${imageHTML}
 
-                        <p class="material-category">
+        <div class="material-card-content">
 
-                            ${material.category || ""}
-
-                        </p>
+            <p class="material-category">
+                ${material.category || ""}
+            </p>
 
 
-                        <h3>
-
-                            ${material.title || ""}
-
-                        </h3>
+            <h3>
+                ${material.title || ""}
+            </h3>
 
 
-                        ${ratingHTML}
+            ${ratingHTML}
 
 
-                        <p class="material-price">
+            <p class="material-price">
+                ¥${Number(
+                    material.price || 0
+                ).toLocaleString()}
+            </p>
 
-                            ¥${Number(
-                                material.price || 0
-                            ).toLocaleString()}
+        </div>
 
-                        </p>
-
-                    </div>
-
-                </a>
-
-            `;
+    </a>
 
 
-            materialList.appendChild(
-                card
-            );
+    <button
+        type="button"
+        class="favorite-button"
+        data-material-id="${material.id}"
+    >
+        ♡
+    </button>
 
-        }
-    );
+`;
 
 
     // ==============================
