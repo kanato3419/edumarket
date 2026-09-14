@@ -2122,6 +2122,13 @@ async function displayReviewForm(materialId) {
     );
 }
 // ==============================
+// 教材詳細ページで実行
+// ==============================
+
+if (document.getElementById("material-detail")) {
+    displayMaterialDetail();
+}
+// ==============================
 // 会員登録（Supabase版）
 // ==============================
 
