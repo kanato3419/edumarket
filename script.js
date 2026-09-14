@@ -5691,6 +5691,22 @@ if (profileEditForm) {
             }
 
 
+            // ==============================
+            // 自己紹介取得
+            // ==============================
+
+            const bioElement =
+                document.getElementById(
+                    "profile-bio"
+                );
+
+
+            const bio =
+                bioElement
+                    ? bioElement.value.trim()
+                    : "";
+
+
             submitButton.disabled = true;
 
             submitButton.textContent =
@@ -5702,17 +5718,17 @@ if (profileEditForm) {
             // ==============================
 
             const {
-    data: currentProfile,
-    error: currentProfileError
-} =
-    await supabaseClient
-        .from("profiles")
-        .select("*")
-        .eq(
-            "id",
-            user.id
-        )
-        .maybeSingle();
+                data: currentProfile,
+                error: currentProfileError
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("*")
+                    .eq(
+                        "id",
+                        user.id
+                    )
+                    .maybeSingle();
 
 
             if (currentProfileError) {
@@ -5721,6 +5737,18 @@ if (profileEditForm) {
                     "プロフィール取得エラー:",
                     currentProfileError
                 );
+
+                alert(
+                    "プロフィール情報の取得に失敗しました。\n\n" +
+                    currentProfileError.message
+                );
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "保存する";
+
+                return;
 
             }
 
@@ -5741,12 +5769,14 @@ if (profileEditForm) {
 
 
             const imageFile =
-                imageInput.files[0];
+                imageInput?.files?.[0];
 
 
             if (imageFile) {
 
+                // ==============================
                 // 画像か確認
+                // ==============================
 
                 if (
                     !imageFile.type.startsWith(
@@ -5774,9 +5804,9 @@ if (profileEditForm) {
 
                 const extension =
                     imageFile.name
-                    .split(".")
-                    .pop()
-                    .toLowerCase();
+                        .split(".")
+                        .pop()
+                        .toLowerCase();
 
 
                 const filePath =
@@ -5856,28 +5886,27 @@ if (profileEditForm) {
             // profilesを更新
             // ==============================
 
-           const {
-    data: savedProfile,
-    error: updateError
-} =
-    await supabaseClient
-        .from("profiles")
-        .upsert(
-            {
+            const {
+                error: updateError
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .upsert(
+                        {
 
-                id: user.id,
+                            id: user.id,
 
-                nickname: nickname,
+                            nickname: nickname,
 
-                avatar_url: avatarUrl
+                            avatar_url: avatarUrl,
 
-            },
-            {
-                onConflict: "id"
-            }
-        )
-        .select()
-        .single();
+                            bio: bio
+
+                        },
+                        {
+                            onConflict: "id"
+                        }
+                    );
 
 
             if (updateError) {
