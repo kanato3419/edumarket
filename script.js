@@ -453,7 +453,7 @@ const stars =
                     `;
 
 
-           // ==============================
+// ==============================
 // カード内容
 // ==============================
 
@@ -491,224 +491,270 @@ card.innerHTML = `
 
     </a>
 
-
-    <button
-        type="button"
-        class="favorite-button"
-        data-material-id="${material.id}"
-    >
-        ♡
-    </button>
-
 `;
 
 
-    // ==============================
-    // 検索結果表示
-    // ==============================
+// ==============================
+// お気に入りボタン
+// ==============================
 
-    if (searchResultText) {
+const favoriteButton =
+    document.createElement("button");
 
-        if (searchKeyword) {
 
-            searchResultText.textContent =
-                `「${params.get("search")}」の検索結果：${displayCount}件`;
+favoriteButton.type =
+    "button";
 
-        } else {
 
-            searchResultText.textContent =
-                "";
+favoriteButton.className =
+    "favorite-button";
+
+
+favoriteButton.dataset.materialId =
+    material.id;
+
+
+favoriteButton.textContent =
+    "♡";
+
+
+card.appendChild(
+    favoriteButton
+);
+
+
+// ==============================
+// カードを一覧に追加
+// ==============================
+
+materialList.appendChild(
+    card
+);
 
         }
+    );
+
+
+// ==============================
+// 検索結果表示
+// ==============================
+
+if (searchResultText) {
+
+    if (searchKeyword) {
+
+        searchResultText.textContent =
+            `「${params.get("search")}」の検索結果：${displayCount}件`;
+
+    } else {
+
+        searchResultText.textContent =
+            "";
 
     }
 
-    // ==============================
-    // お気に入りボタン
-    // ==============================
-
-    const favoriteButtons =
-        document.querySelectorAll(
-            ".favorite-button"
-        );
+}
 
 
-    favoriteButtons.forEach(
-        function(button) {
+// ==============================
+// お気に入りボタン
+// ==============================
 
-            const materialId =
-                button.dataset.materialId;
-
-
-            // すでにお気に入りか確認
-
-            const isFavorite =
-                favoriteData.some(
-                    favorite =>
-                        favorite.material_id ===
-                        materialId
-                );
+const favoriteButtons =
+    document.querySelectorAll(
+        ".favorite-button"
+    );
 
 
-            if (isFavorite) {
+favoriteButtons.forEach(
+    function(button) {
 
-                button.textContent = "♥";
-
-                button.classList.add(
-                    "is-favorite"
-                );
-
-            }
+        const materialId =
+            button.dataset.materialId;
 
 
-            // クリック
+        // ==============================
+        // すでにお気に入りか確認
+        // ==============================
 
-            button.addEventListener(
-                "click",
-                async function(event) {
+        const isFavorite =
+            favoriteData.some(
+                favorite =>
+                    favorite.material_id ===
+                    materialId
+            );
 
-                    event.preventDefault();
 
-                    event.stopPropagation();
+        if (isFavorite) {
+
+            button.textContent =
+                "❤️";
+
+            button.classList.add(
+                "is-favorite"
+            );
+
+        }
 
 
-                    // ログインしていない場合
+        // ==============================
+        // クリック
+        // ==============================
 
-                    if (!currentUser) {
+        button.addEventListener(
+            "click",
+            async function(event) {
 
-                        alert(
-                            "お気に入りを使うにはログインしてください。"
+                event.preventDefault();
+
+                event.stopPropagation();
+
+
+                // ==============================
+                // ログインしていない場合
+                // ==============================
+
+                if (!currentUser) {
+
+                    alert(
+                        "お気に入りを使うにはログインしてください。"
+                    );
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                // ==============================
+                // お気に入り解除
+                // ==============================
+
+                if (
+                    button.classList.contains(
+                        "is-favorite"
+                    )
+                ) {
+
+                    const {
+                        error
+                    } =
+                        await supabaseClient
+                            .from("favorites")
+                            .delete()
+                            .eq(
+                                "user_id",
+                                currentUser.id
+                            )
+                            .eq(
+                                "material_id",
+                                materialId
+                            );
+
+
+                    if (error) {
+
+                        console.error(
+                            "お気に入り削除エラー:",
+                            error
                         );
 
-                        window.location.href =
-                            "login.html";
+                        alert(
+                            "お気に入りの解除に失敗しました。\n\n" +
+                            error.message
+                        );
 
                         return;
 
                     }
 
 
-                    // ==============================
-                    // すでにお気に入りの場合 → 削除
-                    // ==============================
-
-                    if (
-                        button.classList.contains(
-                            "is-favorite"
-                        )
-                    ) {
-
-                        const {
-                            error
-                        } =
-                            await supabaseClient
-                                .from("favorites")
-                                .delete()
-                                .eq(
-                                    "user_id",
-                                    currentUser.id
-                                )
-                                .eq(
-                                    "material_id",
-                                    materialId
-                                );
+                    button.textContent =
+                        "♡";
 
 
-                        if (error) {
-
-                            console.error(
-                                "お気に入り削除エラー:",
-                                error
-                            );
-
-                            alert(
-                                "お気に入りの解除に失敗しました。\n\n" +
-                                error.message
-                            );
-
-                            return;
-
-                        }
-
-
-                        button.textContent = "♡";
-
-                        button.classList.remove(
-                            "is-favorite"
-                        );
-
-                    }
-
-                    // ==============================
-                    // お気に入りではない → 追加
-                    // ==============================
-
-                    else {
-
-                        const {
-                            error
-                        } =
-                            await supabaseClient
-                                .from("favorites")
-                                .insert({
-
-                                    user_id:
-                                        currentUser.id,
-
-                                    material_id:
-                                        materialId
-
-                                });
-
-
-                        if (error) {
-
-                            console.error(
-                                "お気に入り登録エラー:",
-                                error
-                            );
-
-                            alert(
-                                "お気に入りの登録に失敗しました。\n\n" +
-                                error.message
-                            );
-
-                            return;
-
-                        }
-
-
-                        button.textContent = "♥";
-
-                        button.classList.add(
-                            "is-favorite"
-                        );
-
-                    }
+                    button.classList.remove(
+                        "is-favorite"
+                    );
 
                 }
-            );
 
-        }
-    );
-    // ==============================
-    // 結果なし
-    // ==============================
 
-    if (displayCount === 0) {
+                // ==============================
+                // お気に入り追加
+                // ==============================
 
-        materialList.innerHTML = `
+                else {
 
-            <p>
-                条件に一致する教材がありませんでした。
-            </p>
+                    const {
+                        error
+                    } =
+                        await supabaseClient
+                            .from("favorites")
+                            .insert({
 
-        `;
+                                user_id:
+                                    currentUser.id,
+
+                                material_id:
+                                    materialId
+
+                            });
+
+
+                    if (error) {
+
+                        console.error(
+                            "お気に入り登録エラー:",
+                            error
+                        );
+
+                        alert(
+                            "お気に入りの登録に失敗しました。\n\n" +
+                            error.message
+                        );
+
+                        return;
+
+                    }
+
+
+                    button.textContent =
+                        "❤️";
+
+
+                    button.classList.add(
+                        "is-favorite"
+                    );
+
+                }
+
+            }
+        );
 
     }
+);
+
+
+// ==============================
+// 結果なし
+// ==============================
+
+if (displayCount === 0) {
+
+    materialList.innerHTML = `
+
+        <p>
+            条件に一致する教材がありませんでした。
+        </p>
+
+    `;
 
 }
 
+}
 // ==============================
 // カテゴリー検索
 // ==============================
