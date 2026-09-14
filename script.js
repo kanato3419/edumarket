@@ -463,7 +463,13 @@ const stars =
                     href="material.html?id=${material.id}"
                     class="material-card-link"
                 >
-
+　　　　　　　　　<button
+    type="button"
+    class="favorite-button"
+    data-material-id="${material.id}"
+>
+    ♡
+</button>
                     ${imageHTML}
 
                     <div class="material-card-content">
