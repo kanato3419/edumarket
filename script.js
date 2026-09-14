@@ -5984,44 +5984,41 @@ async function displayMyProfile() {
 
     if (userError || !user) {
 
-    userInfo.innerHTML = `
+        userInfo.innerHTML = `
 
-        <div class="mypage-not-logged-in">
+            <div class="mypage-not-logged-in">
 
-            <div class="mypage-avatar-placeholder">
-                👤
+                <div class="mypage-avatar-placeholder">
+                    👤
+                </div>
+
+                <div>
+
+                    <h2>
+                        ログインしていません
+                    </h2>
+
+                    <p>
+                        EduMarketを利用するには
+                        ログインしてください。
+                    </p>
+
+                    <a
+                        href="login.html"
+                        class="profile-edit-button"
+                    >
+                        ログインする
+                    </a>
+
+                </div>
+
             </div>
 
+        `;
 
-            <div>
+        return;
 
-                <h2>
-                    ログインしていません
-                </h2>
-
-
-                <p>
-                    EduMarketを利用するには
-                    ログインしてください。
-                </p>
-
-
-                <a
-                    href="login.html"
-                    class="profile-edit-button"
-                >
-                    ログインする
-                </a>
-
-            </div>
-
-        </div>
-
-    `;
-
-    return;
-
-}
+    }
 
 
     // ==============================
@@ -6063,6 +6060,15 @@ async function displayMyProfile() {
 
 
     // ==============================
+    // 自己紹介
+    // ==============================
+
+    const bio =
+        profile?.bio ||
+        "";
+
+
+    // ==============================
     // アイコン
     // ==============================
 
@@ -6091,6 +6097,23 @@ async function displayMyProfile() {
 
 
     // ==============================
+    // 自己紹介HTML
+    // ==============================
+
+    let bioHTML = "";
+
+    if (bio) {
+
+        bioHTML = `
+            <p class="mypage-profile-bio">
+                ${bio}
+            </p>
+        `;
+
+    }
+
+
+    // ==============================
     // マイページに表示
     // ==============================
 
@@ -6100,18 +6123,17 @@ async function displayMyProfile() {
 
             ${avatarHTML}
 
-
             <div class="mypage-profile-text">
 
                 <h2>
                     ${nickname}
                 </h2>
 
+                ${bioHTML}
 
                 <p>
                     ${user.email}
                 </p>
-
 
                 <a
                     href="profile-edit.html"
@@ -6132,8 +6154,9 @@ async function displayMyProfile() {
 // ==============================
 // 実行
 // ==============================
-console.log("★★★ displayMyProfileを実行します ★★★");
+
+console.log(
+    "★★★ displayMyProfileを実行します ★★★"
+);
+
 displayMyProfile();
-if (document.getElementById("material-detail")) {
-    displayMaterialDetail();
-}
