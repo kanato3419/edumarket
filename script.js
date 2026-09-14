@@ -176,7 +176,50 @@ async function displayMaterials(
 
     }
 
+　　// ==============================
+// お気に入りを取得
+// ==============================
 
+const {
+    data: {
+        user: currentUser
+    }
+} =
+    await supabaseClient
+        .auth
+        .getUser();
+
+let favoriteData = [];
+
+if (currentUser) {
+
+    const {
+        data,
+        error: favoriteError
+    } =
+        await supabaseClient
+            .from("favorites")
+            .select("material_id")
+            .eq(
+                "user_id",
+                currentUser.id
+            );
+
+    if (favoriteError) {
+
+        console.error(
+            "お気に入り取得エラー:",
+            favoriteError
+        );
+
+    } else {
+
+        favoriteData =
+            data || [];
+
+    }
+
+}
     // ==============================
     // レビューを取得
     // ==============================
