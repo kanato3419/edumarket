@@ -3608,3 +3608,68 @@ button:hover {
     }
 
 }
+/* ==============================
+   プロフィールページ 教材カード
+============================== */
+
+.profile-material-card {
+    position: relative;
+}
+
+.profile-material-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 9px;
+    font-size: 13px;
+}
+
+.profile-rating-stars {
+    color: #f5b400;
+    letter-spacing: 1px;
+    font-size: 15px;
+}
+
+.profile-rating-number {
+    color: #14213d;
+    font-weight: bold;
+}
+
+.profile-rating-count {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.profile-material-rating.no-rating {
+    color: #a0a8b5;
+    font-size: 11px;
+}
+
+.profile-favorite-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+
+    border: none;
+    background: transparent;
+
+    padding: 4px;
+
+    font-size: 25px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    color: #64748b;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.profile-favorite-button:hover {
+    transform: scale(1.1);
+}
+
+.profile-favorite-button.is-favorite {
+    color: #e63946;
+}
