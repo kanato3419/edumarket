@@ -7149,18 +7149,211 @@ async function displayProfile() {
         return;
     }
 
+// ==============================
+// 教材カード
+// ==============================
 
-    // ==============================
-    // 教材カード
-    // ==============================
+// ==============================
+// レビュー情報を取得
+// ==============================
 
-    materialList.innerHTML =
-        materials.map(
-            material => `
+const materialIds =
+    materials.map(
+        material => material.id
+    );
+
+let reviewData = [];
+
+if (materialIds.length > 0) {
+
+    const {
+        data,
+        error: reviewError
+    } =
+        await supabaseClient
+            .from("reviews")
+            .select("material_id, rating")
+            .in(
+                "material_id",
+                materialIds
+            );
+
+    if (reviewError) {
+
+        console.error(
+            "レビュー取得エラー:",
+            reviewError
+        );
+
+    } else {
+
+        reviewData =
+            data || [];
+
+    }
+}
+
+
+// ==============================
+// ログインユーザーを取得
+// ==============================
+
+const {
+    data: {
+        user
+    }
+} =
+    await supabaseClient
+        .auth
+        .getUser();
+
+
+// ==============================
+// いいね情報を取得
+// ==============================
+
+let favoriteIds = [];
+
+if (user) {
+
+    const {
+        data: favorites,
+        error: favoriteError
+    } =
+        await supabaseClient
+            .from("favorites")
+            .select("material_id")
+            .eq(
+                "user_id",
+                user.id
+            );
+
+    if (favoriteError) {
+
+        console.error(
+            "お気に入り取得エラー:",
+            favoriteError
+        );
+
+    } else {
+
+        favoriteIds =
+            (favorites || []).map(
+                favorite =>
+                    favorite.material_id
+            );
+
+    }
+
+}
+
+
+// ==============================
+// 教材カード表示
+// ==============================
+
+materialList.innerHTML =
+    materials.map(
+        material => {
+
+            // ------------------------------
+            // レビュー
+            // ------------------------------
+
+            const materialReviews =
+                reviewData.filter(
+                    review =>
+                        review.material_id ===
+                        material.id
+                );
+
+            let ratingHTML = `
+                <div class="profile-material-rating no-rating">
+                    まだレビューはありません
+                </div>
+            `;
+
+            if (
+                materialReviews.length > 0
+            ) {
+
+                const totalRating =
+                    materialReviews.reduce(
+                        (sum, review) =>
+                            sum +
+                            Number(
+                                review.rating || 0
+                            ),
+                        0
+                    );
+
+                const averageRating =
+                    (
+                        totalRating /
+                        materialReviews.length
+                    ).toFixed(1);
+
+                const roundedRating =
+                    Math.round(
+                        Number(
+                            averageRating
+                        )
+                    );
+
+                const stars =
+                    "★".repeat(
+                        roundedRating
+                    ) +
+                    "☆".repeat(
+                        5 -
+                        roundedRating
+                    );
+
+                ratingHTML = `
+                    <div class="profile-material-rating">
+
+                        <span class="profile-rating-stars">
+                            ${stars}
+                        </span>
+
+                        <span class="profile-rating-number">
+                            ${averageRating}
+                        </span>
+
+                        <span class="profile-rating-count">
+                            （${materialReviews.length}件）
+                        </span>
+
+                    </div>
+                `;
+
+            }
+
+
+            // ------------------------------
+            // いいね
+            // ------------------------------
+
+            const isFavorite =
+                favoriteIds.includes(
+                    material.id
+                );
+
+            const favoriteIcon =
+                isFavorite
+                    ? "❤️"
+                    : "♡";
+
+
+            // ------------------------------
+            // カード
+            // ------------------------------
+
+            return `
 
                 <div
                     class="profile-material-card"
-                    onclick="window.location.href='material.html?id=${material.id}'"
+                    data-material-id="${material.id}"
                 >
 
                     <div class="profile-material-image">
@@ -7187,9 +7380,14 @@ async function displayProfile() {
                             ${material.title || "教材"}
                         </h4>
 
+
                         <p>
                             ${material.category || ""}
                         </p>
+
+
+                        ${ratingHTML}
+
 
                         <strong>
                             ¥${Number(
@@ -7197,14 +7395,208 @@ async function displayProfile() {
                             ).toLocaleString()}
                         </strong>
 
+
+                        <button
+                            type="button"
+                            class="profile-favorite-button ${
+                                isFavorite
+                                    ? "is-favorite"
+                                    : ""
+                            }"
+                            data-material-id="${material.id}"
+                        >
+                            ${favoriteIcon}
+                        </button>
+
                     </div>
 
                 </div>
 
-            `
-        ).join("");
+            `;
 
-}
+        }
+    ).join("");
+
+
+// ==============================
+// 教材カードクリック
+// ==============================
+
+const materialCards =
+    materialList.querySelectorAll(
+        ".profile-material-card"
+    );
+
+materialCards.forEach(
+    card => {
+
+        card.addEventListener(
+            "click",
+            function () {
+
+                const materialId =
+                    this.dataset.materialId;
+
+                window.location.href =
+                    "material.html?id=" +
+                    materialId;
+
+            }
+        );
+
+    }
+);
+
+
+// ==============================
+// いいねボタン
+// ==============================
+
+const favoriteButtons =
+    materialList.querySelectorAll(
+        ".profile-favorite-button"
+    );
+
+favoriteButtons.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            async function (event) {
+
+                event.stopPropagation();
+
+
+                if (!user) {
+
+                    alert(
+                        "いいねするにはログインしてください。"
+                    );
+
+                    return;
+
+                }
+
+
+                const materialId =
+                    this.dataset.materialId;
+
+
+                const isFavorite =
+                    favoriteIds.includes(
+                        materialId
+                    );
+
+
+                // ------------------------------
+                // いいね解除
+                // ------------------------------
+
+                if (isFavorite) {
+
+                    const {
+                        error
+                    } =
+                        await supabaseClient
+                            .from("favorites")
+                            .delete()
+                            .eq(
+                                "user_id",
+                                user.id
+                            )
+                            .eq(
+                                "material_id",
+                                materialId
+                            );
+
+                    if (error) {
+
+                        console.error(
+                            "いいね解除エラー:",
+                            error
+                        );
+
+                        alert(
+                            "いいねの解除に失敗しました。"
+                        );
+
+                        return;
+
+                    }
+
+
+                    favoriteIds =
+                        favoriteIds.filter(
+                            id =>
+                                id !==
+                                materialId
+                        );
+
+                    this.textContent =
+                        "♡";
+
+                    this.classList.remove(
+                        "is-favorite"
+                    );
+
+                    return;
+
+                }
+
+
+                // ------------------------------
+                // いいね追加
+                // ------------------------------
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from("favorites")
+                        .insert({
+
+                            user_id:
+                                user.id,
+
+                            material_id:
+                                materialId
+
+                        });
+
+
+                if (error) {
+
+                    console.error(
+                        "いいね追加エラー:",
+                        error
+                    );
+
+                    alert(
+                        "いいねに失敗しました。"
+                    );
+
+                    return;
+
+                }
+
+
+                favoriteIds.push(
+                    materialId
+                );
+
+                this.textContent =
+                    "❤️";
+
+                this.classList.add(
+                    "is-favorite"
+                );
+
+            }
+        );
+
+    }
+);
+    
 
 
 // ==============================
