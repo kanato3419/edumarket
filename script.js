@@ -1448,10 +1448,21 @@ if (material.seller_id) {
                 ${material.description || "教材の説明はありません。"}
             </p>
 
-            <p>
-                出品者：${sellerNickname}
-            </p>
-
+           <p class="seller-info">
+    出品者：
+    ${
+        material.seller_id
+            ? `
+                <a
+                    href="profile.html?id=${material.seller_id}"
+                    class="seller-profile-link"
+                >
+                    ${sellerNickname}
+                </a>
+            `
+            : sellerNickname
+    }
+</p>
             <p class="material-price">
                 ¥${Number(material.price || 0).toLocaleString()}
             </p>
