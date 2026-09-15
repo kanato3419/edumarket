@@ -6905,3 +6905,318 @@ async function displayFavoriteMaterials() {
 // ==============================
 
 displayFavoriteMaterials();
+// ==============================
+// 出品者プロフィールを表示
+// ==============================
+
+async function displayProfile() {
+
+    const profileArea =
+        document.getElementById("profile-detail");
+
+    if (!profileArea) {
+        return;
+    }
+
+    // ==============================
+    // URLからユーザーIDを取得
+    // ==============================
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const userId =
+        params.get("id");
+
+    if (!userId) {
+
+        profileArea.innerHTML = `
+            <h2>プロフィールが見つかりません</h2>
+
+            <p>
+                ユーザーIDが指定されていません。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // profilesから情報取得
+    // ==============================
+
+    const {
+        data: profile,
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "nickname, avatar_url, bio"
+            )
+            .eq(
+                "id",
+                userId
+            )
+            .maybeSingle();
+
+
+    // ==============================
+    // エラー
+    // ==============================
+
+    if (error) {
+
+        console.error(
+            "プロフィール取得エラー:",
+            error
+        );
+
+        profileArea.innerHTML = `
+            <h2>
+                プロフィールを読み込めませんでした
+            </h2>
+
+            <p>
+                プロフィール情報の取得中に
+                エラーが発生しました。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // プロフィールがない
+    // ==============================
+
+    if (!profile) {
+
+        profileArea.innerHTML = `
+            <h2>
+                プロフィールが見つかりません
+            </h2>
+
+            <p>
+                このユーザーのプロフィールは
+                存在しません。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // プロフィール画像
+    // ==============================
+
+    const avatarHTML =
+        profile.avatar_url
+            ? `
+                <img
+                    src="${profile.avatar_url}"
+                    alt="プロフィール画像"
+                >
+            `
+            : `
+                <div class="profile-avatar-placeholder">
+                    👤
+                </div>
+            `;
+
+
+    // ==============================
+    // プロフィール表示
+    // ==============================
+
+    profileArea.innerHTML = `
+
+        <div class="profile-header">
+
+            <div class="profile-avatar">
+
+                ${avatarHTML}
+
+            </div>
+
+
+            <div class="profile-main-info">
+
+                <h2>
+                    ${profile.nickname || "名前未設定"}
+                </h2>
+
+                <p>
+                    ${profile.bio || "自己紹介はありません。"}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <section class="profile-materials">
+
+            <h3>
+                出品している教材
+            </h3>
+
+            <div id="profile-material-list">
+
+                <p>
+                    教材を読み込んでいます...
+                </p>
+
+            </div>
+
+        </section>
+
+    `;
+
+
+    // ==============================
+    // 出品教材を取得
+    // ==============================
+
+    const {
+        data: materials,
+        error: materialError
+    } =
+        await supabaseClient
+            .from("materials")
+            .select("*")
+            .eq(
+                "seller_id",
+                userId
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (materialError) {
+
+        console.error(
+            "出品教材取得エラー:",
+            materialError
+        );
+
+        document.getElementById(
+            "profile-material-list"
+        ).innerHTML = `
+            <p>
+                出品教材を読み込めませんでした。
+            </p>
+        `;
+
+        return;
+    }
+
+
+    const materialList =
+        document.getElementById(
+            "profile-material-list"
+        );
+
+
+    // ==============================
+    // 出品教材がない
+    // ==============================
+
+    if (
+        !materials ||
+        materials.length === 0
+    ) {
+
+        materialList.innerHTML = `
+            <div class="profile-no-materials">
+
+                <p>
+                    まだ教材を出品していません。
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // 教材カード
+    // ==============================
+
+    materialList.innerHTML =
+        materials.map(
+            material => `
+
+                <div
+                    class="profile-material-card"
+                    onclick="window.location.href='material.html?id=${material.id}'"
+                >
+
+                    <div class="profile-material-image">
+
+                        ${
+                            material.image_url
+                                ? `
+                                    <img
+                                        src="${material.image_url}"
+                                        alt="${material.title || "教材"}"
+                                    >
+                                `
+                                : `
+                                    📚
+                                `
+                        }
+
+                    </div>
+
+
+                    <div class="profile-material-info">
+
+                        <h4>
+                            ${material.title || "教材"}
+                        </h4>
+
+                        <p>
+                            ${material.category || ""}
+                        </p>
+
+                        <strong>
+                            ¥${Number(
+                                material.price || 0
+                            ).toLocaleString()}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            `
+        ).join("");
+
+}
+
+
+// ==============================
+// プロフィールページで実行
+// ==============================
+
+if (
+    document.getElementById(
+        "profile-detail"
+    )
+) {
+
+    displayProfile();
+
+}
