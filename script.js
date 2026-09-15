@@ -7466,7 +7466,6 @@ favoriteButtons.forEach(
 
                 event.stopPropagation();
 
-
                 if (!user) {
 
                     alert(
@@ -7474,19 +7473,15 @@ favoriteButtons.forEach(
                     );
 
                     return;
-
                 }
-
 
                 const materialId =
                     this.dataset.materialId;
-
 
                 const isFavorite =
                     favoriteIds.includes(
                         materialId
                     );
-
 
                 // ------------------------------
                 // いいね解除
@@ -7521,9 +7516,7 @@ favoriteButtons.forEach(
                         );
 
                         return;
-
                     }
-
 
                     favoriteIds =
                         favoriteIds.filter(
@@ -7540,9 +7533,7 @@ favoriteButtons.forEach(
                     );
 
                     return;
-
                 }
-
 
                 // ------------------------------
                 // いいね追加
@@ -7563,7 +7554,6 @@ favoriteButtons.forEach(
 
                         });
 
-
                 if (error) {
 
                     console.error(
@@ -7576,9 +7566,7 @@ favoriteButtons.forEach(
                     );
 
                     return;
-
                 }
-
 
                 favoriteIds.push(
                     materialId
@@ -7596,7 +7584,13 @@ favoriteButtons.forEach(
 
     }
 );
-    
+
+
+// ==============================
+// displayProfile() を閉じる
+// ==============================
+
+}
 
 
 // ==============================
