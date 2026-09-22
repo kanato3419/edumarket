@@ -7849,3 +7849,135 @@ if (
     displayProfile();
 
 }
+// ==============================
+// マイページ：フォロー数
+// ==============================
+
+async function displayFollowSummary() {
+
+    const followingCount =
+        document.getElementById(
+            "following-count"
+        );
+
+    const followersCount =
+        document.getElementById(
+            "followers-count"
+        );
+
+    if (
+        !followingCount ||
+        !followersCount
+    ) {
+        return;
+    }
+
+
+    // ==============================
+    // ログインユーザー
+    // ==============================
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (
+        userError ||
+        !user
+    ) {
+
+        return;
+
+    }
+
+
+    // ==============================
+    // フォロー中の人数
+    // ==============================
+
+    const {
+        count: following,
+        error: followingError
+    } =
+        await supabaseClient
+            .from("follows")
+            .select("*", {
+                count: "exact",
+                head: true
+            })
+            .eq(
+                "follower_id",
+                user.id
+            );
+
+
+    if (followingError) {
+
+        console.error(
+            "フォロー中人数取得エラー:",
+            followingError
+        );
+
+    } else {
+
+        followingCount.textContent =
+            following || 0;
+
+    }
+
+
+    // ==============================
+    // フォロワーの人数
+    // ==============================
+
+    const {
+        count: followers,
+        error: followersError
+    } =
+        await supabaseClient
+            .from("follows")
+            .select("*", {
+                count: "exact",
+                head: true
+            })
+            .eq(
+                "following_id",
+                user.id
+            );
+
+
+    if (followersError) {
+
+        console.error(
+            "フォロワー人数取得エラー:",
+            followersError
+        );
+
+    } else {
+
+        followersCount.textContent =
+            followers || 0;
+
+    }
+
+}
+
+
+// ==============================
+// マイページで実行
+// ==============================
+
+if (
+    document.getElementById(
+        "following-count"
+    )
+) {
+
+    displayFollowSummary();
+
+}
