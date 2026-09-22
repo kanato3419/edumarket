@@ -3731,3 +3731,80 @@ button:hover {
     }
 
 }
+/* ==============================
+   フォロー・フォロワー
+============================== */
+
+.follow-summary-card {
+    background: #fff;
+    border: 1px solid #e5eaf2;
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow:
+        0 4px 18px rgba(20, 33, 61, 0.06);
+}
+
+.follow-summary-card h2 {
+    margin: 0 0 18px;
+    color: #14213d;
+    font-size: 20px;
+}
+
+.follow-summary {
+    display: flex;
+    gap: 12px;
+}
+
+.follow-summary-item {
+    flex: 1;
+    min-height: 72px;
+    border: 1px solid #e5eaf2;
+    border-radius: 12px;
+    background: #f8fafc;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+.follow-summary-item:hover {
+    background: #f1f5f9;
+    transform: translateY(-1px);
+}
+
+.follow-summary-number {
+    color: #14213d;
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.follow-summary-label {
+    margin-top: 5px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+@media (max-width: 700px) {
+
+    .follow-summary-card {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .follow-summary-card h2 {
+        font-size: 18px;
+    }
+
+    .follow-summary-item {
+        min-height: 68px;
+    }
+
+}
