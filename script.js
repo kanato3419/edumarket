@@ -7011,6 +7011,105 @@ async function displayProfile() {
     }
 
 
+        // ==============================
+    // 現在ログインしているユーザー
+    // ==============================
+
+    const {
+        data: {
+            user
+        }
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    // ==============================
+    // フォロー情報
+    // ==============================
+
+    let followerCount = 0;
+    let isFollowing = false;
+
+
+    // ------------------------------
+    // フォロワー数を取得
+    // ------------------------------
+
+    const {
+        count: followersCount,
+        error: followersError
+    } =
+        await supabaseClient
+            .from("follows")
+            .select("*", {
+                count: "exact",
+                head: true
+            })
+            .eq(
+                "following_id",
+                userId
+            );
+
+
+    if (followersError) {
+
+        console.error(
+            "フォロワー数取得エラー:",
+            followersError
+        );
+
+    } else {
+
+        followerCount =
+            followersCount || 0;
+
+    }
+
+
+    // ------------------------------
+    // 自分がフォローしているか確認
+    // ------------------------------
+
+    if (
+        user &&
+        user.id !== userId
+    ) {
+
+        const {
+            data: followData,
+            error: followError
+        } =
+            await supabaseClient
+                .from("follows")
+                .select("id")
+                .eq(
+                    "follower_id",
+                    user.id
+                )
+                .eq(
+                    "following_id",
+                    userId
+                )
+                .maybeSingle();
+
+
+        if (followError) {
+
+            console.error(
+                "フォロー状態取得エラー:",
+                followError
+            );
+
+        } else {
+
+            isFollowing =
+                !!followData;
+
+        }
+
+    }
+
+
     // ==============================
     // プロフィール画像
     // ==============================
@@ -7051,9 +7150,49 @@ async function displayProfile() {
                     ${profile.nickname || "名前未設定"}
                 </h2>
 
+
                 <p>
                     ${profile.bio || "自己紹介はありません。"}
                 </p>
+
+
+                <div class="profile-follow-info">
+
+                    <span>
+                        フォロワー
+
+                        <strong id="follower-count">
+                            ${followerCount}
+                        </strong>
+
+                        人
+                    </span>
+
+                </div>
+
+
+                ${
+                    user &&
+                    user.id !== userId
+                        ? `
+                            <button
+                                type="button"
+                                id="follow-button"
+                                class="profile-follow-button ${
+                                    isFollowing
+                                        ? "is-following"
+                                        : ""
+                                }"
+                            >
+                                ${
+                                    isFollowing
+                                        ? "フォロー中"
+                                        : "フォローする"
+                                }
+                            </button>
+                        `
+                        : ""
+                }
 
             </div>
 
@@ -7065,6 +7204,7 @@ async function displayProfile() {
             <h3>
                 出品している教材
             </h3>
+
 
             <div id="profile-material-list">
 
