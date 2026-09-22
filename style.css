@@ -3808,3 +3808,160 @@ button:hover {
     }
 
 }
+/* ==============================
+   フォロー・フォロワー一覧
+============================== */
+
+.follow-page {
+    max-width: 700px;
+    margin: 30px auto 80px;
+}
+
+.follow-page-title {
+    margin: 30px 0 20px;
+    color: #14213d;
+    font-size: 26px;
+}
+
+.follow-user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.follow-user-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 8px;
+    border-bottom: 1px solid #e5eaf2;
+    cursor: pointer;
+}
+
+.follow-user-item:first-child {
+    border-top: 1px solid #e5eaf2;
+}
+
+.follow-user-avatar {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #eef2f7;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #8a96aa;
+    font-size: 24px;
+}
+
+.follow-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.follow-user-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.follow-user-name {
+    margin: 0;
+    color: #14213d;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+.follow-user-bio {
+    margin: 4px 0 0;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.follow-user-button {
+    flex-shrink: 0;
+    width: 105px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+
+    background: #102344;
+    color: white;
+
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.follow-user-button:hover {
+    opacity: 0.9;
+}
+
+.follow-user-button.is-following {
+    background: #e9edf4;
+    color: #14213d;
+}
+
+.follow-empty {
+    padding: 50px 20px;
+    text-align: center;
+    color: #64748b;
+    background: white;
+    border: 1px solid #e5eaf2;
+    border-radius: 16px;
+}
+
+
+/* ==============================
+   スマホ
+============================== */
+
+@media (max-width: 700px) {
+
+    .follow-page {
+        margin: 20px 16px 70px;
+    }
+
+    .follow-page-title {
+        margin: 24px 0 12px;
+        font-size: 23px;
+    }
+
+    .follow-user-item {
+        gap: 12px;
+        padding: 14px 2px;
+    }
+
+    .follow-user-avatar {
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+    }
+
+    .follow-user-name {
+        font-size: 14px;
+    }
+
+    .follow-user-bio {
+        font-size: 11px;
+    }
+
+    .follow-user-button {
+        width: 92px;
+        height: 34px;
+        font-size: 11px;
+    }
+
+}
