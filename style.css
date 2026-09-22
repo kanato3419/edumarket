@@ -3673,3 +3673,61 @@ button:hover {
 .profile-favorite-button.is-favorite {
     color: #e63946;
 }
+/* ==============================
+   プロフィール：フォローボタン
+============================== */
+
+.profile-follow-button {
+    margin-top: 12px;
+    width: 145px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 9px;
+    background: #102344;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-follow-button:hover {
+    opacity: 0.9;
+}
+
+.profile-follow-button.is-following {
+    background: #e9edf4;
+    color: #14213d;
+}
+
+
+/* ==============================
+   プロフィール：フォロワー表示
+============================== */
+
+.profile-follow-info {
+    margin-top: 14px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.profile-follow-info strong {
+    color: #14213d;
+    font-size: 18px;
+    margin: 0 3px;
+}
+
+
+/* ==============================
+   スマホ
+============================== */
+
+@media (max-width: 700px) {
+
+    .profile-follow-button {
+        width: 145px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+}
