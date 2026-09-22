@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://edumarket.jp/sitemap.xml
