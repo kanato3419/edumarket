@@ -7966,7 +7966,48 @@ async function displayFollowSummary() {
     }
 
 }
+// ==============================
+// フォロー一覧ページへの移動
+// ==============================
 
+const followingSummaryButton =
+    document.getElementById(
+        "following-summary-button"
+    );
+
+if (followingSummaryButton) {
+
+    followingSummaryButton.addEventListener(
+        "click",
+        function () {
+
+            window.location.href =
+                "following.html";
+
+        }
+    );
+
+}
+
+
+const followersSummaryButton =
+    document.getElementById(
+        "followers-summary-button"
+    );
+
+if (followersSummaryButton) {
+
+    followersSummaryButton.addEventListener(
+        "click",
+        function () {
+
+            window.location.href =
+                "followers.html";
+
+        }
+    );
+
+}
 
 // ==============================
 // マイページで実行
