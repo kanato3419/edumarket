@@ -8022,3 +8022,333 @@ if (
     displayFollowSummary();
 
 }
+// ==============================
+// フォロー中のユーザー一覧
+// ==============================
+
+async function displayFollowingUsers() {
+
+    const list =
+        document.getElementById(
+            "following-list"
+        );
+
+    if (!list) {
+        return;
+    }
+
+
+    // ==============================
+    // ログインユーザー
+    // ==============================
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (userError || !user) {
+
+        list.innerHTML = `
+            <div class="follow-empty">
+                ログインしてください。
+            </div>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // フォローしているユーザーを取得
+    // ==============================
+
+    const {
+        data: follows,
+        error: followError
+    } =
+        await supabaseClient
+            .from("follows")
+            .select("following_id, created_at")
+            .eq(
+                "follower_id",
+                user.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (followError) {
+
+        console.error(
+            "フォロー中ユーザー取得エラー:",
+            followError
+        );
+
+        list.innerHTML = `
+            <div class="follow-empty">
+                フォロー中のユーザーを
+                取得できませんでした。
+            </div>
+        `;
+
+        return;
+    }
+
+
+    if (!follows || follows.length === 0) {
+
+        list.innerHTML = `
+            <div class="follow-empty">
+                まだ誰もフォローしていません。
+            </div>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // ユーザーID
+    // ==============================
+
+    const userIds =
+        follows.map(
+            follow =>
+                follow.following_id
+        );
+
+
+    // ==============================
+    // プロフィール取得
+    // ==============================
+
+    const {
+        data: profiles,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "id, nickname, avatar_url, bio"
+            )
+            .in(
+                "id",
+                userIds
+            );
+
+
+    if (profileError) {
+
+        console.error(
+            "プロフィール取得エラー:",
+            profileError
+        );
+
+        list.innerHTML = `
+            <div class="follow-empty">
+                ユーザー情報を
+                取得できませんでした。
+            </div>
+        `;
+
+        return;
+    }
+
+
+    // ==============================
+    // 表示順をフォローした順にする
+    // ==============================
+
+    const profileMap =
+        new Map(
+            (profiles || []).map(
+                profile => [
+                    profile.id,
+                    profile
+                ]
+            )
+        );
+
+
+    list.innerHTML = "";
+
+
+    follows.forEach(
+        follow => {
+
+            const profile =
+                profileMap.get(
+                    follow.following_id
+                );
+
+
+            if (!profile) {
+                return;
+            }
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.className =
+                "follow-user-item";
+
+
+            const avatarHTML =
+                profile.avatar_url
+                    ? `
+                        <img
+                            src="${profile.avatar_url}"
+                            alt="プロフィール画像"
+                        >
+                    `
+                    : "👤";
+
+
+            item.innerHTML = `
+
+                <div class="follow-user-avatar">
+                    ${avatarHTML}
+                </div>
+
+
+                <div class="follow-user-info">
+
+                    <p class="follow-user-name">
+                        ${profile.nickname || "名前未設定"}
+                    </p>
+
+                    <p class="follow-user-bio">
+                        ${profile.bio || "自己紹介はありません。"}
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="follow-user-button is-following"
+                    data-user-id="${profile.id}"
+                >
+                    フォロー中
+                </button>
+
+            `;
+
+
+            // ==============================
+            // プロフィールへ移動
+            // ==============================
+
+            item.addEventListener(
+                "click",
+                function () {
+
+                    window.location.href =
+                        "profile.html?id=" +
+                        profile.id;
+
+                }
+            );
+
+
+            // ==============================
+            // フォロー解除
+            // ==============================
+
+            const button =
+                item.querySelector(
+                    ".follow-user-button"
+                );
+
+
+            button.addEventListener(
+                "click",
+                async function (event) {
+
+                    event.stopPropagation();
+
+
+                    const {
+                        error
+                    } =
+                        await supabaseClient
+                            .from("follows")
+                            .delete()
+                            .eq(
+                                "follower_id",
+                                user.id
+                            )
+                            .eq(
+                                "following_id",
+                                profile.id
+                            );
+
+
+                    if (error) {
+
+                        console.error(
+                            "フォロー解除エラー:",
+                            error
+                        );
+
+                        alert(
+                            "フォロー解除に失敗しました。"
+                        );
+
+                        return;
+                    }
+
+
+                    // 一覧から削除
+                    item.remove();
+
+
+                    if (
+                        list.children.length === 0
+                    ) {
+
+                        list.innerHTML = `
+                            <div class="follow-empty">
+                                まだ誰もフォローしていません。
+                            </div>
+                        `;
+
+                    }
+
+                }
+            );
+
+
+            list.appendChild(item);
+
+        }
+    );
+
+}
+
+
+// ==============================
+// フォロー中ページで実行
+// ==============================
+
+if (
+    document.getElementById(
+        "following-list"
+    )
+) {
+
+    displayFollowingUsers();
+
+}
