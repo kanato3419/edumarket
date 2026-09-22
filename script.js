@@ -7217,7 +7217,122 @@ async function displayProfile() {
         </section>
 
     `;
+// ==============================
+// フォローボタン
+// ==============================
 
+const followButton =
+    document.getElementById("follow-button");
+
+if (followButton) {
+
+    followButton.addEventListener(
+        "click",
+        async function () {
+
+            // ==============================
+            // フォロー解除
+            // ==============================
+
+            if (isFollowing) {
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from("follows")
+                        .delete()
+                        .eq(
+                            "follower_id",
+                            user.id
+                        )
+                        .eq(
+                            "following_id",
+                            userId
+                        );
+
+                if (error) {
+
+                    console.error(
+                        "フォロー解除エラー:",
+                        error
+                    );
+
+                    alert(
+                        "フォロー解除に失敗しました。"
+                    );
+
+                    return;
+                }
+
+                isFollowing = false;
+
+                followButton.textContent =
+                    "フォローする";
+
+                followButton.classList.remove(
+                    "is-following"
+                );
+
+                followerCount--;
+
+                document.getElementById(
+                    "follower-count"
+                ).textContent =
+                    followerCount;
+
+                return;
+            }
+
+
+            // ==============================
+            // フォロー追加
+            // ==============================
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("follows")
+                    .insert({
+                        follower_id: user.id,
+                        following_id: userId
+                    });
+
+            if (error) {
+
+                console.error(
+                    "フォロー追加エラー:",
+                    error
+                );
+
+                alert(
+                    "フォローに失敗しました。"
+                );
+
+                return;
+            }
+
+            isFollowing = true;
+
+            followButton.textContent =
+                "フォロー中";
+
+            followButton.classList.add(
+                "is-following"
+            );
+
+            followerCount++;
+
+            document.getElementById(
+                "follower-count"
+            ).textContent =
+                followerCount;
+
+        }
+    );
+
+}
 
     // ==============================
     // 出品教材を取得
