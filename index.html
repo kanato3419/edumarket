@@ -785,14 +785,15 @@ async function displayRecommendedMaterials() {
   );
 
 
-  const {
-    data: materials,
-    error
-  } =
-    await supabaseClient
-      .from("materials")
-      .select("*")
-      .limit(6);
+ const {
+  data: materials,
+  error
+} =
+  await supabaseClient
+    .from("materials")
+    .select("*")
+    .eq("is_published", true)
+    .limit(6);
 
 
   // ==============================
