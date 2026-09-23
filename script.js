@@ -2914,7 +2914,6 @@ if (
 
 // ==============================
 // 教材を購入
-// 無料教材はStripeを使わず入手
 // ==============================
 
 async function purchaseMaterial(materialId) {
@@ -2945,10 +2944,6 @@ async function purchaseMaterial(materialId) {
         return;
     }
 
-
-    // ==============================
-    // ログインしていない
-    // ==============================
 
     if (!user) {
 
@@ -3012,12 +3007,12 @@ async function purchaseMaterial(materialId) {
         error: materialError
     } = await supabaseClient
         .from("materials")
-        .select("id, title, price")
+        .select("id, title, price, is_published")
         .eq("id", materialId)
-        .single();
+        .maybeSingle();
 
 
-    if (materialError || !material) {
+    if (materialError) {
 
         console.error(
             "教材取得エラー:",
@@ -3032,17 +3027,35 @@ async function purchaseMaterial(materialId) {
     }
 
 
+    if (!material) {
+
+        alert(
+            "教材が見つかりません。"
+        );
+
+        return;
+    }
+
+
+    // ==============================
+    // 販売停止チェック
+    // ==============================
+
+    if (material.is_published !== true) {
+
+        alert(
+            "この教材は現在販売停止中です。"
+        );
+
+        return;
+    }
+
+
     // ==============================
     // 無料教材
     // ==============================
 
     if (Number(material.price) === 0) {
-
-        console.log(
-            "無料教材を入手します:",
-            materialId
-        );
-
 
         const {
             data: purchaseId,
@@ -3078,11 +3091,10 @@ async function purchaseMaterial(materialId) {
 
 
         alert(
-            "無料教材を入手しました！"
+            "無料教材を取得しました！"
         );
 
 
-        // 購入履歴ページへ
         window.location.href =
             "purchases.html";
 
@@ -3092,6 +3104,7 @@ async function purchaseMaterial(materialId) {
 
     // ==============================
     // 有料教材
+    // Stripe Checkoutを作成
     // ==============================
 
     console.log(
@@ -3127,6 +3140,7 @@ async function purchaseMaterial(materialId) {
         let detail =
             error.message;
 
+
         try {
 
             if (error.context) {
@@ -3150,7 +3164,6 @@ async function purchaseMaterial(materialId) {
                 "詳細エラー取得失敗:",
                 e
             );
-
         }
 
 
