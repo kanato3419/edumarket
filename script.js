@@ -4539,7 +4539,7 @@ if (editForm) {
 
 loadEditMaterial();
 // ==============================
-// 自分が出品した教材を削除
+// 自分が出品した教材の販売を停止
 // ==============================
 
 async function deleteMaterial(materialId) {
@@ -4565,13 +4565,14 @@ async function deleteMaterial(materialId) {
 
 
     // ==============================
-    // 削除確認
+    // 販売停止確認
     // ==============================
 
     const confirmed =
         confirm(
-            "この教材を削除しますか？\n\n" +
-            "削除すると元に戻せません。"
+            "この教材の販売を停止しますか？\n\n" +
+            "販売停止後は、新しく購入できなくなります。\n" +
+            "すでに購入したユーザーは引き続き利用できます。"
         );
 
 
@@ -4581,89 +4582,17 @@ async function deleteMaterial(materialId) {
 
 
     // ==============================
-    // 教材情報を取得
+    // 教材の販売を停止
     // ==============================
 
     const {
-        data: material,
-        error: materialError
+        error: updateError
     } =
         await supabaseClient
             .from("materials")
-            .select(
-                "id, title, file_path"
-            )
-            .eq(
-                "id",
-                materialId
-            )
-            .eq(
-                "seller_id",
-                user.id
-            )
-            .single();
-
-
-    if (materialError || !material) {
-
-        console.error(
-            "教材取得エラー:",
-            materialError
-        );
-
-        alert(
-            "教材を削除できませんでした。"
-        );
-
-        return;
-    }
-
-
-    // ==============================
-    // StorageのPDFを削除
-    // ==============================
-
-    if (material.file_path) {
-
-        const {
-            error: storageError
-        } =
-            await supabaseClient
-                .storage
-                .from("materials")
-                .remove([
-                    material.file_path
-                ]);
-
-
-        if (storageError) {
-
-            console.error(
-                "PDF削除エラー:",
-                storageError
-            );
-
-            alert(
-                "PDFファイルの削除に失敗しました。\n\n" +
-                storageError.message
-            );
-
-            return;
-        }
-
-    }
-
-
-    // ==============================
-    // materialsテーブルから削除
-    // ==============================
-
-    const {
-        error: deleteError
-    } =
-        await supabaseClient
-            .from("materials")
-            .delete()
+            .update({
+                is_published: false
+            })
             .eq(
                 "id",
                 materialId
@@ -4674,16 +4603,16 @@ async function deleteMaterial(materialId) {
             );
 
 
-    if (deleteError) {
+    if (updateError) {
 
         console.error(
-            "教材削除エラー:",
-            deleteError
+            "販売停止エラー:",
+            updateError
         );
 
         alert(
-            "教材情報の削除に失敗しました。\n\n" +
-            deleteError.message
+            "教材の販売を停止できませんでした。\n\n" +
+            updateError.message
         );
 
         return;
@@ -4691,11 +4620,12 @@ async function deleteMaterial(materialId) {
 
 
     // ==============================
-    // 削除成功
+    // 販売停止成功
     // ==============================
 
     alert(
-        "教材を削除しました！"
+        "教材の販売を停止しました！\n\n" +
+        "購入済みユーザーは引き続き利用できます。"
     );
 
 
