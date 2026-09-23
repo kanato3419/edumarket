@@ -2911,13 +2911,18 @@ if (
     displayMyMaterials();
 
 }
+
 // ==============================
-// Stripe Checkoutで教材を購入
+// 教材を購入
+// 無料教材はStripeを使わず入手
 // ==============================
 
 async function purchaseMaterial(materialId) {
 
+    // ==============================
     // ログイン確認
+    // ==============================
+
     const {
         data: {
             user
@@ -2941,7 +2946,10 @@ async function purchaseMaterial(materialId) {
     }
 
 
+    // ==============================
     // ログインしていない
+    // ==============================
+
     if (!user) {
 
         alert(
@@ -2996,7 +3004,94 @@ async function purchaseMaterial(materialId) {
 
 
     // ==============================
-    // Stripe Checkoutを作成
+    // 教材情報を取得
+    // ==============================
+
+    const {
+        data: material,
+        error: materialError
+    } = await supabaseClient
+        .from("materials")
+        .select("id, title, price")
+        .eq("id", materialId)
+        .single();
+
+
+    if (materialError || !material) {
+
+        console.error(
+            "教材取得エラー:",
+            materialError
+        );
+
+        alert(
+            "教材情報を取得できませんでした。"
+        );
+
+        return;
+    }
+
+
+    // ==============================
+    // 無料教材
+    // ==============================
+
+    if (Number(material.price) === 0) {
+
+        console.log(
+            "無料教材を入手します:",
+            materialId
+        );
+
+
+        const {
+            data: purchaseId,
+            error: freePurchaseError
+        } = await supabaseClient.rpc(
+            "claim_free_material",
+            {
+                p_material_id: materialId
+            }
+        );
+
+
+        if (freePurchaseError) {
+
+            console.error(
+                "無料教材取得エラー:",
+                freePurchaseError
+            );
+
+            alert(
+                "無料教材の取得に失敗しました。\n\n" +
+                freePurchaseError.message
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "無料教材取得完了:",
+            purchaseId
+        );
+
+
+        alert(
+            "無料教材を入手しました！"
+        );
+
+
+        // 購入履歴ページへ
+        window.location.href =
+            "purchases.html";
+
+        return;
+    }
+
+
+    // ==============================
+    // 有料教材
     // ==============================
 
     console.log(
@@ -3018,44 +3113,60 @@ async function purchaseMaterial(materialId) {
     );
 
 
+    // ==============================
     // Edge Functionエラー
-   if (error) {
+    // ==============================
 
-    console.error(
-        "Stripe Checkout作成エラー:",
-        error
-    );
+    if (error) {
 
-    let detail = error.message;
+        console.error(
+            "Stripe Checkout作成エラー:",
+            error
+        );
 
-    try {
-        if (error.context) {
-            const responseText = await error.context.text();
+        let detail =
+            error.message;
+
+        try {
+
+            if (error.context) {
+
+                const responseText =
+                    await error.context.text();
+
+                console.error(
+                    "Edge Functionの詳細:",
+                    responseText
+                );
+
+                detail +=
+                    "\n\n" +
+                    responseText;
+            }
+
+        } catch (e) {
 
             console.error(
-                "Edge Functionの詳細:",
-                responseText
+                "詳細エラー取得失敗:",
+                e
             );
 
-            detail += "\n\n" + responseText;
         }
-    } catch (e) {
-        console.error(
-            "詳細エラー取得失敗:",
-            e
+
+
+        alert(
+            "決済ページを作成できませんでした。\n\n" +
+            detail
         );
+
+        return;
     }
 
-    alert(
-        "決済ページを作成できませんでした。\n\n" +
-        detail
-    );
 
-    return;
-}
+    // ==============================
+    // Checkout URL確認
+    // ==============================
 
-
-    // Checkout URLがない
     if (!data || !data.url) {
 
         console.error(
@@ -3084,7 +3195,6 @@ async function purchaseMaterial(materialId) {
     window.location.href =
         data.url;
 }
-
 // ==============================
 // 購入した教材を表示
 // ==============================
