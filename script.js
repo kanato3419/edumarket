@@ -34,7 +34,6 @@ const defaultMaterials = [
 
 ];
 
-
 // ==============================
 // Supabaseから教材を取得
 // ==============================
@@ -47,6 +46,7 @@ async function getMaterials() {
     } = await supabaseClient
         .from("materials")
         .select("*")
+        .eq("is_published", true)
         .order("created_at", {
             ascending: false
         });
@@ -67,6 +67,7 @@ async function getMaterials() {
     return data || [];
 
 }
+
 
 
 // ==============================
