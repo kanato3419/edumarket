@@ -7387,6 +7387,10 @@ if (followButton) {
                 "seller_id",
                 userId
             )
+        .eq(
+            "is_published",
+             true
+            )
             .order(
                 "created_at",
                 {
