@@ -4539,7 +4539,7 @@ if (editForm) {
 
 loadEditMaterial();
 // ==============================
-// 自分が出品した教材の販売を停止
+// 自分が出品した教材を販売停止
 // ==============================
 
 async function deleteMaterial(materialId) {
@@ -4550,8 +4550,7 @@ async function deleteMaterial(materialId) {
             user
         },
         error: userError
-    } =
-        await supabaseClient.auth.getUser();
+    } = await supabaseClient.auth.getUser();
 
 
     if (userError || !user) {
@@ -4571,7 +4570,7 @@ async function deleteMaterial(materialId) {
     const confirmed =
         confirm(
             "この教材の販売を停止しますか？\n\n" +
-            "販売停止後は、新しく購入できなくなります。\n" +
+            "販売停止すると、新しいユーザーは購入できなくなります。\n" +
             "すでに購入したユーザーは引き続き利用できます。"
         );
 
@@ -4582,36 +4581,36 @@ async function deleteMaterial(materialId) {
 
 
     // ==============================
-    // 教材の販売を停止
+    // 教材を販売停止
     // ==============================
 
     const {
         error: updateError
-    } =
-        await supabaseClient
-            .from("materials")
-            .update({
-                is_published: false
-            })
-            .eq(
-                "id",
-                materialId
-            )
-            .eq(
-                "seller_id",
-                user.id
-            );
+    } = await supabaseClient
+        .from("materials")
+        .update({
+            is_published: false
+        })
+        .eq(
+            "id",
+            materialId
+        )
+        .eq(
+            "seller_id",
+            user.id
+        );
 
 
+    // 更新エラー
     if (updateError) {
 
         console.error(
-            "販売停止エラー:",
+            "教材販売停止エラー:",
             updateError
         );
 
         alert(
-            "教材の販売を停止できませんでした。\n\n" +
+            "教材の販売停止に失敗しました。\n\n" +
             updateError.message
         );
 
@@ -4624,8 +4623,7 @@ async function deleteMaterial(materialId) {
     // ==============================
 
     alert(
-        "教材の販売を停止しました！\n\n" +
-        "購入済みユーザーは引き続き利用できます。"
+        "教材の販売を停止しました。"
     );
 
 
