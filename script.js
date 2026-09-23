@@ -6182,25 +6182,27 @@ if (profileEditForm) {
                 }
 
 
-                // ==============================
-                // 公開URL取得
-                // ==============================
+// ==============================
+// 公開URL取得
+// ==============================
 
-                const {
-                    data: avatarUrlData
-                } =
-                    supabaseClient
-                        .storage
-                        .from("avatars")
-                        .getPublicUrl(
-                            filePath
-                        );
+const {
+    data: avatarUrlData
+} =
+    supabaseClient
+        .storage
+        .from("avatars")
+        .getPublicUrl(
+            filePath
+        );
 
 
-                avatarUrl =
-                    avatarUrlData.publicUrl;
+avatarUrl =
+    avatarUrlData.publicUrl +
+    "?t=" +
+    Date.now();
 
-            }
+}
 
 
             // ==============================
